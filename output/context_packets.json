@@ -1,0 +1,42 @@
+[
+  {
+    "agent": "Research Synthesis Agent",
+    "capability": "research_synthesis",
+    "source": "agents/research_synthesis_agent.json",
+    "task": "在 Complex Product Research Room 内按 artifact contract 产出结构化 artifact。",
+    "expected_output": [
+      "product_cards",
+      "comparison_table",
+      "evidence_map",
+      "unknowns",
+      "source_quality_notes"
+    ]
+  },
+  {
+    "agent": "Product Critic Agent",
+    "capability": "product_critique",
+    "source": "agents/product_critic_agent.json",
+    "task": "在 Complex Product Research Room 内按 artifact contract 产出结构化 artifact。",
+    "expected_output": [
+      "strengths",
+      "limitations",
+      "counterexamples",
+      "risk_notes",
+      "questions_for_human_review"
+    ]
+  },
+  {
+    "agent": "Collaboration Designer Agent",
+    "capability": "collaboration_design",
+    "source": "agents/collaboration_designer_agent.json",
+    "task": "在 Complex Product Research Room 内按 artifact contract 产出结构化 artifact。",
+    "expected_output": [
+      "agent_entry_points",
+      "interaction_protocol",
+      "guardrails",
+      "human_checkpoints",
+      "interview_narrative",
+      "playbook_draft"
+    ]
+  }
+]

@@ -1,0 +1,127 @@
+{
+  "capsule_id": "room_state_capsule_complex_product_research_v1",
+  "task_goal": "复杂产品研究 Room 示例：我需要研究 Linear、Slack、飞书、Paperclip、Symphony 这类协作产品，判断 Agent 应该如何进入真实协作工作流。请不要直接给一篇长答案。先判断是否需要 Task Room，再用已注册 Agent 分别完成资料归纳、产品批判和 Agent 协作设计，最后输出协作产品对比表、Agent 介入点、guardrails / human-in-the-loop 设计、可用于面试的 3 分钟观点，以及 Room Capsule / Playbook Draft。",
+  "current_phase": "ready_for_human_review",
+  "can_reopen_window": true,
+  "resume_mode": "contract_state_only",
+  "confirmed_decisions": [
+    "本次只使用已注册 Research Synthesis Agent、Product Critic Agent 和 Collaboration Designer Agent 进入可信执行。",
+    "候选 Agent 需要通过评测后才能注册，不在本次直接执行。",
+    "未确认外部事实、长期记忆写回和 candidate agent 注册都需要用户确认。",
+    "Room 结束后只回传压缩结果、playbook 写回建议和可恢复状态，不回传原始过程。"
+  ],
+  "open_questions": [
+    "是否接受本次最小完成路径。",
+    "是否把 Evaluation Agent 放入后续评测。",
+    "是否确认保存本次 playbook 写回建议。"
+  ],
+  "active_constraints": [
+    "伪造外部事实",
+    "把待确认资料写成确定事实",
+    "自动注册新 Agent",
+    "写入未经确认的长期记忆",
+    "不保存 raw room trace",
+    "不把待确认研究资料写成确定事实",
+    "不把未确认 candidate agent 当作可信执行单元"
+  ],
+  "artifact_inventory": [
+    {
+      "artifact_id": "research_synthesis_artifact",
+      "owner": "Research Synthesis Agent",
+      "status": "available",
+      "summary": "协作产品的核心差异不是有没有聊天入口，而是如何把任务状态、责任边界、证据和下一步动作结构化。"
+    },
+    {
+      "artifact_id": "product_critique_artifact",
+      "owner": "Product Critic Agent",
+      "status": "available",
+      "summary": "Agent 协作产品不能把“更多 Agent”当卖点，真正要解决的是什么时候该安静、什么时候该请求授权、什么时候该把过程压缩成可复用状态。"
+    },
+    {
+      "artifact_id": "collaboration_design_artifact",
+      "owner": "Collaboration Designer Agent",
+      "status": "available",
+      "summary": "Agent 应该作为协作 harness 的可控参与者进入工作流：先路由，再拿到局部 contract，输出 artifact，关键点交给人审，结束后只写回压缩 playbook。"
+    }
+  ],
+  "evidence_ledger": [
+    {
+      "claim": "Linear",
+      "evidence": [
+        "用强结构、快捷键、轻量状态流和清晰 ownership 降低团队协调成本。",
+        "Agent 可以在 issue triage、状态摘要、跨项目依赖提醒和 release note 草稿中介入。"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "claim": "Slack",
+      "evidence": [
+        "频道、线程、bot、工作流和搜索把异步沟通集中到一个事件流。",
+        "Agent 可以做频道摘要、任务提取、决策追踪和噪音过滤。"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "claim": "飞书",
+      "evidence": [
+        "通过 IM + Docs + Base + 审批把信息流、文档流和业务流连接起来。",
+        "Agent 可以在流程审批、知识库问答、会议纪要、跨表更新和执行提醒中介入。"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "claim": "Paperclip",
+      "evidence": [
+        "强调把 AI 参与工作流的过程、状态和交接显性化。",
+        "可作为 Task Room、artifact contract、memory writeback 等概念的参照样本。"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "agent_outputs_summary": [
+    {
+      "agent": "Research Synthesis Agent",
+      "judgment": "协作产品的核心差异不是有没有聊天入口，而是如何把任务状态、责任边界、证据和下一步动作结构化。",
+      "confidence": "medium"
+    },
+    {
+      "agent": "Product Critic Agent",
+      "judgment": "Agent 协作产品不能把“更多 Agent”当卖点，真正要解决的是什么时候该安静、什么时候该请求授权、什么时候该把过程压缩成可复用状态。",
+      "confidence": "medium"
+    },
+    {
+      "agent": "Collaboration Designer Agent",
+      "judgment": "Agent 应该作为协作 harness 的可控参与者进入工作流：先路由，再拿到局部 contract，输出 artifact，关键点交给人审，结束后只写回压缩 playbook。",
+      "confidence": "medium-high"
+    }
+  ],
+  "blocked_actions": [
+    "伪造外部事实",
+    "把待确认资料写成确定事实",
+    "自动注册新 Agent",
+    "写入未经确认的长期记忆"
+  ],
+  "next_minimal_step": "请用户确认是否采用下一轮最小迭代，并决定是否写回 playbook。",
+  "resume_instructions": [
+    "新窗口只读取本 capsule、collaboration_contract、capability_gap_report 和必要 artifacts。",
+    "继续时先复述 confirmed_decisions，再处理 open_questions。",
+    "不得根据丢弃的 raw trace 补充未确认事实。",
+    "如需要更多上下文，必须向用户请求，而不是猜测。"
+  ],
+  "discarded_context": [
+    "raw room trace",
+    "失败研究草稿",
+    "未确认外部事实",
+    "与当前阶段无关的中间推理"
+  ],
+  "compression_confidence": "high",
+  "requires_human_review": true,
+  "playbook_writeback_reference": "complex_product_research_room_playbook",
+  "capability_gap_summary": {
+    "gap_severity": "recoverable",
+    "missing_capabilities": [
+      "evaluation_design"
+    ],
+    "candidate_agent_count": 1
+  }
+}

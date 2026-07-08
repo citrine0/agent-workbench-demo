@@ -1,0 +1,15 @@
+{
+  "agent_id": "research_synthesis_agent",
+  "agent": "Research Synthesis Agent",
+  "capability": "research_synthesis",
+  "source": "agents/research_synthesis_agent.json",
+  "status": "registered",
+  "description": "整理协作产品资料，抽取产品定位、协作对象、核心机制、信息流和可验证证据。",
+  "why_selected": "复杂产品研究需要先把多款产品的协作机制结构化，否则后续批判和设计会变成泛泛观点。",
+  "input_contract": ["research_goal", "target_products", "available_notes", "evidence_policy"],
+  "output_contract": ["product_cards", "comparison_table", "evidence_map", "unknowns", "source_quality_notes"],
+  "allowed_actions": ["summarize_known_material", "extract_collaboration_mechanisms", "mark_unknowns", "build_comparison_table"],
+  "blocked_actions": ["invent_external_facts", "quote_unverified_claims_as_fact", "crawl_private_sources", "hide_uncertainty"],
+  "eval_criteria": ["keeps_claims_traceable", "separates_fact_from_inference", "covers_all_target_products", "surfaces_unknowns"],
+  "failure_modes": ["把推测写成事实", "遗漏目标产品", "只总结功能不总结协作机制", "不给证据强弱"]
+}

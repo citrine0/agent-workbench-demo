@@ -1,0 +1,15 @@
+{
+  "agent_id": "product_critic_agent",
+  "agent": "Product Critic Agent",
+  "capability": "product_critique",
+  "source": "agents/product_critic_agent.json",
+  "status": "registered",
+  "description": "基于研究归纳产物判断协作产品的优点、局限、反例、风险和不可迁移条件。",
+  "why_selected": "研究 Room 需要有人专门挑战结论，避免只输出产品优点清单或把 Agent 介入点想得过于乐观。",
+  "input_contract": ["research_synthesis_artifact", "user_goal", "product_principles", "risk_policy"],
+  "output_contract": ["strengths", "limitations", "counterexamples", "risk_notes", "questions_for_human_review"],
+  "allowed_actions": ["critique_assumptions", "surface_tradeoffs", "identify_guardrail_needs", "ask_review_questions"],
+  "blocked_actions": ["overstate_agent_value", "ignore_user_workflow_cost", "recommend_unbounded_bot_behavior", "erase_human_accountability"],
+  "eval_criteria": ["names_real_tradeoffs", "keeps_human_judgment_visible", "identifies_failure_modes", "does_not_default_to_more_agents"],
+  "failure_modes": ["为了显得高级而强行引入 Agent", "只讲风险不给取舍", "忽略普通用户协作成本", "缺少反例"]
+}

@@ -1,0 +1,96 @@
+{
+  "dimensions": [
+    "Goal clarity",
+    "能力半径识别准确度",
+    "专家选择必要性",
+    "是否避免过度协作",
+    "用户判断负担",
+    "过程噪音",
+    "结果可判断性",
+    "授权边界清晰度",
+    "handoff 可执行性",
+    "workflow asset 可复用性",
+    "第二次任务复用效果",
+    "token/latency/noise 成本"
+  ],
+  "scores": {
+    "single_agent": [
+      4,
+      2,
+      4,
+      3,
+      5,
+      4,
+      3,
+      2,
+      3,
+      2,
+      1,
+      5
+    ],
+    "multi_agent_chat": [
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "task_room_protocol": [
+      4,
+      4,
+      4,
+      4,
+      3,
+      3,
+      4,
+      4,
+      4,
+      3,
+      3,
+      3
+    ],
+    "capability_radius_harness": [
+      5,
+      5,
+      5,
+      5,
+      4,
+      4,
+      5,
+      5,
+      5,
+      5,
+      5,
+      4
+    ]
+  },
+  "badcases": [
+    "伪协作：single agent 足够却硬拉多专家",
+    "按岗位堆专家，没有能力缺口映射",
+    "输出不能转成 execution handoff",
+    "自动化边界不清导致误授权",
+    "workflow 没有沉淀，任务不可复用"
+  ],
+  "judge_summary": "Capability-radius harness 在边界清晰度、复用性和可授权性上显著优于普通多 Agent 协作。",
+  "comparison": {
+    "single_agent": {
+      "average_score": 3.17
+    },
+    "multi_agent_chat": {
+      "average_score": 1.25
+    },
+    "task_room_protocol": {
+      "average_score": 3.58
+    },
+    "capability_radius_harness": {
+      "average_score": 4.75
+    }
+  }
+}

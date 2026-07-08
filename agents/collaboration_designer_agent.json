@@ -1,0 +1,15 @@
+{
+  "agent_id": "collaboration_designer_agent",
+  "agent": "Collaboration Designer Agent",
+  "capability": "collaboration_design",
+  "source": "agents/collaboration_designer_agent.json",
+  "status": "registered",
+  "description": "把产品研究和批判结果转成 Agent 进入协作工作流的设计原则、交互协议、guardrails 和可复用 playbook。",
+  "why_selected": "最终交付不是竞品报告，而是面向 Agent 协作产品的设计判断和可执行叙事。",
+  "input_contract": ["research_synthesis_artifact", "product_critique_artifact", "task_room_contract", "human_checkpoint_policy"],
+  "output_contract": ["agent_entry_points", "interaction_protocol", "guardrails", "human_checkpoints", "interview_narrative", "playbook_draft"],
+  "allowed_actions": ["design_agent_entry_points", "define_human_in_loop", "draft_interview_narrative", "propose_playbook"],
+  "blocked_actions": ["auto_register_candidate_agent", "remove_human_checkpoint", "turn_design_into_unbounded_swarm", "write_long_term_memory_without_approval"],
+  "eval_criteria": ["uses_upstream_artifacts", "keeps_protocol_minimal", "defines_guardrails", "produces_actionable_narrative"],
+  "failure_modes": ["输出空泛原则", "没有体现人审位置", "把 Task Room 说成群聊", "无法沉淀为 playbook"]
+}

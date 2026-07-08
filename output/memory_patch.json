@@ -1,0 +1,30 @@
+{
+  "stable_user_profile": {
+    "strengths": [
+      "AI Coding",
+      "快速原型",
+      "简历证据映射"
+    ],
+    "blind_spots": [
+      "任务拆解",
+      "角色分配",
+      "产物合约",
+      "QA 与冲突处理",
+      "协作记忆写回",
+      "反馈分诊",
+      "研究归纳",
+      "产品批判",
+      "协作设计",
+      "产品迭代收敛",
+      "信任与激活",
+      "评测设计",
+      "岗位打分"
+    ]
+  },
+  "confirmed_preferences": [
+    "Room 内 raw trace 不写回主 context",
+    "candidate agents 需要 Pilot Eval 后才能注册",
+    "待确认研究资料必须标记 unknown，不能写成事实"
+  ],
+  "writeback_reason": "这些偏好能稳定提升后续 Room fork、授权边界和 context hygiene。"
+}

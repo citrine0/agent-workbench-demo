@@ -1,0 +1,17 @@
+web/.next/
+web/node_modules/
+web/out/
+web/dist/
+output/tmp/
+.env*
+!.env.example
+*.log
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.boss-agent-data/
+.playwright-cli/
+
+# interview prep — keep local, do not publish
+INTERVIEW-CARD-collaboration-judgment.md

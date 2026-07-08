@@ -1,0 +1,371 @@
+{
+  "skill_id": "boss_job_fit_skill",
+  "skill_name": "boss-job-fit",
+  "source_metadata": {
+    "source": "sample",
+    "keyword": "AI产品经理",
+    "city": "上海",
+    "limit": 5,
+    "jobs_loaded": 3,
+    "jobs_ranked": 3
+  },
+  "normalized_jobs": [
+    {
+      "source": "sample",
+      "source_id": "sample-agent-collaboration-pm",
+      "encrypt_job_id": "",
+      "lid": "",
+      "title": "Agent Collaboration Product Manager",
+      "company": "AI Collaboration Platform",
+      "city": "上海",
+      "salary": "30-50K",
+      "jd_text": "负责设计 Agent 与 Agent 之间的协作协议，定义 human-in-the-loop、delegation policy、artifact contract、QA 和 conflict resolution 等产品机制。需要能快速用代码搭建 harness 原型，验证多 Agent 协作在真实任务中的完成率和 token efficiency。",
+      "requirements": [
+        "Agent 协作产品",
+        "multi-agent workflow",
+        "human-in-the-loop",
+        "快速原型",
+        "token efficiency"
+      ],
+      "source_url": "",
+      "raw_available": true
+    },
+    {
+      "source": "sample",
+      "source_id": "sample-ai-agent-workflow-builder",
+      "encrypt_job_id": "",
+      "lid": "",
+      "title": "AI Agent Workflow Builder",
+      "company": "Developer Tool Startup",
+      "city": "北京",
+      "salary": "25-45K",
+      "jd_text": "构建面向开发者和一人公司的 Agent 工作流系统，沉淀可复用 skill，设计任务拆解、角色分配、工具调用、失败恢复和结果面板。熟悉 Codex、Claude Code、Cursor 等 Agent 产品者优先。",
+      "requirements": [
+        "Agent workflow",
+        "skill 设计",
+        "开发者工具",
+        "任务拆解",
+        "结果面板"
+      ],
+      "source_url": "",
+      "raw_available": true
+    },
+    {
+      "source": "sample",
+      "source_id": "sample-ai-product-generalist",
+      "encrypt_job_id": "",
+      "lid": "",
+      "title": "AI Product Generalist",
+      "company": "B2B SaaS",
+      "city": "上海",
+      "salary": "20-35K",
+      "jd_text": "负责 AI 功能规划、用户调研、需求分析和跨团队落地。需要理解大模型能力边界，能推动从原型到上线，但岗位更偏通用 SaaS 产品经理。",
+      "requirements": [
+        "AI 产品",
+        "用户调研",
+        "需求分析",
+        "跨团队协作"
+      ],
+      "source_url": "",
+      "raw_available": true
+    }
+  ],
+  "ranked_jobs": [
+    {
+      "source": "sample",
+      "source_id": "sample-agent-collaboration-pm",
+      "encrypt_job_id": "",
+      "lid": "",
+      "title": "Agent Collaboration Product Manager",
+      "company": "AI Collaboration Platform",
+      "city": "上海",
+      "salary": "30-50K",
+      "jd_text": "负责设计 Agent 与 Agent 之间的协作协议，定义 human-in-the-loop、delegation policy、artifact contract、QA 和 conflict resolution 等产品机制。需要能快速用代码搭建 harness 原型，验证多 Agent 协作在真实任务中的完成率和 token efficiency。",
+      "requirements": [
+        "Agent 协作产品",
+        "multi-agent workflow",
+        "human-in-the-loop",
+        "快速原型",
+        "token efficiency"
+      ],
+      "source_url": "",
+      "raw_available": true,
+      "score": 100,
+      "score_breakdown": {
+        "core_capability_match": 55,
+        "domain_direction_match": 20,
+        "seniority_responsibility_match": 15,
+        "constraint_match": 15,
+        "evidence_strength": 8,
+        "risk_penalty": 3
+      },
+      "why": "Agent Collaboration Product Manager 高度匹配，核心信号包括：agent, multi-agent, workflow, harness, agent collaboration, agent 协作。",
+      "resume_evidence": [
+        "agent",
+        "ai",
+        "human-in-the-loop"
+      ],
+      "gaps": [
+        "需要确认 JD 细节和硬性要求。"
+      ],
+      "risk_flags": [
+        "weak_resume_overlap"
+      ],
+      "recommended_action": "进入 Top jobs checkpoint，由用户确认是否针对该岗位改写简历或申请材料。"
+    },
+    {
+      "source": "sample",
+      "source_id": "sample-ai-agent-workflow-builder",
+      "encrypt_job_id": "",
+      "lid": "",
+      "title": "AI Agent Workflow Builder",
+      "company": "Developer Tool Startup",
+      "city": "北京",
+      "salary": "25-45K",
+      "jd_text": "构建面向开发者和一人公司的 Agent 工作流系统，沉淀可复用 skill，设计任务拆解、角色分配、工具调用、失败恢复和结果面板。熟悉 Codex、Claude Code、Cursor 等 Agent 产品者优先。",
+      "requirements": [
+        "Agent workflow",
+        "skill 设计",
+        "开发者工具",
+        "任务拆解",
+        "结果面板"
+      ],
+      "source_url": "",
+      "raw_available": true,
+      "score": 95,
+      "score_breakdown": {
+        "core_capability_match": 41,
+        "domain_direction_match": 18,
+        "seniority_responsibility_match": 15,
+        "constraint_match": 12,
+        "evidence_strength": 9,
+        "risk_penalty": 0
+      },
+      "why": "AI Agent Workflow Builder 高度匹配，核心信号包括：agent, workflow, skill, codex, agent 工作流, 一人公司。",
+      "resume_evidence": [
+        "agent",
+        "ai",
+        "skill",
+        "工具调用"
+      ],
+      "gaps": [
+        "建议在作品集第一屏突出 Agent Collaboration Harness，而不是单点工具。"
+      ],
+      "risk_flags": [],
+      "recommended_action": "进入 Top jobs checkpoint，由用户确认是否针对该岗位改写简历或申请材料。"
+    },
+    {
+      "source": "sample",
+      "source_id": "sample-ai-product-generalist",
+      "encrypt_job_id": "",
+      "lid": "",
+      "title": "AI Product Generalist",
+      "company": "B2B SaaS",
+      "city": "上海",
+      "salary": "20-35K",
+      "jd_text": "负责 AI 功能规划、用户调研、需求分析和跨团队落地。需要理解大模型能力边界，能推动从原型到上线，但岗位更偏通用 SaaS 产品经理。",
+      "requirements": [
+        "AI 产品",
+        "用户调研",
+        "需求分析",
+        "跨团队协作"
+      ],
+      "source_url": "",
+      "raw_available": true,
+      "score": 58,
+      "score_breakdown": {
+        "core_capability_match": 20,
+        "domain_direction_match": 6,
+        "seniority_responsibility_match": 15,
+        "constraint_match": 14,
+        "evidence_strength": 6,
+        "risk_penalty": 3
+      },
+      "why": "AI Product Generalist 需要谨慎评估，核心信号包括：协作, 原型, 产品。",
+      "resume_evidence": [
+        "ai"
+      ],
+      "gaps": [
+        "需要确认 JD 细节和硬性要求。"
+      ],
+      "risk_flags": [
+        "weak_resume_overlap"
+      ],
+      "recommended_action": "进入 Top jobs checkpoint，由用户确认是否针对该岗位改写简历或申请材料。"
+    }
+  ],
+  "score_breakdown": [
+    {
+      "source_id": "sample-agent-collaboration-pm",
+      "title": "Agent Collaboration Product Manager",
+      "company": "AI Collaboration Platform",
+      "score": 100,
+      "score_breakdown": {
+        "core_capability_match": 55,
+        "domain_direction_match": 20,
+        "seniority_responsibility_match": 15,
+        "constraint_match": 15,
+        "evidence_strength": 8,
+        "risk_penalty": 3
+      },
+      "risk_flags": [
+        "weak_resume_overlap"
+      ]
+    },
+    {
+      "source_id": "sample-ai-agent-workflow-builder",
+      "title": "AI Agent Workflow Builder",
+      "company": "Developer Tool Startup",
+      "score": 95,
+      "score_breakdown": {
+        "core_capability_match": 41,
+        "domain_direction_match": 18,
+        "seniority_responsibility_match": 15,
+        "constraint_match": 12,
+        "evidence_strength": 9,
+        "risk_penalty": 0
+      },
+      "risk_flags": []
+    },
+    {
+      "source_id": "sample-ai-product-generalist",
+      "title": "AI Product Generalist",
+      "company": "B2B SaaS",
+      "score": 58,
+      "score_breakdown": {
+        "core_capability_match": 20,
+        "domain_direction_match": 6,
+        "seniority_responsibility_match": 15,
+        "constraint_match": 14,
+        "evidence_strength": 6,
+        "risk_penalty": 3
+      },
+      "risk_flags": [
+        "weak_resume_overlap"
+      ]
+    }
+  ],
+  "resume_evidence_map": [
+    {
+      "source_id": "sample-agent-collaboration-pm",
+      "title": "Agent Collaboration Product Manager",
+      "resume_evidence": [
+        "agent",
+        "ai",
+        "human-in-the-loop"
+      ],
+      "gaps": [
+        "需要确认 JD 细节和硬性要求。"
+      ]
+    },
+    {
+      "source_id": "sample-ai-agent-workflow-builder",
+      "title": "AI Agent Workflow Builder",
+      "resume_evidence": [
+        "agent",
+        "ai",
+        "skill",
+        "工具调用"
+      ],
+      "gaps": [
+        "建议在作品集第一屏突出 Agent Collaboration Harness，而不是单点工具。"
+      ]
+    },
+    {
+      "source_id": "sample-ai-product-generalist",
+      "title": "AI Product Generalist",
+      "resume_evidence": [
+        "ai"
+      ],
+      "gaps": [
+        "需要确认 JD 细节和硬性要求。"
+      ]
+    }
+  ],
+  "top_jobs_checkpoint": [
+    {
+      "rank": 1,
+      "title": "Agent Collaboration Product Manager",
+      "company": "AI Collaboration Platform",
+      "city": "上海",
+      "salary": "30-50K",
+      "score": 100,
+      "why": "Agent Collaboration Product Manager 高度匹配，核心信号包括：agent, multi-agent, workflow, harness, agent collaboration, agent 协作。",
+      "resume_evidence": [
+        "agent",
+        "ai",
+        "human-in-the-loop"
+      ],
+      "gaps": [
+        "需要确认 JD 细节和硬性要求。"
+      ],
+      "risk_flags": [
+        "weak_resume_overlap"
+      ],
+      "recommended_action": "进入 Top jobs checkpoint，由用户确认是否针对该岗位改写简历或申请材料。"
+    },
+    {
+      "rank": 2,
+      "title": "AI Agent Workflow Builder",
+      "company": "Developer Tool Startup",
+      "city": "北京",
+      "salary": "25-45K",
+      "score": 95,
+      "why": "AI Agent Workflow Builder 高度匹配，核心信号包括：agent, workflow, skill, codex, agent 工作流, 一人公司。",
+      "resume_evidence": [
+        "agent",
+        "ai",
+        "skill",
+        "工具调用"
+      ],
+      "gaps": [
+        "建议在作品集第一屏突出 Agent Collaboration Harness，而不是单点工具。"
+      ],
+      "risk_flags": [],
+      "recommended_action": "进入 Top jobs checkpoint，由用户确认是否针对该岗位改写简历或申请材料。"
+    },
+    {
+      "rank": 3,
+      "title": "AI Product Generalist",
+      "company": "B2B SaaS",
+      "city": "上海",
+      "salary": "20-35K",
+      "score": 58,
+      "why": "AI Product Generalist 需要谨慎评估，核心信号包括：协作, 原型, 产品。",
+      "resume_evidence": [
+        "ai"
+      ],
+      "gaps": [
+        "需要确认 JD 细节和硬性要求。"
+      ],
+      "risk_flags": [
+        "weak_resume_overlap"
+      ],
+      "recommended_action": "进入 Top jobs checkpoint，由用户确认是否针对该岗位改写简历或申请材料。"
+    }
+  ],
+  "blocked_actions": [
+    "自动投递",
+    "自动打招呼",
+    "自动联系招聘方",
+    "批量沟通",
+    "绕过验证码或风控",
+    "编造简历经历"
+  ],
+  "human_checkpoints": [
+    "确认 Top jobs 是否符合目标方向。",
+    "确认每个推荐是否有真实简历/作品集证据支撑。",
+    "确认是否允许针对单个岗位改写简历或申请材料。",
+    "确认是否保存求职 workflow memory。"
+  ],
+  "writeback_preview": {
+    "requires_user_approval": true,
+    "workflow_asset_memory": "BOSS 岗位获取 -> JD 标准化 -> 匹配打分 -> 简历证据映射 -> Top jobs checkpoint。",
+    "discard": [
+      "原始简历全文",
+      "未确认岗位事实",
+      "agent trace",
+      "私密沟通内容"
+    ]
+  }
+}

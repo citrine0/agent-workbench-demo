@@ -1,0 +1,355 @@
+{
+  "goal_check": {
+    "input_type": "goal",
+    "interpreted_goal": "Auto-JobHunter 示例：我想使用 boss-agent-cli 通过 Chrome CDP 只读获取 BOSS 上 Agent / AI Product Builder 相关岗位，尽量补全岗位 JD，再按岗位描述、目标方向和我的真实简历证据做筛选与打分，输出最值得优先看的 Top jobs checkpoint。当前只需要完成岗位搜集、标准化、筛选和打分；不要修改简历、不要自动投递、不要联系招聘方、不要编造经历。",
+    "executable_goal": true,
+    "needs_task_room": false,
+    "single_agent_sufficient": true,
+    "recommendation": "single_agent",
+    "why": "这是 Auto-JobHunter 的 human-agent collaboration 示例：Header Agent 判断岗位获取、JD 标准化、打分和证据映射已沉淀为 boss_job_fit_skill；Harness 只负责 checkpoint、授权边界和 memory preview，不需要创建 Task Room。",
+    "why_single_agent_not_enough": "",
+    "current_autonomy_level": "Level 1: Draft with approval",
+    "recommended_autonomy_level": "Level 1: Draft with approval",
+    "automation_risk": "medium-high",
+    "authorization_scope": {
+      "allowed": [
+        "通过 boss-agent-cli 只读获取岗位/JD",
+        "标准化岗位字段",
+        "岗位筛选与打分",
+        "输出 Top jobs checkpoint"
+      ],
+      "needs_approval": [
+        "登录 BOSS",
+        "读取已登录账号可见岗位结果",
+        "根据目标 JD 修改简历",
+        "保存求职 workflow memory"
+      ],
+      "blocked": [
+        "自动投递",
+        "联系招聘方",
+        "批量打招呼",
+        "绕过验证码",
+        "编造简历经历",
+        "保存原始简历全文"
+      ],
+      "review_required": true
+    },
+    "success_criteria": [
+      "用户能判断哪些岗位值得优先看",
+      "每个推荐都有岗位字段、打分理由和风险说明",
+      "系统明确把修改简历与投递放到后续人工确认阶段",
+      "系统明确阻止自动投递、外部联系和经历编造",
+      "求职 workflow 只在确认后写回"
+    ],
+    "minimum_completion_path": [
+      "调用 boss_job_fit_skill，通过 Chrome CDP + boss-agent-cli 只读获取岗位列表和完整 JD",
+      "在 skill 内完成岗位标准化、fit score、风险打分和简历证据映射",
+      "输出 Top jobs checkpoint，等待用户确认是否进入简历修改阶段",
+      "由 harness services 展示禁止自动投递、联系招聘方、编造经历和 memory writeback preview"
+    ],
+    "required_capabilities": [
+      "job_scoring",
+      "application_risk_policy",
+      "memory_writeback"
+    ],
+    "minimum_viable_team": [
+      {
+        "agent": "Application Risk Policy Agent",
+        "capability": "application_risk_policy",
+        "why_selected": "阻止自动投递、联系招聘方和把简历修改提前到未确认阶段。"
+      },
+      {
+        "agent": "Memory Writeback Agent",
+        "capability": "memory_writeback",
+        "why_selected": "输出可确认的求职 workflow 写回预览。"
+      }
+    ],
+    "excluded_agents": [
+      {
+        "agent": "Job Scoring Agent",
+        "why_excluded": "岗位获取、JD 标准化、打分和证据映射已经沉淀为 boss_job_fit_skill，不需要单独创建专家。"
+      },
+      {
+        "agent": "Resume Evidence Agent",
+        "why_excluded": "证据映射由 boss_job_fit_skill 输出；根据 JD 修改简历属于后续需确认阶段。"
+      },
+      {
+        "agent": "Auto Apply Agent",
+        "why_excluded": "真实投递和外部联系必须由用户确认。"
+      },
+      {
+        "agent": "Open-Ended Swarm Agent",
+        "why_excluded": "岗位打分主要由 skill pipeline 覆盖，不需要开放式群聊。"
+      }
+    ],
+    "suggested_experts": [
+      "Application Risk Policy Agent",
+      "Memory Writeback Agent"
+    ],
+    "clarification_questions": [],
+    "capability_blindspots": [
+      "岗位排序偏差",
+      "简历证据不足",
+      "自动投递风险",
+      "memory 污染"
+    ],
+    "capability_boundary": "擅长：AI Coding、快速原型、产品构建、判断自身经历真实性；希望委托：跨产品研究、产品批判、协作设计、评测指标和长期记忆压缩。"
+  },
+  "capability_radius": {
+    "inside_radius": [
+      {
+        "capability": "ai_coding",
+        "label": "AI Coding",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户能判断实现细节与工程取舍"
+      },
+      {
+        "capability": "rapid_prototyping",
+        "label": "快速原型",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户擅长快速验证并收敛方案"
+      },
+      {
+        "capability": "resume_evidence",
+        "label": "简历证据映射",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户能判断自身经历真实性，适合深挖和确认"
+      }
+    ],
+    "outside_radius": [
+      {
+        "capability": "task_decomposition",
+        "label": "任务拆解",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "复杂任务需要先拆成可交付单元，避免 Agent 直接长回答"
+      },
+      {
+        "capability": "role_assignment",
+        "label": "角色分配",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要判断哪些 Agent 会改变结果，哪些只是增加噪音"
+      },
+      {
+        "capability": "artifact_contract",
+        "label": "产物合约",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "Agent 协作需要结构化输入输出，否则难以合并和复核"
+      },
+      {
+        "capability": "qa_conflict_resolution",
+        "label": "QA 与冲突处理",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "多 Agent 输出必须有质检、冲突合并和停止条件"
+      },
+      {
+        "capability": "memory_writeback",
+        "label": "协作记忆写回",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "用户更偏好结果优先与证据优先"
+      },
+      {
+        "capability": "feedback_triage",
+        "label": "反馈分诊",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "跨平台反馈需要去重、聚类和信号强度判断，不能只凭单条评论下结论"
+      },
+      {
+        "capability": "research_synthesis",
+        "label": "研究归纳",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "跨产品研究需要把事实、推断、证据强弱和待确认信息结构化"
+      },
+      {
+        "capability": "product_critique",
+        "label": "产品批判",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要主动寻找反例、局限和不可迁移条件，避免只输出正向总结"
+      },
+      {
+        "capability": "collaboration_design",
+        "label": "协作设计",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要把研究结论转成可执行的 Agent 介入点、授权边界和人审节点"
+      },
+      {
+        "capability": "product_iteration",
+        "label": "产品迭代收敛",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要把用户信号、目标用户和产品策略合并成下一轮迭代判断"
+      },
+      {
+        "capability": "trust_activation",
+        "label": "信任与激活",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "平台文案和激活路径涉及承诺边界、信任门槛与用户行动设计"
+      },
+      {
+        "capability": "evaluation_design",
+        "label": "评测设计",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要定义反馈是否足够支撑产品迭代的证据标准和停止条件"
+      },
+      {
+        "capability": "job_scoring",
+        "label": "岗位打分",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "岗位排序需要证据映射和约束判断"
+      },
+      {
+        "capability": "application_risk_policy",
+        "label": "申请风险策略",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "用户更偏好结果优先与证据优先"
+      }
+    ],
+    "automation_sensitive": [
+      {
+        "capability": "execution_handoff",
+        "label": "执行交接",
+        "preferred_mode": "delegate_with_review",
+        "required_controls": [
+          "blocked_actions",
+          "rollback_condition",
+          "review_required"
+        ],
+        "why": "发布、私信和跨平台外部动作必须先生成草稿并等待审批"
+      }
+    ]
+  },
+  "collaboration_mode": {
+    "by_capability": {
+      "ai_coding": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "rapid_prototyping": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "resume_evidence": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "task_decomposition": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "role_assignment": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "artifact_contract": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "qa_conflict_resolution": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "memory_writeback": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "feedback_triage": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "research_synthesis": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "product_critique": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "collaboration_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "product_iteration": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "trust_activation": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "evaluation_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "job_scoring": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "application_risk_policy": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "execution_handoff": {
+        "mode": "delegate_with_review",
+        "detail_level": "boundary_first",
+        "user_action": "approve_or_block"
+      }
+    }
+  },
+  "runtime_decision": {
+    "runtime": "skill_heavy_with_human_checkpoints",
+    "decision_factors": {
+      "task_complexity": "medium",
+      "user_capability_radius": {
+        "inside_count": 3,
+        "outside_count": 14,
+        "automation_sensitive_count": 1
+      },
+      "intent_mode": "delegate_stable_workflow",
+      "risk_boundary": "high"
+    },
+    "collaboration_policy": {
+      "inside_radius": "co-think with detail",
+      "outside_radius": "result-first with evidence",
+      "automation_sensitive": "approval-required with blocked actions"
+    },
+    "why_not_skill": "",
+    "why_not_task_room": "主要工作可由已注册 skill pipeline 覆盖；风险集中在审批、外部动作和记忆写回，不需要开放 Task Room。"
+  },
+  "meta": {
+    "mode": "v0-fallback",
+    "generated_at": "2026-06-17T19:33:54",
+    "warning": "当前 Goal Check 使用 fallback 规则。"
+  }
+}

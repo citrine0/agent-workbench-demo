@@ -1,0 +1,685 @@
+{
+  "goal_check": {
+    "input_type": "goal",
+    "interpreted_goal": "根据 MVP 7 天用户反馈，判断最大阻塞点，设计下一轮最小迭代，生成 Execution Agent handoff brief，并明确哪些自动化能力不能直接上线。",
+    "executable_goal": true,
+    "needs_task_room": true,
+    "single_agent_sufficient": false,
+    "recommendation": "task_room",
+    "why": "任务同时涉及反馈归因、产品收敛、授权边界和执行交接，单 Agent 容易把关键取舍压缩成长回答。",
+    "why_single_agent_not_enough": "需要多个能力模块共同影响决策与授权边界，且必须显式给出 blocked actions 和回滚条件。",
+    "current_autonomy_level": "Level 1: Draft with approval",
+    "recommended_autonomy_level": "Level 2: Execute after one-click approval（仅限低风险 patch）",
+    "automation_risk": "medium-high",
+    "authorization_scope": {
+      "allowed": [
+        "生成 Execution Agent patch brief",
+        "生成一键确认后的低风险文案/页面草稿"
+      ],
+      "needs_approval": [
+        "修改关键任务流程",
+        "调整默认授权文案"
+      ],
+      "blocked": [
+        "自动触达所有用户",
+        "自动上线高风险功能",
+        "自动改动计费/权限策略"
+      ],
+      "review_required": true
+    },
+    "success_criteria": [
+      "用户能快速判断 primary blocker",
+      "用户能看到下一轮最小迭代而非功能堆叠",
+      "用户能明确哪些动作可授权、哪些必须人工确认",
+      "用户能看到本次任务如何更新 autonomy policy"
+    ],
+    "minimum_completion_path": [
+      "判断反馈中的最大阻塞点",
+      "区分价值问题、体验问题、信任问题和增长问题",
+      "定义下一轮最小产品迭代",
+      "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+      "定义观察指标与 autonomy policy 更新条件"
+    ],
+    "required_capabilities": [
+      "feedback_triage",
+      "product_iteration",
+      "trust_activation",
+      "execution_handoff",
+      "evaluation_design"
+    ],
+    "minimum_viable_team": [
+      {
+        "agent": "Feedback Triage Agent",
+        "why_selected": "识别高信号反馈和 primary blocker。"
+      },
+      {
+        "agent": "Product Iteration Agent",
+        "why_selected": "收敛下一轮最小迭代与排除项。"
+      },
+      {
+        "agent": "Trust & Activation Agent",
+        "why_selected": "判断授权风险与 blocked automation。"
+      },
+      {
+        "agent": "Execution Handoff Agent",
+        "why_selected": "把产品决策转成 Execution Agent 可执行 patch brief。"
+      },
+      {
+        "agent": "Evaluation Agent",
+        "why_selected": "定义观察指标、badcase 与 policy 更新条件。"
+      }
+    ],
+    "excluded_agents": [
+      {
+        "agent": "Growth Experiment Agent",
+        "why_excluded": "当前最大阻塞点在激活与信任，先修复产品闭环再放大获客。"
+      },
+      {
+        "agent": "Full Automation Agent",
+        "why_excluded": "证据不足，不应直接提升到高自治自动执行。"
+      }
+    ],
+    "suggested_experts": [
+      "Feedback Triage Agent",
+      "Product Iteration Agent",
+      "Trust & Activation Agent",
+      "Execution Handoff Agent",
+      "Evaluation Agent"
+    ],
+    "clarification_questions": [],
+    "capability_blindspots": [
+      "反馈归因",
+      "范围收敛",
+      "自动化风险判断",
+      "执行交接规范"
+    ]
+  },
+  "minimum_completion_path": {
+    "success_criteria": [
+      "用户能快速判断 primary blocker",
+      "用户能看到下一轮最小迭代而非功能堆叠",
+      "用户能明确哪些动作可授权、哪些必须人工确认",
+      "用户能看到本次任务如何更新 autonomy policy"
+    ],
+    "minimum_completion_path": [
+      "判断反馈中的最大阻塞点",
+      "区分价值问题、体验问题、信任问题和增长问题",
+      "定义下一轮最小产品迭代",
+      "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+      "定义观察指标与 autonomy policy 更新条件"
+    ],
+    "required_capabilities": [
+      "feedback_triage",
+      "product_iteration",
+      "trust_activation",
+      "execution_handoff",
+      "evaluation_design"
+    ]
+  },
+  "task_state": {
+    "task_room": "ai-product-iteration-loop",
+    "status": "waiting_for_user_review",
+    "goal": "根据 MVP 7 天用户反馈完成下一轮最小迭代、执行交接与授权边界判断",
+    "current_autonomy_level": "Level 1: Draft with approval",
+    "recommended_autonomy_level": "Level 2: Execute after one-click approval（低风险 patch）",
+    "automation_risk": "medium-high",
+    "success_criteria": [
+      "用户能快速判断 primary blocker",
+      "用户能看到下一轮最小迭代",
+      "用户能明确授权范围和 blocked actions"
+    ],
+    "authorization_level": "Level 1: 生成建议，等待确认"
+  },
+  "collaboration_contract": {
+    "why_task_room": "任务同时涉及反馈分层、产品收敛、风险授权和执行交接；这些能力共同影响最终授权决策。",
+    "selected_agents": [
+      {
+        "agent": "Feedback Triage Agent",
+        "why_selected": "识别 primary blocker 与反馈信号质量。"
+      },
+      {
+        "agent": "Product Iteration Agent",
+        "why_selected": "将问题转成最小迭代与排除项。"
+      },
+      {
+        "agent": "Trust & Activation Agent",
+        "why_selected": "明确授权风险与不可自动化动作。"
+      },
+      {
+        "agent": "Execution Handoff Agent",
+        "why_selected": "生成可执行 patch brief 与回滚条件。"
+      },
+      {
+        "agent": "Evaluation Agent",
+        "why_selected": "定义指标和 policy 更新条件。"
+      }
+    ],
+    "excluded_agents": [
+      {
+        "agent": "Growth Experiment Agent",
+        "why_excluded": "先解决激活阻塞，再放大获客。"
+      },
+      {
+        "agent": "Full Automation Agent",
+        "why_excluded": "证据不足，不可直接全自动执行。"
+      }
+    ],
+    "authorization_scope": {
+      "allowed": [
+        "生成 patch brief",
+        "生成低风险草稿"
+      ],
+      "needs_approval": [
+        "改动关键流程",
+        "变更默认授权逻辑"
+      ],
+      "blocked": [
+        "自动触达所有用户",
+        "自动上线高风险功能"
+      ],
+      "review_required": true
+    },
+    "merge_rule": "先确定 primary blocker，再定义最小迭代与执行交接，最后给出授权范围和 policy 更新建议。",
+    "success_criteria": "用户能在一个界面中判断该改什么、能授权什么、不能自动化什么。"
+  },
+  "context_packets": [
+    {
+      "agent": "Feedback Triage Agent",
+      "task": "拆分用户反馈信号并定位 primary blocker",
+      "minimum_completion_path": [
+        "判断反馈中的最大阻塞点",
+        "区分价值/体验/信任/增长问题"
+      ],
+      "necessary_context": [
+        "30 用户 7 天行为数据",
+        "文本反馈摘要",
+        "当前产品能力"
+      ],
+      "excluded_context": [
+        "无关历史聊天",
+        "未验证外部推断"
+      ],
+      "expected_output": {
+        "agent": "Feedback Triage Agent",
+        "judgment": "",
+        "key_findings": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high"
+      },
+      "success_criteria": "明确 primary blocker 并给出可验证证据"
+    },
+    {
+      "agent": "Product Iteration Agent",
+      "task": "输出下一轮最小产品迭代",
+      "minimum_completion_path": [
+        "定义下一轮最小产品迭代",
+        "明确不做项"
+      ],
+      "necessary_context": [
+        "primary blocker",
+        "当前产品约束",
+        "开发周期 1-2 周"
+      ],
+      "excluded_context": [
+        "长期平台规划",
+        "无关增长假设"
+      ],
+      "expected_output": {
+        "agent": "Product Iteration Agent",
+        "judgment": "",
+        "key_findings": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high"
+      },
+      "success_criteria": "范围可执行，且有清晰验收标准"
+    },
+    {
+      "agent": "Trust & Activation Agent",
+      "task": "明确授权风险和 blocked automation",
+      "minimum_completion_path": [
+        "判断可授权动作",
+        "标注不可自动执行动作"
+      ],
+      "necessary_context": [
+        "当前 autonomy level",
+        "迭代方案",
+        "用户反馈中的信任阻塞"
+      ],
+      "excluded_context": [
+        "与授权无关的技术细节"
+      ],
+      "expected_output": {
+        "agent": "Trust & Activation Agent",
+        "judgment": "",
+        "key_findings": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high"
+      },
+      "success_criteria": "授权范围清晰且风险可解释"
+    },
+    {
+      "agent": "Execution Handoff Agent",
+      "task": "生成 Execution Agent patch brief",
+      "minimum_completion_path": [
+        "定义可执行 patch",
+        "定义回滚与复核条件"
+      ],
+      "necessary_context": [
+        "最小迭代方案",
+        "authorization scope",
+        "工程约束"
+      ],
+      "excluded_context": [
+        "与 patch 无关的长讨论"
+      ],
+      "expected_output": {
+        "agent": "Execution Handoff Agent",
+        "judgment": "",
+        "key_findings": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high"
+      },
+      "success_criteria": "交接可被执行代理直接消费"
+    },
+    {
+      "agent": "Evaluation Agent",
+      "task": "定义观察指标与 policy 更新条件",
+      "minimum_completion_path": [
+        "定义指标",
+        "定义 policy 更新条件"
+      ],
+      "necessary_context": [
+        "primary blocker",
+        "迭代方案",
+        "授权范围"
+      ],
+      "excluded_context": [
+        "不可观测指标"
+      ],
+      "expected_output": {
+        "agent": "Evaluation Agent",
+        "judgment": "",
+        "key_findings": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high"
+      },
+      "success_criteria": "指标可执行，能支持下一轮授权调整"
+    }
+  ],
+  "expert_outputs": [
+    {
+      "agent": "Feedback Triage Agent",
+      "judgment": "primary blocker 是用户完成首次结果后缺少明确下一步行动引导，属于信任与激活断层。",
+      "key_findings": [
+        "8/30 用户明确反馈“不知道下一步怎么做”",
+        "仅 5/30 次日回访，说明激活链路薄弱",
+        "页面信息过多导致行动决策成本高"
+      ],
+      "risks": [
+        "若先做获客放大，会放大低激活漏斗",
+        "若直接自动执行，可能触发错误操作"
+      ],
+      "missing_information": [
+        "不同用户分层的具体流失节点"
+      ],
+      "next_validation_step": "对 5 名流失用户回访，确认“下一步迷失”发生在哪一屏。",
+      "authorization_impact": "不建议直接提升到高自治执行；先补齐结果到行动的引导链路。",
+      "confidence": "high"
+    },
+    {
+      "agent": "Product Iteration Agent",
+      "judgment": "下一轮应先做“结果后下一步引导卡 + 一键执行草稿”而非新增复杂功能。",
+      "key_findings": [
+        "最小迭代可围绕单一目标：缩短从结果到行动的时间",
+        "首版只做 1-2 个高频下一步模板",
+        "减少首屏信息密度，突出主行动按钮"
+      ],
+      "risks": [
+        "若同时改太多模块，无法归因效果",
+        "若没有验收指标，迭代价值不透明"
+      ],
+      "missing_information": [
+        "最常见的前 2 个下一步场景"
+      ],
+      "next_validation_step": "先上线引导卡与草稿模式，对比“结果后 24h 二次行动率”。",
+      "authorization_impact": "可授权执行 UI 文案和低风险引导改动；核心流程改动需人工复核。",
+      "confidence": "high"
+    },
+    {
+      "agent": "Trust & Activation Agent",
+      "judgment": "当前可从 Level 1 提升到有限 Level 2（需一键确认），但不能放开全自动执行。",
+      "key_findings": [
+        "用户已有自动执行诉求，但证据不足以直接全自动",
+        "应显式展示 Allowed / Needs Approval / Blocked 三类动作",
+        "授权按钮必须与风险提示同屏"
+      ],
+      "risks": [
+        "若隐藏 blocked actions，会误导授权边界",
+        "若无回滚条件，错误自动化成本高"
+      ],
+      "missing_information": [
+        "用户对一键确认路径的接受度"
+      ],
+      "next_validation_step": "A/B 测试：仅建议 vs 建议+一键确认草稿 的完成率差异。",
+      "authorization_impact": "建议限定为“草稿+一键确认”授权，不开放自动触达和自动上线。",
+      "confidence": "medium-high"
+    },
+    {
+      "agent": "Execution Handoff Agent",
+      "judgment": "可生成可执行 patch brief，范围限定在结果页引导与草稿执行卡。",
+      "key_findings": [
+        "明确 patch goal、涉及模块、验收标准和回滚条件",
+        "可由 Execution Agent 在受限范围内实施",
+        "必须保留 review_required=true"
+      ],
+      "risks": [
+        "模块边界不清会导致过量改动",
+        "若未定义回滚条件，线上风险不可控"
+      ],
+      "missing_information": [
+        "当前代码中对应模块命名"
+      ],
+      "next_validation_step": "先在测试环境执行 patch，并校验 3 项验收标准后再上线。",
+      "authorization_impact": "允许执行受限 patch，禁止跨模块自动重构。",
+      "confidence": "medium"
+    },
+    {
+      "agent": "Evaluation Agent",
+      "judgment": "应以激活与授权质量指标作为本轮核心评测，附带 policy 更新条件。",
+      "key_findings": [
+        "核心指标：二次行动率、授权通过率、回滚触发率",
+        "badcase 必须覆盖错误自动化与过度组队",
+        "policy 更新应基于连续成功样本而非单次成功"
+      ],
+      "risks": [
+        "只看功能上线而不看授权质量会误判",
+        "指标过多会降低执行效率"
+      ],
+      "missing_information": [
+        "当前事件埋点完整度"
+      ],
+      "next_validation_step": "定义 2 周观察窗口，收集 3 个核心指标并复盘授权边界。",
+      "authorization_impact": "仅当核心指标达标且无高风险事故，才考虑提升自治等级。",
+      "confidence": "high"
+    }
+  ],
+  "single_agent_baseline": {
+    "summary": "single agent 可以给出综合建议，但通常难以显式区分可授权动作、blocked actions 与执行交接边界。",
+    "gaps": [
+      "authorization scope 不够结构化",
+      "execution handoff 粒度不足",
+      "policy 更新条件不稳定"
+    ]
+  },
+  "multi_agent_chat_baseline": {
+    "summary": "多角色群聊信息量大，但若缺少 contract 和 merge rule，用户很难快速做授权决策。",
+    "gaps": [
+      "噪音高",
+      "冲突难合并",
+      "无法稳定生成可执行 handoff"
+    ]
+  },
+  "execution_handoff_brief": {
+    "patch_goal": "在结果页增加“下一步行动引导卡”和“Execution Agent 草稿执行卡”，缩短用户从结果到行动的路径。",
+    "files_or_modules_to_touch": [
+      "result_surface_view",
+      "next_action_card",
+      "execution_draft_panel"
+    ],
+    "acceptance_criteria": [
+      "用户在结果页 30 秒内可看到明确下一步",
+      "一键确认草稿可生成且可编辑",
+      "blocked actions 在授权面板中显式可见"
+    ],
+    "blocked_actions": [
+      "自动触达所有用户",
+      "自动上线高风险功能",
+      "自动改动计费/权限策略"
+    ],
+    "rollback_condition": "若上线后 48 小时内二次行动率下降超过 10% 或出现高风险误触发，立即回滚。",
+    "review_required": true
+  },
+  "final_result": {
+    "goal_summary": {
+      "user_goal": "根据 MVP 7 天反馈完成下一轮最小迭代、执行交接与授权边界判断。",
+      "header_understanding": "你已经愿意高频使用 Agent，当前关键是控制授权边界，避免噪音协作和错误自动化。",
+      "success_criteria": [
+        "明确 primary blocker",
+        "给出 next minimal iteration",
+        "给出可执行 handoff 与 blocked actions",
+        "给出 autonomy policy 更新建议"
+      ],
+      "current_autonomy_level": "Level 1: Draft with approval",
+      "recommended_autonomy_level": "Level 2: Execute after one-click approval（限低风险 patch）",
+      "authorization_scope": {
+        "allowed": [
+          "生成 patch brief",
+          "生成低风险草稿"
+        ],
+        "needs_approval": [
+          "关键流程改动",
+          "默认授权策略改动"
+        ],
+        "blocked": [
+          "自动触达用户",
+          "自动上线高风险功能",
+          "自动改计费"
+        ],
+        "review_required": true
+      }
+    },
+    "final_recommendation": {
+      "decision": "建议继续（Go）",
+      "reason": "阻塞点与改动范围已可收敛，且可在受限授权下安全推进。",
+      "suggested_action": "先授权 Execution Agent 执行低风险 patch，再按指标决定是否提升自治等级。"
+    },
+    "primary_blocker": "用户完成首次结果后缺少下一步行动引导，导致激活链路断层。",
+    "next_minimal_iteration": [
+      "结果页增加下一步引导卡",
+      "提供一键确认草稿执行卡",
+      "降低首屏信息密度并突出主行动按钮"
+    ],
+    "execution_agent_handoff_brief": {
+      "patch_goal": "实现下一步引导卡与草稿执行卡",
+      "files_or_modules_to_touch": [
+        "result_surface_view",
+        "next_action_card",
+        "execution_draft_panel"
+      ],
+      "acceptance_criteria": [
+        "30 秒内可定位下一步",
+        "草稿可生成且可编辑",
+        "blocked actions 显示清晰"
+      ],
+      "blocked_actions": [
+        "自动触达用户",
+        "自动上线高风险功能",
+        "自动改计费/权限"
+      ],
+      "rollback_condition": "关键指标恶化或出现高风险误触发即回滚",
+      "review_required": true
+    },
+    "blocked_automation": [
+      "自动触达所有用户",
+      "自动上线高风险功能",
+      "自动改动计费或权限策略"
+    ],
+    "metrics_to_watch": [
+      "结果后 24h 二次行动率",
+      "授权通过率",
+      "回滚触发率"
+    ],
+    "autonomy_update": "保持全局 Level 1；对“低风险引导类 patch”试点 Level 2（一键确认）。",
+    "why_this_matters": [
+      "把反馈分析转成可授权执行闭环",
+      "避免错误自动化",
+      "形成可复用自治策略"
+    ],
+    "evidence_confidence": {
+      "overall_confidence": "medium-high",
+      "evidence": [
+        "反馈和行为数据均指向激活断层",
+        "最小迭代可在短周期内验证",
+        "执行交接与回滚条件已明确"
+      ],
+      "uncertainties": [
+        "用户对一键确认路径的真实接受度",
+        "埋点完整度是否足够支持 policy 更新"
+      ]
+    },
+    "risks_unknowns": [
+      "若过早放开高自治执行会引发错误自动化",
+      "若范围失控会延迟验证周期",
+      "若未监控关键指标则无法判断升级自治是否安全"
+    ],
+    "suggested_next_actions": {
+      "low_risk": [
+        "先执行低风险 UI/文案 patch",
+        "上线前在测试环境完成验收"
+      ],
+      "needs_authorization": [
+        "授权 Execution Agent 执行受限 patch",
+        "批准关键流程改动"
+      ],
+      "human_confirm_required": [
+        "涉及用户触达策略的改动",
+        "涉及默认授权策略的改动"
+      ],
+      "blocked": [
+        "全量自动触达",
+        "高风险功能自动上线",
+        "自动改计费/权限"
+      ],
+      "not_recommended": [
+        "当前阶段直接提升到 Level 3/4",
+        "在激活问题未解前放大获客实验"
+      ]
+    },
+    "authorization_panel": [
+      "Accept result",
+      "Ask follow-up",
+      "Edit goal",
+      "Authorize Execution Agent patch",
+      "Approve draft only",
+      "Keep analysis-only",
+      "Reject result",
+      "Close Task Room"
+    ]
+  },
+  "memory_patch": {
+    "stable_user_profile": {
+      "strengths": [
+        "AI Coding",
+        "快速原型"
+      ],
+      "blind_spots": [
+        "自动化风险边界",
+        "授权策略设计",
+        "评测体系"
+      ]
+    },
+    "confirmed_preferences": [
+      "先看可授权动作，再看协作细节",
+      "希望显式看到 blocked actions",
+      "偏好低风险一键确认而非全自动"
+    ],
+    "writeback_reason": "这些偏好跨任务稳定，可用于后续自治策略。"
+  },
+  "playbook_update": {
+    "title": "MVP 反馈迭代与执行交接",
+    "steps": [
+      "先定位 primary blocker",
+      "收敛 next minimal iteration",
+      "生成 execution handoff brief",
+      "定义 blocked actions 与回滚条件",
+      "按指标复盘并更新自治策略"
+    ],
+    "when_to_use": [
+      "已有真实用户反馈",
+      "需要把分析推进到执行"
+    ]
+  },
+  "autonomy_policy_update": {
+    "current_level": "Level 1: Draft with approval",
+    "recommended_level": "Level 2: Execute after one-click approval（仅限低风险 patch）",
+    "allowed_action_classes": [
+      "低风险文案/引导改动",
+      "结构化 patch brief 生成"
+    ],
+    "blocked_action_classes": [
+      "自动触达用户",
+      "自动上线高风险功能",
+      "自动改计费与权限"
+    ],
+    "upgrade_condition": [
+      "连续两轮迭代达成核心指标",
+      "无高风险事故",
+      "回滚触发率低于阈值"
+    ],
+    "downgrade_condition": [
+      "出现高风险误执行",
+      "核心指标连续恶化",
+      "回滚频繁触发"
+    ],
+    "review_required": true,
+    "notes": "按任务类型分层升级自治，不做全局一次性升权。"
+  },
+  "evaluation": {
+    "dimensions": [
+      "启动摩擦",
+      "Goal clarity",
+      "是否避免过度协作",
+      "是否值得创建 Task Room",
+      "Token/时间成本是否合理",
+      "是否出现 AI 会议噪音",
+      "目标理解清晰度",
+      "minimum completion path 清晰度",
+      "盲区发现能力",
+      "selected agents 是否必要",
+      "Minimum Viable Team 是否足够小",
+      "excluded agents 是否合理",
+      "Context 精炼度",
+      "输出可判断性",
+      "风险透明度",
+      "下一步可执行性",
+      "授权友好度",
+      "Execution Agent handoff 是否可执行",
+      "automation risk 是否被识别",
+      "blocked actions 是否合理",
+      "autonomy policy update 是否清晰",
+      "复用价值"
+    ],
+    "scores": {
+      "single_agent": [5, 4, 5, 2, 5, 5, 3, 2, 2, 2, 5, 4, 3, 3, 2, 3, 3, 2, 2, 2, 2, 2],
+      "multi_agent_chat": [2, 3, 1, 2, 2, 1, 3, 1, 3, 2, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1],
+      "task_room_protocol": [4, 5, 5, 5, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 4, 5, 5, 5, 5, 5, 5, 5]
+    },
+    "badcases": [
+      "伪协作：单 Agent 足够却硬拉多专家",
+      "岗位映射误区：按岗位机械组队",
+      "过度组队：加入不会改变决策的专家",
+      "长上下文污染：专家收到无关历史",
+      "群聊噪音：无 merge rule",
+      "过度授权：无风险与回滚条件直接执行",
+      "错误自动化：证据不足却放开高自治",
+      "handoff 失真：上游结论无法转成 patch brief",
+      "无写回：未更新 playbook/policy"
+    ],
+    "judge_summary": "Task Room 的优势来自 Goal Check、最小团队、授权范围和 execution handoff，而非专家数量。"
+  }
+}

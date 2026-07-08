@@ -1,0 +1,10 @@
+{
+  "room_name": "Complex Product Research Room",
+  "status": "completed_with_compressed_result",
+  "goal": "复杂产品研究 Room 示例：我需要研究 Linear、Slack、飞书、Paperclip、Symphony 这类协作产品，判断 Agent 应该如何进入真实协作工作流。请不要直接给一篇长答案。先判断是否需要 Task Room，再用已注册 Agent 分别完成资料归纳、产品批判和 Agent 协作设计，最后输出协作产品对比表、Agent 介入点、guardrails / human-in-the-loop 设计、可用于面试的 3 分钟观点，以及 Room Capsule / Playbook Draft。",
+  "why_task_room": "这是复杂产品研究 Room 示例：跨产品研究、批判、协作设计和评估指标不适合由单个 Skill 或一篇长答案覆盖；需要 Room Controller 组织已注册 Agent 产出可合并 artifact，并把 candidate Agent、人审和写回边界显性化。",
+  "context_scope": "temporary_room_context",
+  "current_autonomy_level": "Level 1: Draft with approval",
+  "recommended_autonomy_level": "Level 2: Build agent team spec after approval",
+  "automation_risk": "medium"
+}

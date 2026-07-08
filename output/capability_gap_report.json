@@ -1,0 +1,119 @@
+{
+  "required_capabilities": [
+    "research_synthesis",
+    "product_critique",
+    "collaboration_design",
+    "memory_writeback",
+    "evaluation_design"
+  ],
+  "covered_by_registered_agents": [
+    {
+      "capability": "research_synthesis",
+      "agent": "Research Synthesis Agent",
+      "source": "agents/research_synthesis_agent.json",
+      "status": "registered"
+    },
+    {
+      "capability": "product_critique",
+      "agent": "Product Critic Agent",
+      "source": "agents/product_critic_agent.json",
+      "status": "registered"
+    },
+    {
+      "capability": "collaboration_design",
+      "agent": "Collaboration Designer Agent",
+      "source": "agents/collaboration_designer_agent.json",
+      "status": "registered"
+    }
+  ],
+  "covered_by_skills": [
+    {
+      "skill_id": "research_brief_loader_skill",
+      "capability": "research_brief_loading",
+      "covers": [
+        "target_products",
+        "evidence_policy",
+        "known_unknowns"
+      ],
+      "status": "room_local_skill"
+    },
+    {
+      "skill_id": "artifact_indexer_skill",
+      "capability": "artifact_indexing",
+      "covers": [
+        "research_synthesis_artifact",
+        "product_critique_artifact",
+        "collaboration_design_artifact"
+      ],
+      "status": "room_local_skill"
+    },
+    {
+      "skill_id": "collaboration_memory_writer_skill",
+      "capability": "memory_writeback",
+      "covers": [
+        "playbook_writeback_proposal"
+      ],
+      "status": "harness_service"
+    }
+  ],
+  "missing_capabilities": [
+    "evaluation_design"
+  ],
+  "gap_severity": "recoverable",
+  "minimal_path": [
+    "本次只使用已注册 Research Synthesis、Product Critic、Collaboration Designer 三个 Agent 完成可交付结果。",
+    "Evaluation Agent 先保留为 candidate spec，不进入可信执行。",
+    "未确认资料全部标记为待确认，不作为强事实。",
+    "成功后只写回 playbook proposal；多次复用稳定后再考虑注册/升级 agent 或 skill。"
+  ],
+  "candidate_agent_specs": [
+    {
+      "agent": "Evaluation Agent",
+      "capability": "evaluation_design",
+      "status": "candidate_only",
+      "generated_by": "external_agent_builder_tool_protocol",
+      "why_needed": "后续需要系统评估 Router / Room Controller 的路由准确率、噪音和复用质量；当前 demo 只展示 5 行 Pilot Eval。",
+      "input_contract": [
+        "task_goal",
+        "scoped_memory",
+        "registered_agent_artifacts",
+        "blocked_actions"
+      ],
+      "output_contract": [
+        "structured_artifact",
+        "evidence",
+        "risk_notes",
+        "stop_condition"
+      ],
+      "blocked_actions": [
+        "enter_trusted_execution_without_eval",
+        "perform_external_actions",
+        "write_long_term_memory_without_approval"
+      ],
+      "eval_required": true
+    }
+  ],
+  "agent_builder_call": {
+    "tool": "external_agent_builder",
+    "status": "proposed_not_executed",
+    "why": "Room Controller 只提出 candidate agent spec；通过 Agent Eval 前不进入可信执行。",
+    "inputs": [
+      "missing_capabilities",
+      "task_goal",
+      "artifact_contract",
+      "blocked_actions"
+    ],
+    "outputs": [
+      "candidate_agent_spec",
+      "eval_plan",
+      "registration_recommendation"
+    ]
+  },
+  "eval_gate": [
+    "必须在 3 个以上同类任务中输出结构化 artifact",
+    "必须遵守 blocked actions，不能自动执行外部动作",
+    "必须证明相比现有 registered agents 能降低噪音或提高结果质量",
+    "通过后只注册为 registered agent；多次稳定复用后才可能升级为 skill"
+  ],
+  "human_checkpoint": "确认本次是否接受最小路径；确认 Evaluation Agent 是否进入后续评测；确认 playbook 是否写回。"
+}

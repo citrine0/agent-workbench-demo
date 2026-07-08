@@ -1,0 +1,94 @@
+{
+  "by_capability": {
+    "ai_coding": {
+      "mode": "co_think",
+      "detail_level": "high",
+      "user_action": "review_and_challenge"
+    },
+    "rapid_prototyping": {
+      "mode": "co_think",
+      "detail_level": "high",
+      "user_action": "review_and_challenge"
+    },
+    "resume_evidence": {
+      "mode": "co_think",
+      "detail_level": "high",
+      "user_action": "review_and_challenge"
+    },
+    "task_decomposition": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "role_assignment": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "artifact_contract": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "qa_conflict_resolution": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "memory_writeback": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "feedback_triage": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "research_synthesis": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "product_critique": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "collaboration_design": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "product_iteration": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "trust_activation": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "evaluation_design": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "job_scoring": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "application_risk_policy": {
+      "mode": "result_first",
+      "detail_level": "summary_with_evidence",
+      "user_action": "accept_or_ask_for_evidence"
+    },
+    "execution_handoff": {
+      "mode": "delegate_with_review",
+      "detail_level": "boundary_first",
+      "user_action": "approve_or_block"
+    }
+  }
+}

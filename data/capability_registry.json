@@ -1,0 +1,558 @@
+{
+  "version": "2026-06-04",
+  "purpose": "Registry for the Agent Collaboration Harness demo. The same harness is shown through two examples: Auto-JobHunter for human-agent collaboration, and Multi-Agent Workflow for agent-agent collaboration.",
+  "memory_model": {
+    "principle": "Memory is a writeback layer for collaboration hygiene, not a generic chat history store.",
+    "memory_types": [
+      "user_capability_profile",
+      "delegation_policy_memory",
+      "workflow_asset_memory",
+      "agent_team_template_memory",
+      "agent_performance_memory"
+    ],
+    "writeback_rule": "Only compressed workflow, policy, capability, and agent performance preferences can be saved after user approval. Raw traces, unconfirmed evidence, and private data are discarded."
+  },
+  "skills": [
+    {
+      "skill_id": "agent_necessity_router_skill",
+      "label": "Agent 必要性判断",
+      "runtime_type": "deterministic_or_llm_assisted",
+      "path": "shared",
+      "inputs": [
+        "user_goal",
+        "risk_profile",
+        "available_skills",
+        "user_capability_profile"
+      ],
+      "outputs": [
+        "need_agent",
+        "why_not_skill_only",
+        "why_not_full_automation",
+        "recommended_runtime"
+      ],
+      "allowed_actions": [
+        "route_to_single_agent",
+        "route_to_skill_heavy",
+        "route_to_task_room"
+      ],
+      "blocked_actions": [
+        "create_task_room_without_gap",
+        "auto_execute_external_action"
+      ]
+    },
+    {
+      "skill_id": "human_checkpoint_renderer_skill",
+      "label": "人审 checkpoint 渲染",
+      "runtime_type": "deterministic",
+      "path": "shared",
+      "inputs": [
+        "result_surface",
+        "policy_boundary",
+        "memory_writeback_preview"
+      ],
+      "outputs": [
+        "approval_surface",
+        "blocked_actions_panel",
+        "writeback_preview"
+      ],
+      "allowed_actions": [
+        "render_allowed_needs_approval_blocked",
+        "render_writeback_preview"
+      ],
+      "blocked_actions": [
+        "hide_blocked_actions",
+        "write_memory_without_review"
+      ]
+    },
+    {
+      "skill_id": "boss_job_fit_skill",
+      "label": "BOSS 岗位获取与匹配打分",
+      "runtime_type": "external_cli_orchestrated_skill",
+      "path": "auto_jobhunter",
+      "inputs": [
+        "keyword",
+        "city",
+        "limit",
+        "resume_text",
+        "candidate_constraints",
+        "boss_data_dir",
+        "boss_cdp_url"
+      ],
+      "outputs": [
+        "normalized_jobs",
+        "ranked_jobs",
+        "score_breakdown",
+        "resume_evidence_map",
+        "top_jobs_checkpoint",
+        "blocked_actions",
+        "human_checkpoints",
+        "writeback_preview"
+      ],
+      "allowed_actions": [
+        "search_jobs",
+        "read_job_detail",
+        "rank_jobs",
+        "map_resume_evidence"
+      ],
+      "needs_approval": [
+        "login_to_boss",
+        "read_authenticated_job_results",
+        "save_job_workflow_memory"
+      ],
+      "blocked_actions": [
+        "auto_apply",
+        "contact_recruiter",
+        "batch_greet",
+        "bypass_captcha",
+        "invent_resume_experience"
+      ]
+    },
+    {
+      "skill_id": "memory_retrieval_skill",
+      "label": "产品记忆检索",
+      "runtime_type": "deterministic",
+      "path": "product_launch_room",
+      "inputs": [
+        "product_id",
+        "memory_scope"
+      ],
+      "outputs": [
+        "product_architecture",
+        "target_user",
+        "positioning",
+        "tone_preference",
+        "blocked_claims"
+      ],
+      "allowed_actions": [
+        "read_scoped_product_memory",
+        "summarize_relevant_memory"
+      ],
+      "blocked_actions": [
+        "load_unscoped_private_memory",
+        "write_memory_without_review"
+      ]
+    },
+    {
+      "skill_id": "xiaohongshu_copy_skill",
+      "label": "小红书文案生成",
+      "runtime_type": "llm_assisted",
+      "path": "product_launch_room",
+      "inputs": [
+        "product_architecture",
+        "target_user",
+        "positioning",
+        "tone_preference",
+        "blocked_claims"
+      ],
+      "outputs": [
+        "title_options",
+        "body",
+        "tags",
+        "cta",
+        "claim_risk_notes",
+        "publish_preview"
+      ],
+      "allowed_actions": [
+        "draft_xiaohongshu_post",
+        "surface_claim_risks"
+      ],
+      "blocked_actions": [
+        "claim_unbuilt_capabilities",
+        "hide_risk_notes"
+      ]
+    },
+    {
+      "skill_id": "xiaohongshu_publish_skill",
+      "label": "小红书审批后上传",
+      "runtime_type": "approval_required_tool_stub",
+      "path": "product_launch_room",
+      "inputs": [
+        "approved_title",
+        "approved_body",
+        "approved_tags",
+        "approved_assets",
+        "account_id"
+      ],
+      "outputs": [
+        "publish_status",
+        "post_url",
+        "publish_time",
+        "error_message"
+      ],
+      "allowed_actions": [
+        "upload_after_user_approval"
+      ],
+      "needs_approval": [
+        "publish_post"
+      ],
+      "blocked_actions": [
+        "publish_without_preview",
+        "auto_dm_users",
+        "auto_reply_comments",
+        "change_account_without_approval"
+      ]
+    },
+    {
+      "skill_id": "feedback_collection_skill",
+      "label": "发布反馈收集",
+      "runtime_type": "deterministic_stub",
+      "path": "product_launch_room",
+      "inputs": [
+        "post_url",
+        "feedback_window"
+      ],
+      "outputs": [
+        "metrics",
+        "comments",
+        "private_message_summaries",
+        "conversion_signals"
+      ],
+      "allowed_actions": [
+        "collect_public_feedback",
+        "summarize_user_supplied_private_messages"
+      ],
+      "blocked_actions": [
+        "store_raw_private_messages",
+        "auto_reply_comments",
+        "auto_dm_users"
+      ]
+    },
+    {
+      "skill_id": "task_decomposition_skill",
+      "label": "任务拆解",
+      "runtime_type": "llm_assisted",
+      "path": "multi_agent_workflow",
+      "inputs": [
+        "final_task",
+        "constraints",
+        "success_criteria"
+      ],
+      "outputs": [
+        "subtasks",
+        "capability_gaps",
+        "minimum_completion_path"
+      ],
+      "allowed_actions": [
+        "decompose_task",
+        "identify_capability_gaps"
+      ],
+      "blocked_actions": [
+        "invent_user_goal",
+        "expand_scope_without_reason"
+      ]
+    },
+    {
+      "skill_id": "agent_team_builder_skill",
+      "label": "Agent Team Builder",
+      "runtime_type": "llm_assisted",
+      "path": "multi_agent_workflow",
+      "inputs": [
+        "capability_gaps",
+        "available_agents",
+        "policy_boundary"
+      ],
+      "outputs": [
+        "minimum_agent_team",
+        "excluded_agents",
+        "role_assignment"
+      ],
+      "allowed_actions": [
+        "select_minimum_agents",
+        "explain_exclusions"
+      ],
+      "blocked_actions": [
+        "select_all_agents_by_default",
+        "spawn_open_ended_swarm"
+      ]
+    },
+    {
+      "skill_id": "artifact_contract_builder_skill",
+      "label": "Artifact Contract Builder",
+      "runtime_type": "llm_assisted",
+      "path": "multi_agent_workflow",
+      "inputs": [
+        "agent_team",
+        "subtasks",
+        "success_criteria"
+      ],
+      "outputs": [
+        "context_packets",
+        "artifact_schemas",
+        "merge_rule"
+      ],
+      "allowed_actions": [
+        "build_context_packet",
+        "define_output_schema",
+        "define_merge_rule"
+      ],
+      "blocked_actions": [
+        "allow_unstructured_group_chat"
+      ]
+    },
+    {
+      "skill_id": "qa_conflict_resolution_skill",
+      "label": "QA 与冲突处理",
+      "runtime_type": "llm_assisted",
+      "path": "multi_agent_workflow",
+      "inputs": [
+        "agent_artifacts",
+        "quality_bar",
+        "policy_boundary"
+      ],
+      "outputs": [
+        "qa_result",
+        "conflict_log",
+        "revision_instruction",
+        "stop_condition"
+      ],
+      "allowed_actions": [
+        "score_artifacts",
+        "request_revision",
+        "merge_conflicts"
+      ],
+      "blocked_actions": [
+        "accept_low_confidence_output_without_review"
+      ]
+    },
+    {
+      "skill_id": "collaboration_memory_writer_skill",
+      "label": "协作记忆写回",
+      "runtime_type": "llm_assisted",
+      "path": "shared",
+      "inputs": [
+        "result_surface",
+        "agent_team_template",
+        "policy_decisions",
+        "user_confirmed_actions"
+      ],
+      "outputs": [
+        "workflow_asset",
+        "policy_memory_update",
+        "agent_performance_memory",
+        "writeback_preview"
+      ],
+      "allowed_actions": [
+        "draft_writeback_preview",
+        "compress_reusable_pattern"
+      ],
+      "blocked_actions": [
+        "write_unreviewed_sensitive_memory",
+        "store_raw_private_data"
+      ]
+    }
+  ],
+  "specialist_agents": [
+    {
+      "agent_id": "job_scoring_agent",
+      "label": "岗位打分 Agent",
+      "path": "auto_jobhunter",
+      "capability": "job_scoring",
+      "use_when": [
+        "jobs_need_ranking",
+        "top_jobs_checkpoint_needed"
+      ],
+      "output_contract": [
+        "top_jobs",
+        "score_breakdown",
+        "tradeoffs"
+      ],
+      "failure_modes": [
+        "optimizes_for_title_only",
+        "ignores_user_constraints"
+      ]
+    },
+    {
+      "agent_id": "resume_evidence_agent",
+      "label": "简历证据 Agent",
+      "path": "auto_jobhunter",
+      "capability": "resume_evidence",
+      "use_when": [
+        "job_fit_requires_resume_evidence",
+        "fabrication_risk_exists"
+      ],
+      "output_contract": [
+        "evidence_map",
+        "missing_evidence",
+        "application_notes"
+      ],
+      "failure_modes": [
+        "fabricates_experience",
+        "over_tailors_without_evidence"
+      ]
+    },
+    {
+      "agent_id": "application_risk_policy_agent",
+      "label": "申请风险策略 Agent",
+      "path": "auto_jobhunter",
+      "capability": "application_risk_policy",
+      "use_when": [
+        "auto_apply_or_external_contact_risk",
+        "resume_edit_requires_approval"
+      ],
+      "output_contract": [
+        "allowed_actions",
+        "needs_approval",
+        "blocked_actions"
+      ],
+      "failure_modes": [
+        "suggests_auto_apply",
+        "allows_contact_without_approval"
+      ]
+    },
+    {
+      "agent_id": "task_decomposition_agent",
+      "label": "任务拆解 Agent",
+      "path": "multi_agent_workflow",
+      "capability": "task_decomposition",
+      "use_when": [
+        "final_task_is_complex",
+        "single_agent_answer_would_be_unstructured"
+      ],
+      "output_contract": [
+        "subtasks",
+        "capability_gaps",
+        "minimum_completion_path"
+      ],
+      "failure_modes": [
+        "over_decomposes_simple_task",
+        "misses_core_dependency"
+      ]
+    },
+    {
+      "agent_id": "role_assignment_agent",
+      "label": "角色分配 Agent",
+      "path": "multi_agent_workflow",
+      "capability": "role_assignment",
+      "use_when": [
+        "agent_team_must_be_built",
+        "some_agents_should_be_excluded"
+      ],
+      "output_contract": [
+        "minimum_agent_team",
+        "excluded_agents",
+        "why_each_agent_matters"
+      ],
+      "failure_modes": [
+        "selects_too_many_agents",
+        "does_not_explain_exclusions"
+      ]
+    },
+    {
+      "agent_id": "artifact_contract_agent",
+      "label": "产物合约 Agent",
+      "path": "multi_agent_workflow",
+      "capability": "artifact_contract",
+      "use_when": [
+        "agent_outputs_must_be_mergeable",
+        "context_hygiene_matters"
+      ],
+      "output_contract": [
+        "context_packet_schema",
+        "artifact_schema",
+        "merge_rule"
+      ],
+      "failure_modes": [
+        "allows_free_chat",
+        "artifact_schema_is_not_actionable"
+      ]
+    },
+    {
+      "agent_id": "qa_conflict_resolution_agent",
+      "label": "QA 与冲突处理 Agent",
+      "path": "multi_agent_workflow",
+      "capability": "qa_conflict_resolution",
+      "use_when": [
+        "agent_outputs_can_conflict",
+        "revision_loop_needed"
+      ],
+      "output_contract": [
+        "qa_rubric",
+        "conflict_resolution_rule",
+        "stop_condition"
+      ],
+      "failure_modes": [
+        "rubric_is_vague",
+        "never_stops_revising"
+      ]
+    },
+    {
+      "agent_id": "memory_writeback_agent",
+      "label": "协作记忆写回 Agent",
+      "path": "shared",
+      "capability": "memory_writeback",
+      "use_when": [
+        "workflow_pattern_should_be_reused",
+        "policy_memory_may_change"
+      ],
+      "output_contract": [
+        "workflow_asset",
+        "policy_memory_update",
+        "writeback_preview"
+      ],
+      "failure_modes": [
+        "stores_raw_trace",
+        "writes_memory_without_user_approval"
+      ]
+    }
+  ],
+  "policies": [
+    {
+      "policy_id": "auto_jobhunter_human_agent_policy",
+      "path": "auto_jobhunter",
+      "allowed": [
+        "read_authenticated_job_results",
+        "search_jobs",
+        "read_job_detail",
+        "rank_jobs",
+        "map_resume_evidence",
+        "render_top_jobs_checkpoint"
+      ],
+      "needs_approval": [
+        "login_to_boss",
+        "tailor_resume_for_specific_job",
+        "save_job_search_workflow_memory"
+      ],
+      "blocked": [
+        "auto_apply",
+        "contact_recruiter",
+        "batch_greet",
+        "bypass_captcha",
+        "invent_resume_experience",
+        "store_raw_resume_text"
+      ]
+    },
+    {
+      "policy_id": "multi_agent_workflow_builder_policy",
+      "path": "multi_agent_workflow",
+      "allowed": [
+        "build_agent_team_spec",
+        "build_artifact_contract",
+        "run_qa_review",
+        "draft_workflow_memory"
+      ],
+      "needs_approval": [
+        "activate_new_agent_team_template",
+        "save_agent_performance_memory"
+      ],
+      "blocked": [
+        "spawn_open_ended_swarm",
+        "write_unreviewed_memory",
+        "auto_execute_external_action"
+      ]
+    }
+  ],
+  "runtime_patterns": [
+    {
+      "runtime_id": "skill_heavy_with_human_checkpoints",
+      "example": "Auto-JobHunter",
+      "description": "Used when skills cover the primary work, but the workflow is high risk enough to require explicit human checkpoints and blocked actions.",
+      "default_interaction": "skill_pipeline_then_result_surface"
+    },
+    {
+      "runtime_id": "task_room_agent_team_builder",
+      "example": "Multi-Agent Workflow",
+      "description": "Used when the main problem is deciding what Agent team to build and how agent-agent collaboration should converge.",
+      "default_interaction": "context_packet_to_specialist_artifact_to_qa_merge"
+    }
+  ]
+}

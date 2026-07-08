@@ -1,0 +1,49 @@
+{
+  "post_url": "https://www.xiaohongshu.com/explore/demo-solo-builder-memory-os",
+  "published_at": "2026-06-05T10:00:00+08:00",
+  "windows": [
+    {
+      "window": "24h",
+      "metrics": {
+        "views": 1260,
+        "likes": 48,
+        "saves": 19,
+        "comments": 11,
+        "profile_clicks": 23
+      },
+      "comments": [
+        "我也在用 Codex 做产品，但每次上下文断了都很痛苦。",
+        "这个和 Notion AI 有什么区别？",
+        "如果能把每次和 AI 协作的决策沉淀成模板会很有用。",
+        "听起来有点抽象，能不能给一个真实使用场景？",
+        "我担心它会保存太多隐私内容。"
+      ],
+      "private_message_summaries": [
+        "两位用户询问是否支持 Claude Code 工作流复盘。",
+        "一位用户希望看到 memory preview 的具体样例。"
+      ]
+    },
+    {
+      "window": "48h",
+      "metrics": {
+        "views": 2380,
+        "likes": 91,
+        "saves": 47,
+        "comments": 24,
+        "profile_clicks": 51
+      },
+      "comments": [
+        "我不想要又一个知识库，但想要一个能记住我工作方式的助手。",
+        "如果能区分临时上下文和长期记忆，这个点很打动我。",
+        "小白可能看不懂 Header Agent / Task Room 这些词。",
+        "希望有一个一键导出 playbook 的功能。",
+        "是否可以先做成浏览器插件？"
+      ],
+      "private_message_summaries": [
+        "三位用户请求试用链接。",
+        "一位用户反馈最关心隐私和可删除机制。",
+        "一位用户建议用真实案例展示从一次对话沉淀 playbook 的过程。"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+[
+  {
+    "source": "sample",
+    "source_id": "sample-agent-collaboration-pm",
+    "title": "Agent Collaboration Product Manager",
+    "company": "AI Collaboration Platform",
+    "city": "上海",
+    "salary": "30-50K",
+    "jd_text": "负责设计 Agent 与 Agent 之间的协作协议，定义 human-in-the-loop、delegation policy、artifact contract、QA 和 conflict resolution 等产品机制。需要能快速用代码搭建 harness 原型，验证多 Agent 协作在真实任务中的完成率和 token efficiency。",
+    "requirements": ["Agent 协作产品", "multi-agent workflow", "human-in-the-loop", "快速原型", "token efficiency"],
+    "source_url": ""
+  },
+  {
+    "source": "sample",
+    "source_id": "sample-ai-agent-workflow-builder",
+    "title": "AI Agent Workflow Builder",
+    "company": "Developer Tool Startup",
+    "city": "北京",
+    "salary": "25-45K",
+    "jd_text": "构建面向开发者和一人公司的 Agent 工作流系统，沉淀可复用 skill，设计任务拆解、角色分配、工具调用、失败恢复和结果面板。熟悉 Codex、Claude Code、Cursor 等 Agent 产品者优先。",
+    "requirements": ["Agent workflow", "skill 设计", "开发者工具", "任务拆解", "结果面板"],
+    "source_url": ""
+  },
+  {
+    "source": "sample",
+    "source_id": "sample-ai-product-generalist",
+    "title": "AI Product Generalist",
+    "company": "B2B SaaS",
+    "city": "上海",
+    "salary": "20-35K",
+    "jd_text": "负责 AI 功能规划、用户调研、需求分析和跨团队落地。需要理解大模型能力边界，能推动从原型到上线，但岗位更偏通用 SaaS 产品经理。",
+    "requirements": ["AI 产品", "用户调研", "需求分析", "跨团队协作"],
+    "source_url": ""
+  }
+]
+

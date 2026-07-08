@@ -1,0 +1,225 @@
+{
+  "goal_summary": {
+    "user_goal": "复杂产品研究 Room 示例：我需要研究 Linear、Slack、飞书、Paperclip、Symphony 这类协作产品，判断 Agent 应该如何进入真实协作工作流。请不要直接给一篇长答案。先判断是否需要 Task Room，再用已注册 Agent 分别完成资料归纳、产品批判和 Agent 协作设计，最后输出协作产品对比表、Agent 介入点、guardrails / human-in-the-loop 设计、可用于面试的 3 分钟观点，以及 Room Capsule / Playbook Draft。",
+    "header_understanding": "Header Agent fork 临时 Complex Product Research Room；Room Controller 调用 room-local skills 和 registered agents，结束后只回传压缩结果。",
+    "success_criteria": [
+      "用户能看到为什么这不是单个长答案或单个 Skill 能覆盖的任务",
+      "每个研究结论都区分已知事实、推断和待确认信息",
+      "产品优点、局限、Agent 介入点和 guardrails 能形成可判断交付物",
+      "candidate Evaluation Agent 只展示规格和评测门槛，不直接注册",
+      "长期 playbook 只展示预览，等待用户确认后写回"
+    ],
+    "authorization_scope": {
+      "allowed": [
+        "生成产品研究卡",
+        "生成协作机制对比表",
+        "生成 Agent 介入点和 guardrails",
+        "生成 playbook 写回预览"
+      ],
+      "needs_approval": [
+        "把研究结论用于投递材料",
+        "保存产品研究 playbook",
+        "让候选 Evaluation Agent 进入后续评测"
+      ],
+      "blocked": [
+        "伪造外部事实",
+        "把待确认资料写成确定事实",
+        "自动注册新 Agent",
+        "写入未经确认的长期记忆"
+      ],
+      "review_required": true
+    }
+  },
+  "final_recommendation": {
+    "decision": "Go",
+    "reason": "复杂产品研究需要跨产品资料归纳、反例批判和 Agent 协作设计，Task Room 比单个长答案更容易保留证据、边界和可复用状态。",
+    "suggested_action": "补齐每个产品 1 页研究卡，并用 5 行 Pilot Eval 验证 Router/Room Controller 判断力。"
+  },
+  "primary_blocker": "Paperclip / Symphony 等新兴产品资料不足，必须把待确认事实和推断分开。",
+  "next_minimal_iteration": [
+    "产出 Linear / Slack / 飞书 / Paperclip / Symphony 的 1 页研究卡。",
+    "把 Agent 介入点收敛为路由、摘要、artifact contract 和人审写回四类。",
+    "用 5 行 Pilot Eval 验证 Router 是否避免无脑开 Room。"
+  ],
+  "metrics_to_watch": [
+    "路由判断准确率",
+    "无效 Agent 排除率",
+    "证据可追溯性",
+    "人审负担",
+    "playbook 复用质量"
+  ],
+  "automation_boundary": {
+    "allowed": [
+      "生成产品研究卡",
+      "生成协作机制对比表",
+      "生成 Agent 介入点和 guardrails",
+      "生成 playbook 写回预览"
+    ],
+    "needs_approval": [
+      "把研究结论用于投递材料",
+      "保存产品研究 playbook",
+      "让候选 Evaluation Agent 进入后续评测"
+    ],
+    "blocked": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆"
+    ],
+    "review_required": true
+  },
+  "blocked_automation": [
+    "伪造外部事实",
+    "把待确认资料写成确定事实",
+    "自动注册新 Agent",
+    "写入未经确认的长期记忆"
+  ],
+  "execution_agent_handoff_brief": {
+    "patch_goal": "实现复杂产品研究 Room 的结果面板、注册 Agent 展示、候选 Evaluation Agent 和 Pilot Eval 表。",
+    "files_or_modules_to_touch": [
+      "room_lifecycle_panel",
+      "registered_agents_panel",
+      "candidate_agent_specs_panel",
+      "pilot_eval_panel"
+    ],
+    "acceptance_criteria": [
+      "用户能看到 Header / Room Controller 职责分离",
+      "用户能看到 room-local skills 和 registered agents 的区别",
+      "Product Critic Agent 和 Collaboration Designer Agent 的输入来自上游 artifact",
+      "candidate Evaluation Agent 不进入可信执行",
+      "room 结束后只回传 compressed result、capsule 和 playbook proposal"
+    ],
+    "blocked_actions": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆"
+    ],
+    "rollback_condition": "如果页面重新表现成开放式多 Agent 群聊，则回滚。",
+    "review_required": true
+  },
+  "capability_radius_review": {
+    "inside_review": [
+      "AI Coding",
+      "快速原型",
+      "简历证据映射"
+    ],
+    "delegate_with_evidence": [
+      "任务拆解",
+      "角色分配",
+      "产物合约",
+      "QA 与冲突处理",
+      "协作记忆写回",
+      "反馈分诊",
+      "研究归纳",
+      "产品批判",
+      "协作设计",
+      "产品迭代收敛",
+      "信任与激活",
+      "评测设计",
+      "岗位打分",
+      "执行交接（需审批）",
+      "申请风险策略（需审批）"
+    ]
+  },
+  "collaboration_mode": {
+    "by_capability": {
+      "ai_coding": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "rapid_prototyping": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "resume_evidence": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "task_decomposition": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "role_assignment": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "artifact_contract": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "qa_conflict_resolution": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "memory_writeback": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "feedback_triage": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "research_synthesis": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "product_critique": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "collaboration_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "product_iteration": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "trust_activation": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "evaluation_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "job_scoring": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "execution_handoff": {
+        "mode": "delegate_with_review",
+        "detail_level": "boundary_first",
+        "user_action": "approve_or_block"
+      },
+      "application_risk_policy": {
+        "mode": "delegate_with_review",
+        "detail_level": "boundary_first",
+        "user_action": "approve_or_block"
+      }
+    }
+  },
+  "authorization_panel": [
+    "Approve playbook writeback",
+    "Challenge research claim",
+    "Reject candidate agent",
+    "Close Room"
+  ]
+}

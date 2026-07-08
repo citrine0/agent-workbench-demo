@@ -1,0 +1,69 @@
+{
+  "why_task_room": "这是复杂产品研究 Room 示例：跨产品研究、批判、协作设计和评估指标不适合由单个 Skill 或一篇长答案覆盖；需要 Room Controller 组织已注册 Agent 产出可合并 artifact，并把 candidate Agent、人审和写回边界显性化。",
+  "selected_agents": [
+    {
+      "agent": "Research Synthesis Agent",
+      "capability": "research_synthesis",
+      "why_selected": "复杂产品研究需要先把多款产品的协作机制结构化，否则后续批判和设计会变成泛泛观点。",
+      "source": "agents/research_synthesis_agent.json",
+      "status": "registered"
+    },
+    {
+      "agent": "Product Critic Agent",
+      "capability": "product_critique",
+      "why_selected": "研究 Room 需要有人专门挑战结论，避免只输出产品优点清单或把 Agent 介入点想得过于乐观。",
+      "source": "agents/product_critic_agent.json",
+      "status": "registered"
+    },
+    {
+      "agent": "Collaboration Designer Agent",
+      "capability": "collaboration_design",
+      "why_selected": "最终交付不是竞品报告，而是面向 Agent 协作产品的设计判断和可执行叙事。",
+      "source": "agents/collaboration_designer_agent.json",
+      "status": "registered"
+    }
+  ],
+  "excluded_agents": [
+    {
+      "agent": "Evaluation Agent",
+      "capability": "evaluation_design",
+      "why_excluded": "当前先展示 Pilot Eval 表，不把 Evaluation Agent 作为可信执行单元。",
+      "status": "candidate_only"
+    }
+  ],
+  "authorization_scope": {
+    "allowed": [
+      "生成产品研究卡",
+      "生成协作机制对比表",
+      "生成 Agent 介入点和 guardrails",
+      "生成 playbook 写回预览"
+    ],
+    "needs_approval": [
+      "把研究结论用于投递材料",
+      "保存产品研究 playbook",
+      "让候选 Evaluation Agent 进入后续评测"
+    ],
+    "blocked": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆"
+    ],
+    "review_required": true
+  },
+  "merge_rule": "先把研究事实与推断分开，再由 Product Critic 找局限和反例，最后只允许 Collaboration Designer 基于上游 artifact 生成 Agent 介入点、guardrails 和面试叙事。",
+  "success_criteria": "Room 只组合 registered agents；candidate agents 只提出规格，不进入可信执行。",
+  "room_context_policy": {
+    "context_scope": "temporary_room_context",
+    "return_to_main_context": [
+      "compressed_room_result",
+      "playbook_writeback_proposal",
+      "candidate_agent_specs"
+    ],
+    "discard": [
+      "raw room trace",
+      "failed drafts",
+      "unconfirmed external facts"
+    ]
+  }
+}

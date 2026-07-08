@@ -1,0 +1,28 @@
+{
+  "current_level": "Level 1: Draft with approval",
+  "recommended_level": "Level 2: Build agent team spec after approval",
+  "allowed_action_classes": [
+    "生成产品研究卡",
+    "生成协作机制对比表",
+    "生成 Agent 介入点和 guardrails",
+    "生成 playbook 写回预览"
+  ],
+  "blocked_action_classes": [
+    "伪造外部事实",
+    "把待确认资料写成确定事实",
+    "自动注册新 Agent",
+    "写入未经确认的长期记忆"
+  ],
+  "upgrade_condition": [
+    "连续两轮核心指标达标",
+    "无高风险事故",
+    "回滚触发率低于阈值"
+  ],
+  "downgrade_condition": [
+    "出现高风险误执行",
+    "核心指标连续恶化",
+    "回滚频繁触发"
+  ],
+  "review_required": true,
+  "notes": "按任务类型分层升级自治，不做一次性全局升权。"
+}

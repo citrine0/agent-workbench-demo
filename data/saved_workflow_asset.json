@@ -1,0 +1,126 @@
+{
+  "workflow_asset": {
+    "name": "Agent Collaboration Harness Pattern",
+    "trigger": "用户需要判断是否让 Agent 介入，或需要 builder 一个最小 Agent team 完成复杂任务",
+    "user_strengths": [
+      "ai_coding",
+      "rapid_prototyping",
+      "resume_evidence"
+    ],
+    "delegated_capabilities": [
+      "task_decomposition",
+      "role_assignment",
+      "artifact_contract",
+      "qa_conflict_resolution",
+      "memory_writeback",
+      "feedback_triage",
+      "research_synthesis",
+      "product_critique",
+      "collaboration_design",
+      "product_iteration",
+      "trust_activation",
+      "evaluation_design",
+      "job_scoring",
+      "execution_handoff",
+      "application_risk_policy"
+    ],
+    "preferred_expert_team": [
+      "Research Synthesis Agent",
+      "Product Critic Agent",
+      "Collaboration Designer Agent"
+    ],
+    "automation_boundary": {
+      "allowed": [
+        "生成产品研究卡",
+        "生成协作机制对比表",
+        "生成 Agent 介入点和 guardrails",
+        "生成 playbook 写回预览"
+      ],
+      "needs_approval": [
+        "把研究结论用于投递材料",
+        "保存产品研究 playbook",
+        "让候选 Evaluation Agent 进入后续评测"
+      ],
+      "blocked": [
+        "伪造外部事实",
+        "把待确认资料写成确定事实",
+        "自动注册新 Agent",
+        "写入未经确认的长期记忆"
+      ],
+      "review_required": true
+    },
+    "review_policy": {
+      "inside_radius_detail_level": "high",
+      "outside_radius_detail_level": "summary_with_evidence",
+      "automation_sensitive_detail_level": "boundary_first",
+      "approval_required": true
+    },
+    "reuse_condition": [
+      "task_requires_agent_necessity_check",
+      "task_requires_agent_team_builder",
+      "task_has_human_checkpoint_or_memory_writeback"
+    ],
+    "source_primary_blocker": "Paperclip / Symphony 等新兴产品资料不足，必须把待确认事实和推断分开。",
+    "memory_writeback_preview": {
+      "memory_type": "collaboration_harness_memory",
+      "requires_user_approval": true,
+      "user_capability_profile": {
+        "inside_radius": [
+          "ai_coding",
+          "rapid_prototyping",
+          "resume_evidence"
+        ],
+        "outside_radius": [
+          "task_decomposition",
+          "role_assignment",
+          "artifact_contract",
+          "qa_conflict_resolution",
+          "memory_writeback",
+          "feedback_triage",
+          "research_synthesis",
+          "product_critique",
+          "collaboration_design",
+          "product_iteration",
+          "trust_activation",
+          "evaluation_design",
+          "job_scoring"
+        ],
+        "automation_sensitive": [
+          "execution_handoff",
+          "application_risk_policy"
+        ]
+      },
+      "delegation_policy_memory": {
+        "allowed": [
+          "生成产品研究卡",
+          "生成协作机制对比表",
+          "生成 Agent 介入点和 guardrails",
+          "生成 playbook 写回预览"
+        ],
+        "needs_approval": [
+          "把研究结论用于投递材料",
+          "保存产品研究 playbook",
+          "让候选 Evaluation Agent 进入后续评测"
+        ],
+        "blocked": [
+          "伪造外部事实",
+          "把待确认资料写成确定事实",
+          "自动注册新 Agent",
+          "写入未经确认的长期记忆"
+        ],
+        "review_required": true
+      },
+      "agent_team_template": {
+        "preferred_team": [
+          "Research Synthesis Agent",
+          "Product Critic Agent",
+          "Collaboration Designer Agent"
+        ],
+        "merge_rule": "先把研究事实与推断分开，再由 Product Critic 找局限和反例，最后只允许 Collaboration Designer 基于上游 artifact 生成 Agent 介入点、guardrails 和面试叙事。",
+        "stop_condition": "Only save when the result surface has clear blocked actions, QA outcome, and human checkpoint."
+      },
+      "context_hygiene_rule": "Only compressed workflow, policy, and capability preferences are written back; raw traces and unconfirmed evidence are discarded."
+    },
+    "updated_at": "2026-06-17T19:32:33"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "product_id": "solo_builder_memory_os",
+  "product_name": "Solo Builder Memory OS",
+  "one_liner": "为一人公司 builder 设计的 AI 工作流记忆与复盘系统。",
+  "target_user": "正在用 Claude Code、Codex、Cursor 等 Agent 工具独立推进产品、内容和增长的一人公司 builder。",
+  "positioning": "不是普通笔记，也不是任务管理工具，而是把用户和 Agent 的协作过程压缩成可复用 playbook 的工作记忆层。",
+  "core_capabilities": [
+    "自动沉淀高频工作流 playbook",
+    "区分可写回记忆、临时上下文和敏感原始 trace",
+    "根据用户能力半径调整 Agent 协作方式",
+    "展示每次写回前的 memory preview"
+  ],
+  "current_version": "v0.3 prototype",
+  "tone_preference": "具体、真实、克制，不夸大自动化能力",
+  "proof_points": [
+    "已做出 Agent Collaboration Harness demo",
+    "支持 Header Agent 判断 skill / Task Room runtime",
+    "支持 memory writeback preview"
+  ],
+  "blocked_claims": [
+    "不能承诺自动经营公司",
+    "不能承诺无需人工判断",
+    "不能暗示已接入所有外部平台 API"
+  ],
+  "launch_goal": "收集早期 builder 对 AI 工作流记忆、playbook 写回和 Agent 协作边界的真实反馈。"
+}

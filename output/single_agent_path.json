@@ -1,0 +1,693 @@
+{
+  "route_id": "example_a_auto_jobhunter_human_agent",
+  "runtime": "skill_heavy_with_human_checkpoints",
+  "task_state": {
+    "room_name": "Auto-JobHunter Human-Agent Workflow",
+    "status": "skill_heavy_path",
+    "goal": "Auto-JobHunter 示例：我想使用 boss-agent-cli 通过 Chrome CDP 只读获取 BOSS 上 Agent / AI Product Builder 相关岗位，尽量补全岗位 JD，再按岗位描述、目标方向和我的真实简历证据做筛选与打分，输出最值得优先看的 Top jobs checkpoint。当前只需要完成岗位搜集、标准化、筛选和打分；不要修改简历、不要自动投递、不要联系招聘方、不要编造经历。",
+    "why_no_task_room": "这是 Auto-JobHunter 的 human-agent collaboration 示例：Header Agent 判断岗位获取、JD 标准化、打分和证据映射已沉淀为 boss_job_fit_skill；Harness 只负责 checkpoint、授权边界和 memory preview，不需要创建 Task Room。",
+    "automation_risk": "medium-high",
+    "authorization_level": "Level 1: 生成建议，等待确认"
+  },
+  "agent_necessity_decision": {
+    "need_agent": true,
+    "why_agent_is_useful": "岗位排序和证据映射需要跨 JD、简历和个人约束做判断。",
+    "why_skill_heavy_is_enough": "岗位获取、JD 标准化、打分和证据映射由 boss_job_fit_skill 覆盖；不需要临时设计新的 Agent team。",
+    "why_full_automation_blocked": "投递和外部联系是高风险外部动作，必须由用户确认。"
+  },
+  "selected_skills": [
+    "agent_necessity_router_skill",
+    "boss_job_fit_skill"
+  ],
+  "optional_agents": [
+    {
+      "agent_id": "application_risk_policy_agent",
+      "label": "申请风险策略 Agent",
+      "role": "只在申请边界不清时复核 blocked actions，不参与岗位抓取或打分。"
+    },
+    {
+      "agent_id": "memory_writeback_agent",
+      "label": "协作记忆写回 Agent",
+      "role": "只在用户准备保存 workflow memory 时复核写回范围。"
+    }
+  ],
+  "skill_pipeline": [
+    {
+      "step": "run_job_fit_workflow",
+      "skill_id": "boss_job_fit_skill",
+      "output": "normalized_jobs + ranked_jobs + resume_evidence_map + top_jobs_checkpoint + blocked_actions + writeback_preview"
+    },
+    {
+      "step": "render_harness_surface",
+      "skill_id": "harness_services",
+      "output": "approval_surface + memory_writeback_preview"
+    }
+  ],
+  "result_surface": {
+    "top_jobs_checkpoint": [
+      {
+        "rank": 1,
+        "title": "Agent Product Engineer - Multi-Agent",
+        "company_type": "AI platform / agent runtime",
+        "score": 91,
+        "why": "岗位强调 collaboration harness、Agent team builder、human-in-the-loop，与当前 demo 证据最贴合。",
+        "resume_evidence": [
+          "Agent Collaboration Harness demo",
+          "Auto-JobHunter human-agent workflow",
+          "Multi-Agent Workflow agent team builder",
+          "routing / policy / memory writeback design"
+        ],
+        "gap": "需要在作品集第一屏明确这不是求职工具，而是 Agent Collaboration Harness。",
+        "company": "AI platform / agent runtime",
+        "risk_flags": [],
+        "gaps": [
+          "需要在作品集第一屏明确这不是求职工具，而是 Agent Collaboration Harness。"
+        ]
+      },
+      {
+        "rank": 2,
+        "title": "AI Agent Workflow PM / Builder",
+        "company_type": "B2B SaaS / productivity",
+        "score": 84,
+        "why": "强调 workflow、human checkpoint、自动化边界和 agent 协作产品判断。",
+        "resume_evidence": [
+          "blocked actions policy",
+          "workflow asset reuse",
+          "capability radius",
+          "benchmark cases"
+        ],
+        "gap": "需要补 token / noise efficiency 对比说明。",
+        "company": "B2B SaaS / productivity",
+        "risk_flags": [],
+        "gaps": [
+          "需要补 token / noise efficiency 对比说明。"
+        ]
+      },
+      {
+        "rank": 3,
+        "title": "AI Product Builder",
+        "company_type": "startup",
+        "score": 76,
+        "why": "匹配快速原型和 AI coding，但 multi-agent collaboration 叙事弱于前两项。",
+        "resume_evidence": [
+          "Streamlit prototype",
+          "AI coding",
+          "workflow demos"
+        ],
+        "gap": "需要突出 agent-agent protocol，而不是只讲应用功能。",
+        "company": "startup",
+        "risk_flags": [],
+        "gaps": [
+          "需要突出 agent-agent protocol，而不是只讲应用功能。"
+        ]
+      }
+    ],
+    "human_checkpoints": [
+      "确认 Top 2 岗位是否符合目标方向",
+      "确认每个推荐是否有真实简历证据",
+      "确认是否允许针对单个岗位改写简历",
+      "确认是否保存求职 workflow memory"
+    ],
+    "blocked_actions": [
+      "自动投递",
+      "联系招聘方",
+      "批量打招呼",
+      "绕过验证码",
+      "编造经历",
+      "保存原始简历全文"
+    ],
+    "writeback_preview": {
+      "memory_type": "auto_jobhunter_workflow_memory",
+      "requires_user_approval": true,
+      "workflow_asset_memory": "boss-job-fit 流程：Chrome CDP 登录 -> boss-agent-cli 只读获取岗位/JD -> 标准化 -> 匹配打分 -> 简历证据映射 -> Top jobs checkpoint -> 用户确认后才进入简历改写或投递。",
+      "delegation_policy_memory": {
+        "allowed": [
+          "通过 boss-agent-cli 只读获取岗位/JD",
+          "岗位标准化",
+          "岗位匹配打分",
+          "简历证据映射",
+          "生成申请建议草稿"
+        ],
+        "needs_approval": [
+          "登录 BOSS",
+          "读取已登录账号可见岗位结果",
+          "针对岗位改写简历",
+          "保存求职 workflow memory"
+        ],
+        "blocked": [
+          "自动投递",
+          "联系招聘方",
+          "批量打招呼",
+          "绕过验证码",
+          "编造经历",
+          "保存原始简历全文"
+        ]
+      },
+      "context_hygiene_rule": "不保存原始简历全文、不保存未确认岗位事实、不保存 agent trace。"
+    }
+  },
+  "policy": {
+    "allowed": [
+      "通过 boss-agent-cli 只读获取岗位/JD",
+      "标准化岗位字段",
+      "岗位筛选与打分",
+      "输出 Top jobs checkpoint"
+    ],
+    "needs_approval": [
+      "登录 BOSS",
+      "读取已登录账号可见岗位结果",
+      "根据目标 JD 修改简历",
+      "保存求职 workflow memory"
+    ],
+    "blocked": [
+      "自动投递",
+      "联系招聘方",
+      "批量打招呼",
+      "绕过验证码",
+      "编造简历经历",
+      "保存原始简历全文"
+    ],
+    "review_required": true
+  },
+  "benchmark_expectation": {
+    "route_correctness": 5,
+    "agent_necessity_judgment": 5,
+    "policy_enforcement": 5,
+    "human_checkpoint_quality": 5,
+    "memory_hygiene": 5,
+    "token_noise_efficiency": 5
+  },
+  "selected_business_skill": {
+    "skill_id": "boss_job_fit_skill",
+    "label": "BOSS 岗位获取与匹配打分",
+    "role": "稳定任务 workflow skill：获取岗位/JD、标准化、打分、证据映射并输出 Top jobs checkpoint。",
+    "connector": "boss-agent-cli via Chrome CDP",
+    "mode": "read_only_with_human_checkpoints"
+  },
+  "harness_services": [
+    {
+      "skill_id": "human_checkpoint_renderer_skill",
+      "label": "人审 checkpoint 渲染",
+      "role": "把 boss_job_fit_skill 的输出转成用户可确认的 Top jobs、blocked actions 和下一步授权面板。"
+    },
+    {
+      "skill_id": "collaboration_memory_writer_skill",
+      "label": "协作记忆写回",
+      "role": "只生成 memory writeback preview；用户确认前不写入长期记忆。"
+    }
+  ],
+  "capability_gap_report": {
+    "required_capabilities": [
+      "job_scoring",
+      "application_risk_policy",
+      "memory_writeback"
+    ],
+    "covered_by_registered_agents": [],
+    "covered_by_skills": [
+      {
+        "skill_id": "boss_job_fit_skill",
+        "capability": "job_scoring",
+        "covers": [
+          "job_fetching",
+          "jd_detail_fetching",
+          "normalization",
+          "fit_scoring",
+          "resume_evidence_mapping"
+        ],
+        "status": "registered_skill"
+      },
+      {
+        "skill_id": "human_checkpoint_renderer_skill",
+        "capability": "human_checkpoint",
+        "covers": [
+          "top_jobs_checkpoint",
+          "blocked_actions_surface"
+        ],
+        "status": "harness_service"
+      },
+      {
+        "skill_id": "collaboration_memory_writer_skill",
+        "capability": "memory_writeback",
+        "covers": [
+          "memory_writeback_preview"
+        ],
+        "status": "harness_service"
+      },
+      {
+        "skill_id": "boss_job_fit_skill",
+        "capability": "application_risk_policy",
+        "covers": [
+          "blocked_apply_actions",
+          "read_only_boundary"
+        ],
+        "status": "registered_skill"
+      }
+    ],
+    "missing_capabilities": [],
+    "gap_severity": "none",
+    "minimal_path": [
+      "调用 boss_job_fit_skill，通过 Chrome CDP + boss-agent-cli 只读获取岗位列表和完整 JD",
+      "在 skill 内完成岗位标准化、fit score、风险打分和简历证据映射",
+      "输出 Top jobs checkpoint，等待用户确认是否进入简历修改阶段",
+      "由 harness services 展示禁止自动投递、联系招聘方、编造经历和 memory writeback preview"
+    ],
+    "candidate_agent_specs": [],
+    "agent_builder_call": null,
+    "eval_gate": [],
+    "human_checkpoint": "本次不调用 Agent Builder；用户只需确认 Top jobs、简历证据、是否进入简历改写/投递阶段和 memory writeback。"
+  },
+  "goal_check": {
+    "input_type": "goal",
+    "interpreted_goal": "Auto-JobHunter 示例：我想使用 boss-agent-cli 通过 Chrome CDP 只读获取 BOSS 上 Agent / AI Product Builder 相关岗位，尽量补全岗位 JD，再按岗位描述、目标方向和我的真实简历证据做筛选与打分，输出最值得优先看的 Top jobs checkpoint。当前只需要完成岗位搜集、标准化、筛选和打分；不要修改简历、不要自动投递、不要联系招聘方、不要编造经历。",
+    "executable_goal": true,
+    "needs_task_room": false,
+    "single_agent_sufficient": true,
+    "recommendation": "single_agent",
+    "why": "这是 Auto-JobHunter 的 human-agent collaboration 示例：Header Agent 判断岗位获取、JD 标准化、打分和证据映射已沉淀为 boss_job_fit_skill；Harness 只负责 checkpoint、授权边界和 memory preview，不需要创建 Task Room。",
+    "why_single_agent_not_enough": "",
+    "current_autonomy_level": "Level 1: Draft with approval",
+    "recommended_autonomy_level": "Level 1: Draft with approval",
+    "automation_risk": "medium-high",
+    "authorization_scope": {
+      "allowed": [
+        "通过 boss-agent-cli 只读获取岗位/JD",
+        "标准化岗位字段",
+        "岗位筛选与打分",
+        "输出 Top jobs checkpoint"
+      ],
+      "needs_approval": [
+        "登录 BOSS",
+        "读取已登录账号可见岗位结果",
+        "根据目标 JD 修改简历",
+        "保存求职 workflow memory"
+      ],
+      "blocked": [
+        "自动投递",
+        "联系招聘方",
+        "批量打招呼",
+        "绕过验证码",
+        "编造简历经历",
+        "保存原始简历全文"
+      ],
+      "review_required": true
+    },
+    "success_criteria": [
+      "用户能判断哪些岗位值得优先看",
+      "每个推荐都有岗位字段、打分理由和风险说明",
+      "系统明确把修改简历与投递放到后续人工确认阶段",
+      "系统明确阻止自动投递、外部联系和经历编造",
+      "求职 workflow 只在确认后写回"
+    ],
+    "minimum_completion_path": [
+      "调用 boss_job_fit_skill，通过 Chrome CDP + boss-agent-cli 只读获取岗位列表和完整 JD",
+      "在 skill 内完成岗位标准化、fit score、风险打分和简历证据映射",
+      "输出 Top jobs checkpoint，等待用户确认是否进入简历修改阶段",
+      "由 harness services 展示禁止自动投递、联系招聘方、编造经历和 memory writeback preview"
+    ],
+    "required_capabilities": [
+      "job_scoring",
+      "application_risk_policy",
+      "memory_writeback"
+    ],
+    "minimum_viable_team": [
+      {
+        "agent": "Application Risk Policy Agent",
+        "capability": "application_risk_policy",
+        "why_selected": "阻止自动投递、联系招聘方和把简历修改提前到未确认阶段。"
+      },
+      {
+        "agent": "Memory Writeback Agent",
+        "capability": "memory_writeback",
+        "why_selected": "输出可确认的求职 workflow 写回预览。"
+      }
+    ],
+    "excluded_agents": [
+      {
+        "agent": "Job Scoring Agent",
+        "why_excluded": "岗位获取、JD 标准化、打分和证据映射已经沉淀为 boss_job_fit_skill，不需要单独创建专家。"
+      },
+      {
+        "agent": "Resume Evidence Agent",
+        "why_excluded": "证据映射由 boss_job_fit_skill 输出；根据 JD 修改简历属于后续需确认阶段。"
+      },
+      {
+        "agent": "Auto Apply Agent",
+        "why_excluded": "真实投递和外部联系必须由用户确认。"
+      },
+      {
+        "agent": "Open-Ended Swarm Agent",
+        "why_excluded": "岗位打分主要由 skill pipeline 覆盖，不需要开放式群聊。"
+      }
+    ],
+    "suggested_experts": [
+      "Application Risk Policy Agent",
+      "Memory Writeback Agent"
+    ],
+    "clarification_questions": [],
+    "capability_blindspots": [
+      "岗位排序偏差",
+      "简历证据不足",
+      "自动投递风险",
+      "memory 污染"
+    ],
+    "capability_boundary": "擅长：AI Coding、快速原型、产品构建、判断自身经历真实性；希望委托：跨产品研究、产品批判、协作设计、评测指标和长期记忆压缩。"
+  },
+  "capability_radius": {
+    "inside_radius": [
+      {
+        "capability": "ai_coding",
+        "label": "AI Coding",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户能判断实现细节与工程取舍"
+      },
+      {
+        "capability": "rapid_prototyping",
+        "label": "快速原型",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户擅长快速验证并收敛方案"
+      },
+      {
+        "capability": "resume_evidence",
+        "label": "简历证据映射",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户能判断自身经历真实性，适合深挖和确认"
+      }
+    ],
+    "outside_radius": [
+      {
+        "capability": "task_decomposition",
+        "label": "任务拆解",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "复杂任务需要先拆成可交付单元，避免 Agent 直接长回答"
+      },
+      {
+        "capability": "role_assignment",
+        "label": "角色分配",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要判断哪些 Agent 会改变结果，哪些只是增加噪音"
+      },
+      {
+        "capability": "artifact_contract",
+        "label": "产物合约",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "Agent 协作需要结构化输入输出，否则难以合并和复核"
+      },
+      {
+        "capability": "qa_conflict_resolution",
+        "label": "QA 与冲突处理",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "多 Agent 输出必须有质检、冲突合并和停止条件"
+      },
+      {
+        "capability": "memory_writeback",
+        "label": "协作记忆写回",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "用户更偏好结果优先与证据优先"
+      },
+      {
+        "capability": "feedback_triage",
+        "label": "反馈分诊",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "跨平台反馈需要去重、聚类和信号强度判断，不能只凭单条评论下结论"
+      },
+      {
+        "capability": "research_synthesis",
+        "label": "研究归纳",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "跨产品研究需要把事实、推断、证据强弱和待确认信息结构化"
+      },
+      {
+        "capability": "product_critique",
+        "label": "产品批判",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要主动寻找反例、局限和不可迁移条件，避免只输出正向总结"
+      },
+      {
+        "capability": "collaboration_design",
+        "label": "协作设计",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要把研究结论转成可执行的 Agent 介入点、授权边界和人审节点"
+      },
+      {
+        "capability": "product_iteration",
+        "label": "产品迭代收敛",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要把用户信号、目标用户和产品策略合并成下一轮迭代判断"
+      },
+      {
+        "capability": "trust_activation",
+        "label": "信任与激活",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "平台文案和激活路径涉及承诺边界、信任门槛与用户行动设计"
+      },
+      {
+        "capability": "evaluation_design",
+        "label": "评测设计",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要定义反馈是否足够支撑产品迭代的证据标准和停止条件"
+      },
+      {
+        "capability": "job_scoring",
+        "label": "岗位打分",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "岗位排序需要证据映射和约束判断"
+      },
+      {
+        "capability": "application_risk_policy",
+        "label": "申请风险策略",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "用户更偏好结果优先与证据优先"
+      }
+    ],
+    "automation_sensitive": [
+      {
+        "capability": "execution_handoff",
+        "label": "执行交接",
+        "preferred_mode": "delegate_with_review",
+        "required_controls": [
+          "blocked_actions",
+          "rollback_condition",
+          "review_required"
+        ],
+        "why": "发布、私信和跨平台外部动作必须先生成草稿并等待审批"
+      }
+    ]
+  },
+  "collaboration_mode": {
+    "by_capability": {
+      "ai_coding": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "rapid_prototyping": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "resume_evidence": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "task_decomposition": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "role_assignment": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "artifact_contract": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "qa_conflict_resolution": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "memory_writeback": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "feedback_triage": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "research_synthesis": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "product_critique": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "collaboration_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "product_iteration": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "trust_activation": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "evaluation_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "job_scoring": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "application_risk_policy": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "execution_handoff": {
+        "mode": "delegate_with_review",
+        "detail_level": "boundary_first",
+        "user_action": "approve_or_block"
+      }
+    }
+  },
+  "runtime_decision": {
+    "runtime": "skill_heavy_with_human_checkpoints",
+    "decision_factors": {
+      "task_complexity": "medium",
+      "user_capability_radius": {
+        "inside_count": 3,
+        "outside_count": 14,
+        "automation_sensitive_count": 1
+      },
+      "intent_mode": "delegate_stable_workflow",
+      "risk_boundary": "high"
+    },
+    "collaboration_policy": {
+      "inside_radius": "co-think with detail",
+      "outside_radius": "result-first with evidence",
+      "automation_sensitive": "approval-required with blocked actions"
+    },
+    "why_not_skill": "",
+    "why_not_task_room": "主要工作可由已注册 skill pipeline 覆盖；风险集中在审批、外部动作和记忆写回，不需要开放 Task Room。"
+  },
+  "single_agent_answer": {
+    "summary": "该任务建议走 Auto-JobHunter 的 skill-heavy with human checkpoints 路径，而不是创建 Task Room。",
+    "lightweight_plan": [
+      "调用 boss_job_fit_skill，通过 Chrome CDP + boss-agent-cli 只读获取岗位列表和完整 JD",
+      "在 skill 内完成岗位标准化、fit score、风险打分和简历证据映射",
+      "输出 Top jobs checkpoint，等待用户确认是否进入简历修改阶段",
+      "由 harness services 展示禁止自动投递、联系招聘方、编造经历和 memory writeback preview"
+    ],
+    "why_no_task_room": "这是 Auto-JobHunter 的 human-agent collaboration 示例：Header Agent 判断岗位获取、JD 标准化、打分和证据映射已沉淀为 boss_job_fit_skill；Harness 只负责 checkpoint、授权边界和 memory preview，不需要创建 Task Room。",
+    "authorization_scope": {
+      "allowed": [
+        "通过 boss-agent-cli 只读获取岗位/JD",
+        "标准化岗位字段",
+        "岗位筛选与打分",
+        "输出 Top jobs checkpoint"
+      ],
+      "needs_approval": [
+        "登录 BOSS",
+        "读取已登录账号可见岗位结果",
+        "根据目标 JD 修改简历",
+        "保存求职 workflow memory"
+      ],
+      "blocked": [
+        "自动投递",
+        "联系招聘方",
+        "批量打招呼",
+        "绕过验证码",
+        "编造简历经历",
+        "保存原始简历全文"
+      ],
+      "review_required": true
+    },
+    "memory_writeback_preview": {
+      "memory_type": "auto_jobhunter_workflow_memory",
+      "requires_user_approval": true,
+      "workflow_asset_memory": "boss-job-fit 流程：Chrome CDP 登录 -> boss-agent-cli 只读获取岗位/JD -> 标准化 -> 匹配打分 -> 简历证据映射 -> Top jobs checkpoint -> 用户确认后才进入简历改写或投递。",
+      "delegation_policy_memory": {
+        "allowed": [
+          "通过 boss-agent-cli 只读获取岗位/JD",
+          "岗位标准化",
+          "岗位匹配打分",
+          "简历证据映射",
+          "生成申请建议草稿"
+        ],
+        "needs_approval": [
+          "登录 BOSS",
+          "读取已登录账号可见岗位结果",
+          "针对岗位改写简历",
+          "保存求职 workflow memory"
+        ],
+        "blocked": [
+          "自动投递",
+          "联系招聘方",
+          "批量打招呼",
+          "绕过验证码",
+          "编造经历",
+          "保存原始简历全文"
+        ]
+      },
+      "context_hygiene_rule": "不保存原始简历全文、不保存未确认岗位事实、不保存 agent trace。"
+    }
+  },
+  "minimum_completion_path": {
+    "success_criteria": [
+      "用户能判断哪些岗位值得优先看",
+      "每个推荐都有岗位字段、打分理由和风险说明",
+      "系统明确把修改简历与投递放到后续人工确认阶段",
+      "系统明确阻止自动投递、外部联系和经历编造",
+      "求职 workflow 只在确认后写回"
+    ],
+    "minimum_completion_path": [
+      "调用 boss_job_fit_skill，通过 Chrome CDP + boss-agent-cli 只读获取岗位列表和完整 JD",
+      "在 skill 内完成岗位标准化、fit score、风险打分和简历证据映射",
+      "输出 Top jobs checkpoint，等待用户确认是否进入简历修改阶段",
+      "由 harness services 展示禁止自动投递、联系招聘方、编造经历和 memory writeback preview"
+    ],
+    "required_capabilities": [
+      "job_scoring",
+      "application_risk_policy",
+      "memory_writeback"
+    ]
+  },
+  "meta": {
+    "path": "skill_heavy_with_human_checkpoints",
+    "generated_at": "2026-06-17T19:33:57"
+  }
+}

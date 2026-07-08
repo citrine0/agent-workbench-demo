@@ -1,0 +1,14 @@
+{
+  "accepted_experts": [
+    "Research Synthesis Agent",
+    "Product Critic Agent",
+    "Collaboration Designer Agent"
+  ],
+  "replaced_experts": [],
+  "experts_to_try_next": [],
+  "saved_preferences": [
+    "开放判断默认结果优先并附证据",
+    "自动化相关任务必须显示 blocked actions",
+    "长期 memory 写回必须先展示 preview"
+  ]
+}

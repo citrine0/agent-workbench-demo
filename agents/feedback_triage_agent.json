@@ -1,0 +1,15 @@
+{
+  "agent_id": "feedback_triage_agent",
+  "agent": "Feedback Triage Agent",
+  "capability": "feedback_triage",
+  "source": "agents/feedback_triage_agent.json",
+  "status": "registered",
+  "description": "将发布后的评论、私信摘要和转化指标聚类，区分强信号、噪音、误解和信任风险。",
+  "why_selected": "反馈包含评论、私信摘要和转化信号，需要先区分真实痛点、价值信号、误解、隐私风险和噪音。",
+  "input_contract": ["post_url", "feedback_windows", "product_positioning", "blocked_claims"],
+  "output_contract": ["feedback_clusters", "signal_strength", "evidence", "noise_notes", "missing_information", "next_validation_step"],
+  "allowed_actions": ["cluster_feedback", "summarize_private_message_summaries", "surface_risks"],
+  "blocked_actions": ["store_raw_private_messages", "auto_reply_comments", "auto_dm_users", "overfit_small_sample"],
+  "eval_criteria": ["uses_evidence", "separates_noise_from_signal", "surfaces_privacy_risk", "does_not_store_raw_private_messages"],
+  "failure_modes": ["把噪音当趋势", "忽略平台语境", "保存 raw 私信", "过度归因小样本"]
+}

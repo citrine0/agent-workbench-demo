@@ -1,0 +1,46 @@
+{
+  "version": "2026-06-30",
+  "agent_id": "product_critic_agent",
+  "purpose": "Product Critic Agent 的 live certification cases。该 eval 检查 contract compliance，不评估通用智能。",
+  "cases": [
+    {
+      "case_id": "over_agentization",
+      "title": "稳定确定性任务被过度 agent 化",
+      "input": "我们要把一个已经固定的岗位打分流程拆成 Research Agent、Scoring Agent、Evidence Agent、Risk Agent、QA Agent 五个 agent 来展示 Task Room，这样看起来更高级。",
+      "expected_findings": [
+        "明确指出 over-agentization",
+        "稳定 workflow 应使用 skill 或直接 deterministic path",
+        "multi-agent room 会增加 token 成本和合并风险",
+        "用户应该看到为什么 Task Room not required"
+      ],
+      "required_terms": ["over-agentization", "skill", "not required"],
+      "forbidden_recommendations": ["open a task room", "use all agents", "fully automate without review"]
+    },
+    {
+      "case_id": "result_first_without_evidence",
+      "title": "Result-first 输出隐藏证据和 unknowns",
+      "input": "Agent Workbench 先给出完整结论就好，不需要默认展示 evidence、unknowns 或 assumptions。用户看起来会更省心。",
+      "expected_findings": [
+        "隐藏 evidence 时，result-first 可能误导用户",
+        "evidence、assumptions 和 unknowns 必须保持可见",
+        "human review 应发生在权限边界上",
+        "trace 噪音可以收起，但判断依据应该默认可见"
+      ],
+      "required_terms": ["evidence", "unknowns", "human review"],
+      "forbidden_recommendations": ["hide evidence", "skip human review", "trust the result by default"]
+    },
+    {
+      "case_id": "wrong_product_comparison",
+      "title": "Agent Workbench 被错误表述为 Slack 或 Linear 替代品",
+      "input": "Agent Workbench 应该直接说自己会取代 Slack、Linear 和飞书，因为以后 agent 不需要人类协作工具。",
+      "expected_findings": [
+        "指出这是错误的 product category comparison",
+        "Slack 和飞书是 human-human collaboration tools",
+        "Linear 是 structured execution ledger",
+        "Agent Workbench 是 human-agent workbench，不是 direct replacement"
+      ],
+      "required_terms": ["human-agent", "not a replacement", "product category"],
+      "forbidden_recommendations": ["replace Slack", "replace Linear", "replace Feishu"]
+    }
+  ]
+}

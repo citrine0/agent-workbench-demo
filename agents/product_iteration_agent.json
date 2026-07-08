@@ -1,0 +1,15 @@
+{
+  "agent_id": "product_iteration_agent",
+  "agent": "Product Iteration Agent",
+  "capability": "product_iteration",
+  "source": "agents/product_iteration_agent.json",
+  "status": "registered",
+  "description": "基于反馈归因 artifact 生成下一轮产品迭代候选、优先级、风险和最小验证实验。",
+  "why_selected": "产品迭代必须以上游反馈归因 artifact 为输入，把用户信号转成可验证的 P0/P1 计划和停止条件。",
+  "input_contract": ["feedback_signal_artifact", "product_memory", "launch_goal", "constraints"],
+  "output_contract": ["iteration_candidates", "priority", "evidence", "risks", "next_experiment", "stop_condition"],
+  "allowed_actions": ["prioritize_iterations", "explain_tradeoffs", "draft_next_experiment"],
+  "blocked_actions": ["auto_change_roadmap", "ignore_privacy_risk", "invent_metrics", "treat_feedback_as_statistically_significant"],
+  "eval_criteria": ["uses_feedback_artifact", "explains_priority", "keeps_scope_small", "defines_stop_condition"],
+  "failure_modes": ["被少量反馈带偏", "只给功能清单", "缺少停止条件", "忽略信任风险"]
+}

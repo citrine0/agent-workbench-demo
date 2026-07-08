@@ -1,0 +1,241 @@
+{
+  "version": "2026-06-04",
+  "router_owner": "Header Agent",
+  "purpose": "Route one Agent Collaboration Harness demo into two examples: Auto-JobHunter for human-agent collaboration, and Multi-Agent Workflow for agent-agent collaboration.",
+  "default_user_capability_profile": {
+    "inside_radius": [
+      "ai_coding",
+      "rapid_prototyping",
+      "resume_evidence"
+    ],
+    "outside_radius": [
+      "task_decomposition",
+      "role_assignment",
+      "artifact_contract",
+      "qa_conflict_resolution",
+      "job_scoring"
+    ],
+    "automation_sensitive": [
+      "application_risk_policy",
+      "memory_writeback",
+      "external_action"
+    ]
+  },
+  "routes": [
+    {
+      "route_id": "example_a_auto_jobhunter_human_agent",
+      "label": "Auto-JobHunter 人机协作示例",
+      "core_question": "Should an agent be involved, and what must remain human-approved?",
+      "expected_runtime": "skill_heavy_with_human_checkpoints",
+      "trigger_terms": [
+        "Auto-JobHunter",
+        "岗位",
+        "JD",
+        "职位",
+        "简历匹配",
+        "打分",
+        "投递",
+        "resume",
+        "job",
+        "application"
+      ],
+      "positive_conditions": [
+        "task_is_real_user_workflow",
+        "skills_cover_primary_work",
+        "risk_requires_human_checkpoint",
+        "auto_apply_or_fabrication_must_be_blocked"
+      ],
+      "negative_conditions": [
+        "user_requests_open_ended_agent_swarm",
+        "task_requires_designing_new_agent_team",
+        "user_requests_external_action_without_review"
+      ],
+      "required_skills": [
+        "agent_necessity_router_skill",
+        "boss_job_fit_skill"
+      ],
+      "optional_agents": [
+        "application_risk_policy_agent",
+        "memory_writeback_agent"
+      ],
+      "checkpoints": [
+        "Agent necessity decision",
+        "Top jobs checkpoint",
+        "Resume evidence confirmation",
+        "Blocked auto-apply confirmation",
+        "Job workflow memory writeback preview"
+      ],
+      "policy": {
+        "allowed": [
+          "通过 boss-agent-cli 只读获取岗位/JD",
+          "岗位标准化",
+          "岗位匹配打分",
+          "简历证据映射",
+          "生成 Top jobs checkpoint"
+        ],
+        "needs_approval": [
+          "登录 BOSS",
+          "读取已登录账号可见岗位结果",
+          "针对单个岗位改写简历",
+          "保存求职 workflow memory"
+        ],
+        "blocked": [
+          "自动投递",
+          "联系招聘方",
+          "批量打招呼",
+          "绕过验证码",
+          "编造简历经历",
+          "保存原始简历全文"
+        ]
+      },
+      "memory_writeback_contract": {
+        "allowed_memory": [
+          "job_scoring_preferences",
+          "blocked_action_policy",
+          "evidence_mapping_pattern"
+        ],
+        "requires_user_approval": true,
+        "discard": [
+          "raw_resume_private_text",
+          "unconfirmed_job_facts",
+          "agent_trace_logs"
+        ]
+      },
+      "result_surface_contract": [
+        "agent_necessity_decision",
+        "top_jobs",
+        "score_breakdown",
+        "resume_evidence_map",
+        "human_checkpoints",
+        "blocked_actions",
+        "writeback_preview"
+      ],
+      "harness_services": [
+        "human_checkpoint_renderer_skill",
+        "collaboration_memory_writer_skill"
+      ]
+    },
+    {
+      "route_id": "example_b_multi_agent_workflow_builder",
+      "label": "Multi-Agent Workflow / Agent Team Builder 示例",
+      "core_question": "What kind of Agent team should be built to complete the final task?",
+      "expected_runtime": "task_room_agent_team_builder",
+      "trigger_terms": [
+        "multi-agent",
+        "多 Agent",
+        "Agent team",
+        "builder",
+        "角色分工",
+        "任务拆解",
+        "冲突处理",
+        "QA",
+        "artifact contract"
+      ],
+      "positive_conditions": [
+        "task_requires_agent_team_design",
+        "agent_outputs_must_be_mergeable",
+        "qa_or_conflict_resolution_is_required",
+        "workflow_memory_should_be_reusable"
+      ],
+      "negative_conditions": [
+        "skill_pipeline_covers_primary_work",
+        "single_agent_answer_is_sufficient",
+        "task_only_needs_short_copy_or_summary"
+      ],
+      "required_skills": [
+        "agent_necessity_router_skill",
+        "task_decomposition_skill",
+        "agent_team_builder_skill",
+        "artifact_contract_builder_skill",
+        "qa_conflict_resolution_skill",
+        "collaboration_memory_writer_skill"
+      ],
+      "minimum_viable_agents": [
+        "task_decomposition_agent",
+        "role_assignment_agent",
+        "artifact_contract_agent",
+        "qa_conflict_resolution_agent",
+        "memory_writeback_agent"
+      ],
+      "excluded_agents": [
+        {
+          "agent_id": "open_ended_swarm_agent",
+          "reason": "开放式群聊会制造噪音、增加 token 成本，并且没有可授权结果面板。"
+        },
+        {
+          "agent_id": "full_automation_agent",
+          "reason": "当前任务是构建协作协议和 Agent team spec，不应直接执行外部动作。"
+        }
+      ],
+      "checkpoints": [
+        "Confirm task decomposition",
+        "Confirm minimum agent team",
+        "Confirm artifact contract",
+        "Confirm QA / conflict resolution rule",
+        "Confirm memory writeback preview"
+      ],
+      "policy": {
+        "allowed": [
+          "生成 Agent team spec",
+          "生成 artifact contract",
+          "生成 QA 规则",
+          "生成 workflow memory 写回预览"
+        ],
+        "needs_approval": [
+          "启用新的 Agent team 模板",
+          "保存 agent performance memory"
+        ],
+        "blocked": [
+          "开放式无边界群聊",
+          "自动执行外部动作",
+          "写入未经确认的长期记忆"
+        ]
+      },
+      "memory_writeback_contract": {
+        "allowed_memory": [
+          "agent_team_template",
+          "delegation_policy",
+          "qa_rubric",
+          "context_hygiene_rule"
+        ],
+        "requires_user_approval": true,
+        "discard": [
+          "raw_agent_trace",
+          "failed_drafts",
+          "unconfirmed_evidence"
+        ]
+      },
+      "result_surface_contract": [
+        "agent_necessity_decision",
+        "minimum_agent_team",
+        "role_assignment",
+        "artifact_contract",
+        "qa_conflict_resolution",
+        "stop_condition",
+        "writeback_preview"
+      ]
+    }
+  ],
+  "route_decision_rules": [
+    {
+      "rule_id": "prefer_skill_heavy_when_skills_cover_work",
+      "description": "If stable skills cover the primary work and the main risk is approval, use skill-heavy with human checkpoints instead of Task Room.",
+      "expected_behavior": "Auto-JobHunter should not create a Task Room unless the user asks to design a new Agent team."
+    },
+    {
+      "rule_id": "create_task_room_for_agent_team_builder",
+      "description": "If the core problem is what Agent team to build, how to assign roles, how to merge artifacts, or how to resolve conflicts, create a Task Room.",
+      "expected_behavior": "Multi-Agent Workflow should output context packets, artifact contracts, QA rules, stop conditions, and writeback preview."
+    },
+    {
+      "rule_id": "block_external_actions_by_default",
+      "description": "Publishing, applying, contacting, payment, permission changes, and long-term memory writeback are blocked or review-required by default.",
+      "expected_behavior": "Show allowed / needs approval / blocked in every result surface."
+    },
+    {
+      "rule_id": "memory_writeback_requires_preview",
+      "description": "Memory improves harness continuity only when it is compressed, scoped, and user-approved.",
+      "expected_behavior": "Always show memory_writeback_preview before saving workflow, policy, or agent performance memory."
+    }
+  ]
+}

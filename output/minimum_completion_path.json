@@ -1,0 +1,22 @@
+{
+  "success_criteria": [
+    "用户能看到为什么这不是单个长答案或单个 Skill 能覆盖的任务",
+    "每个研究结论都区分已知事实、推断和待确认信息",
+    "产品优点、局限、Agent 介入点和 guardrails 能形成可判断交付物",
+    "candidate Evaluation Agent 只展示规格和评测门槛，不直接注册",
+    "长期 playbook 只展示预览，等待用户确认后写回"
+  ],
+  "minimum_completion_path": [
+    "把研究目标、目标产品和证据策略转成 Room Contract",
+    "由 Research Synthesis Agent 输出产品研究卡和协作机制对比表",
+    "由 Product Critic Agent 挑战结论、识别局限、反例和风险",
+    "由 Collaboration Designer Agent 生成 Agent 介入点、guardrails、人审节点和面试叙事",
+    "展示 candidate Evaluation Agent、Room Capsule 和 playbook 写回预览"
+  ],
+  "required_capabilities": [
+    "research_synthesis",
+    "product_critique",
+    "collaboration_design",
+    "memory_writeback"
+  ]
+}

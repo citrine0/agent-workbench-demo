@@ -1,0 +1,163 @@
+{
+  "version": "2026-06-30",
+  "trust_model": {
+    "principle": "Registry 只代表可发现，不代表可信。信任必须通过评测和人审晋升获得。",
+    "tiers": {
+      "deterministic": "可靠性来自固定代码或确定性规则执行。",
+      "verified": "能力已经在明确范围内通过带证据的评测或外部测试。",
+      "declared": "已有能力契约，但输出在通过评测和人审晋升前不可信。",
+      "provisional": "候选能力，只能产出 spec 或评测计划。",
+      "excluded_by_design": "能力被注册出来只是为了明确它应该被拒绝。"
+    },
+    "propagation_rule": [
+      "Declared agent 的输出必须标记为未认证。",
+      "Declared 输出在使用前必须经过人审节点。",
+      "Declared 输出在人工确认前不能写入 memory。",
+      "Declared 输出不能作为可信输入污染 verified 链路。",
+      "晋升必须同时具备 benchmark 证据和人工批准。"
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "job_fit_scoring",
+      "label": "岗位匹配打分",
+      "description": "拉取 sample 岗位，标准化岗位记录，计算匹配分，并映射简历证据。"
+    },
+    {
+      "id": "product_critique",
+      "label": "产品批判",
+      "description": "批判产品定位、过度 agent 化、信任风险和品类误判。"
+    },
+    {
+      "id": "task_room_planning",
+      "label": "Task Room 规划",
+      "description": "规划 artifact-first 协作，但不执行 multi-agent room。"
+    },
+    {
+      "id": "human_checkpoint_rendering",
+      "label": "人审节点渲染",
+      "description": "渲染审批、阻断动作和晋升闸。"
+    },
+    {
+      "id": "unsafe_full_automation",
+      "label": "不安全全自动化",
+      "description": "拒绝未经批准的自主外部动作。"
+    },
+    {
+      "id": "open_ended_swarm",
+      "label": "开放式 agent 群聊",
+      "description": "拒绝无边界的 multi-agent 讨论。"
+    }
+  ],
+  "skills": [
+    {
+      "id": "boss_job_fit_skill",
+      "label": "BOSS 岗位匹配 Skill",
+      "type": "skill",
+      "capabilities": ["job_fit_scoring"],
+      "trust_tier": "verified",
+      "trust_evidence": "sample-source workflow 已端到端跑通：拉取 sample 岗位、标准化、打分、映射简历证据，并产出人审节点。",
+      "verified_scope": [
+        "从 sample 拉取岗位",
+        "标准化岗位",
+        "匹配打分",
+        "简历证据映射"
+      ],
+      "execution_mode": "real",
+      "blocked_actions": [
+        "auto_apply",
+        "contact_recruiter",
+        "batch_greet",
+        "bypass_captcha",
+        "invent_resume_experience"
+      ],
+      "human_checkpoint_policy": "任何外部投递、联系招聘方、简历改写或 memory 写回都必须由用户批准。",
+      "memory_writeback_policy": "只有在用户批准后，才允许提出压缩后的 workflow memory 写回建议。"
+    },
+    {
+      "id": "controller_resolve_skill",
+      "label": "Controller Resolve",
+      "type": "skill",
+      "capabilities": ["task_room_planning", "human_checkpoint_rendering"],
+      "trust_tier": "deterministic",
+      "trust_evidence": "纯 registry 查找和策略规则解析。",
+      "verified_scope": ["路由解析", "信任闸渲染", "人审节点规划"],
+      "execution_mode": "deterministic",
+      "blocked_actions": ["select_unregistered_agent", "promote_without_eval", "write_memory_without_approval"],
+      "human_checkpoint_policy": "外部动作、memory 写回和晋升决策必须升级到人审。",
+      "memory_writeback_policy": "不直接写入 memory。"
+    }
+  ],
+  "agents": [
+    {
+      "id": "product_critic_agent",
+      "label": "Product Critic Agent",
+      "type": "agent",
+      "capabilities": ["product_critique"],
+      "trust_tier": "declared",
+      "trust_evidence": "已有 contract；在 scoped verification 之前必须通过 live certification。",
+      "verified_scope": [],
+      "execution_mode": "live_llm",
+      "blocked_actions": [
+        "claim_verified_without_eval",
+        "recommend_unbounded_agent_team",
+        "erase_human_accountability",
+        "write_memory_without_approval"
+      ],
+      "human_checkpoint_policy": "所有认证结果在 scoped promotion 前都必须经过人工批准。",
+      "memory_writeback_policy": "Declared 输出不能写入 memory。"
+    },
+    {
+      "id": "research_synthesis_agent",
+      "label": "研究综合 Agent",
+      "type": "agent",
+      "capabilities": ["task_room_planning"],
+      "trust_tier": "declared",
+      "trust_evidence": "已有 Codex 生成的 contract；v2 中还没有输出质量评测。",
+      "verified_scope": [],
+      "execution_mode": "planned",
+      "blocked_actions": ["invent_external_facts", "quote_unverified_claims_as_fact"],
+      "human_checkpoint_policy": "v2 中只展示 planned 输出。",
+      "memory_writeback_policy": "declared planned artifacts 不允许写入 memory。"
+    },
+    {
+      "id": "collaboration_designer_agent",
+      "label": "协作设计 Agent",
+      "type": "agent",
+      "capabilities": ["task_room_planning"],
+      "trust_tier": "declared",
+      "trust_evidence": "已有 Codex 生成的 contract；v2 中还没有输出质量评测。",
+      "verified_scope": [],
+      "execution_mode": "planned",
+      "blocked_actions": ["turn_planned_room_into_executed_claim", "hide_human_checkpoints"],
+      "human_checkpoint_policy": "v2 中只展示 planned 输出。",
+      "memory_writeback_policy": "declared planned artifacts 不允许写入 memory。"
+    },
+    {
+      "id": "open_ended_swarm",
+      "label": "开放式群聊 Agent",
+      "type": "agent",
+      "capabilities": ["open_ended_swarm"],
+      "trust_tier": "excluded_by_design",
+      "trust_evidence": "被排除，因为无边界 agent 讨论噪音高、成本高，且难以审计。",
+      "verified_scope": [],
+      "execution_mode": "simulated",
+      "blocked_actions": ["enter_execution"],
+      "human_checkpoint_policy": "必须被 Controller 拒绝。",
+      "memory_writeback_policy": "不写入 memory。"
+    },
+    {
+      "id": "full_automation",
+      "label": "全自动化 Agent",
+      "type": "agent",
+      "capabilities": ["unsafe_full_automation"],
+      "trust_tier": "excluded_by_design",
+      "trust_evidence": "被排除，因为外部动作和持久决策必须经过人工批准。",
+      "verified_scope": [],
+      "execution_mode": "simulated",
+      "blocked_actions": ["enter_execution", "perform_external_action_without_approval"],
+      "human_checkpoint_policy": "必须被 Controller 拒绝。",
+      "memory_writeback_policy": "不写入 memory。"
+    }
+  ]
+}

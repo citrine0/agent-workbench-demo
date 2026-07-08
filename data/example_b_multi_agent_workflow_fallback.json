@@ -1,0 +1,387 @@
+{
+  "route_id": "example_b_product_launch_feedback_room",
+  "runtime": "dynamic_task_room",
+  "task_state": {
+    "room_name": "Product Launch Feedback Room",
+    "status": "completed_with_compressed_result",
+    "goal": "从产品 memory 生成小红书发布文案，用户确认后上传，24h / 48h 后收集反馈，并生成产品迭代规划。",
+    "why_task_room": "任务包含 memory 检索、审批后外部发布、延迟反馈收集、反馈归因、产品迭代规划和 playbook 写回，适合 fork 临时 Room，避免主 context 被中间 trace 污染。",
+    "automation_risk": "medium-high",
+    "context_scope": "temporary_room_context"
+  },
+  "runtime_decision": {
+    "runtime": "dynamic_task_room",
+    "decision_factors": {
+      "task_complexity": "high",
+      "user_capability_radius": {
+        "inside_count": 3,
+        "outside_count": 10,
+        "automation_sensitive_count": 2
+      },
+      "intent_mode": "design_collaboration",
+      "risk_boundary": "high"
+    },
+    "collaboration_policy": {
+      "inside_radius": "co-think with detail",
+      "outside_radius": "result-first with evidence",
+      "automation_sensitive": "approval-required with blocked actions"
+    },
+    "why_not_skill": "文案生成和发布上传可以由 skill 完成，但反馈归因、迭代判断、延迟反馈合并和 playbook 写回需要 Room Controller 在临时上下文中收敛。",
+    "why_not_task_room": ""
+  },
+  "room_lifecycle": [
+    {"step": "forked", "owner": "Header Agent", "output": "Launch Feedback Room created with scoped boundary"},
+    {"step": "running_room_skills", "owner": "Room Controller", "output": "memory, copy, publish, feedback skills executed in room context"},
+    {"step": "waiting_for_user_approval", "owner": "Human", "output": "publish preview approved before upload"},
+    {"step": "publishing_after_approval", "owner": "xiaohongshu_publish_skill", "output": "simulated post URL returned"},
+    {"step": "waiting_for_24h_feedback", "owner": "feedback_collection_skill", "output": "24h feedback window collected"},
+    {"step": "waiting_for_48h_feedback", "owner": "feedback_collection_skill", "output": "48h feedback window collected"},
+    {"step": "running_registered_agents", "owner": "Room Controller", "output": "registered agents produced artifacts"},
+    {"step": "merging_artifacts", "owner": "Room Controller", "output": "feedback and iteration artifacts merged"},
+    {"step": "closed", "owner": "Header Agent", "output": "compressed result returned; raw room trace discarded"}
+  ],
+  "room_local_skills": [
+    {
+      "skill_id": "memory_retrieval_skill",
+      "status": "completed",
+      "input": "product_id=solo_builder_memory_os",
+      "output": "产品定位、目标用户、核心能力、语气偏好和 blocked claims"
+    },
+    {
+      "skill_id": "xiaohongshu_copy_skill",
+      "status": "completed",
+      "input": "product memory + Xiaohongshu platform constraint",
+      "output": "标题选项、正文、标签、CTA、claim risk notes"
+    },
+    {
+      "skill_id": "xiaohongshu_publish_skill",
+      "status": "simulated_after_approval",
+      "input": "approved post preview",
+      "output": "post_url=https://www.xiaohongshu.com/explore/demo-solo-builder-memory-os"
+    },
+    {
+      "skill_id": "feedback_collection_skill",
+      "status": "completed",
+      "input": "post_url + 24h / 48h windows",
+      "output": "metrics, comments, private-message summaries"
+    }
+  ],
+  "publish_preview": {
+    "title_options": [
+      "我做了一个给一人公司用的 AI 工作流记忆层",
+      "和 AI 一起工作，最痛的不是生成，而是记不住决策",
+      "我不想再让每次 Agent 协作都从零开始"
+    ],
+    "body": "最近在做一个小原型：Solo Builder Memory OS。它不是普通笔记，也不是任务管理工具，而是把你和 Agent 一起推进工作的过程，压缩成下次能复用的 playbook。比如：什么时候该让 Agent 直接执行，什么时候必须先给你确认；哪些上下文只是临时的，哪些可以写成长记忆；一次产品发布、求职筛选、用户反馈分析结束后，系统应该留下结果和流程，而不是留下满屏聊天记录。现在还是 v0.3 prototype，我最想验证的是：一人公司 builder 是否真的需要这样的工作记忆层？",
+    "tags": ["AI工具", "一人公司", "Agent", "效率工具", "产品原型"],
+    "cta": "如果你也在用 Codex / Claude Code / Cursor 做产品，最希望 AI 记住你的哪类工作方式？",
+    "claim_risk_notes": [
+      "不要承诺自动经营公司",
+      "不要承诺无需人工判断",
+      "明确当前是 prototype"
+    ]
+  },
+  "approval_gate": {
+    "required": true,
+    "approved_in_demo": true,
+    "allowed_after_approval": ["upload_xiaohongshu_post"],
+    "blocked_even_after_approval": ["auto_dm_users", "auto_reply_comments", "change_account_without_approval"]
+  },
+  "registered_agents": [
+    {
+      "agent": "Feedback Triage Agent",
+      "capability": "feedback_triage",
+      "source": "agents/feedback_triage_agent.json",
+      "status": "registered",
+      "why_selected": "反馈包含评论、私信摘要和转化信号，需要区分噪音、真实痛点、价值信号、误解和信任风险。",
+      "artifact_contract": ["feedback_clusters", "signal_strength", "evidence", "noise_notes", "missing_information"]
+    },
+    {
+      "agent": "Product Iteration Agent",
+      "capability": "product_iteration",
+      "source": "agents/product_iteration_agent.json",
+      "status": "registered",
+      "why_selected": "需要把反馈信号转成下一轮产品迭代候选、优先级、风险和实验建议。",
+      "artifact_contract": ["iteration_candidates", "priority", "evidence", "risks", "next_experiment"]
+    }
+  ],
+  "candidate_agents": [
+    {
+      "agent": "Trust & Activation Agent",
+      "status": "candidate_only",
+      "benchmark_required": true,
+      "why_not_trusted_yet": "当前示例先用 claim risk notes 和人工审批控制信任风险，尚未验证该 Agent 是否稳定提升结果。"
+    },
+    {
+      "agent": "Community Signal Agent",
+      "status": "candidate_only",
+      "benchmark_required": true,
+      "why_not_trusted_yet": "需要更多平台样本验证它能否区分社区噪音和真实用户信号。"
+    },
+    {
+      "agent": "Evaluation Agent",
+      "status": "candidate_only",
+      "benchmark_required": true,
+      "why_not_trusted_yet": "当前先展示 benchmark preview，不把 Eval Agent 作为可信执行单元。"
+    }
+  ],
+  "agent_artifacts": {
+    "feedback_signal_artifact": {
+      "agent": "Feedback Triage Agent",
+      "clusters": [
+        {
+          "cluster": "上下文断裂痛点",
+          "signal_strength": "high",
+          "evidence": ["每次上下文断了都很痛苦", "不想要知识库，但想要能记住工作方式的助手"]
+        },
+        {
+          "cluster": "memory preview 价值信号",
+          "signal_strength": "high",
+          "evidence": ["区分临时上下文和长期记忆很打动我", "希望看到 memory preview 的具体样例"]
+        },
+        {
+          "cluster": "定位不清 / 术语过重",
+          "signal_strength": "medium",
+          "evidence": ["和 Notion AI 有什么区别", "Header Agent / Task Room 这些词小白看不懂"]
+        },
+        {
+          "cluster": "隐私信任风险",
+          "signal_strength": "medium",
+          "evidence": ["担心保存太多隐私内容", "最关心隐私和可删除机制"]
+        }
+      ],
+      "noise_notes": ["早期评论样本小，不应直接推导大规模需求。"],
+      "missing_information": ["缺少试用后的真实留存和重复使用数据。"]
+    },
+    "product_iteration_artifact": {
+      "agent": "Product Iteration Agent",
+      "artifact_type": "product_iteration_artifact",
+      "priority": [
+        {
+          "item": "把抽象概念改成一次真实 Agent 协作 -> playbook 写回的可视化样例",
+          "priority": "P0",
+          "why": "同时回应定位不清和 memory preview 价值信号。"
+        },
+        {
+          "item": "增加隐私与可删除机制说明",
+          "priority": "P0",
+          "why": "信任风险会直接阻碍用户上传真实工作上下文。"
+        },
+        {
+          "item": "弱化 Header Agent / Task Room 术语，对外改成 工作流记忆 / 临时任务空间",
+          "priority": "P1",
+          "why": "降低小红书受众理解门槛。"
+        }
+      ],
+      "next_experiment": "下一条内容用一个真实场景演示：用户和 Codex 做产品发布，结束后只保存 playbook，不保存 raw trace。",
+      "risks": ["样本来自单平台早期曝光，不能代表所有 AI builder。"]
+    }
+  },
+  "merge_rule": "先按反馈信号强度聚类，再由产品迭代 Agent 生成候选，P0 只允许来自 high/medium 信号且能同时降低用户理解或信任风险的改动。",
+  "qa_gate": {
+    "rubric": ["证据是否来自反馈", "是否区分噪音", "是否避免过度归因", "是否保留人工确认", "是否能形成下一轮实验"],
+    "stop_condition": "输出 P0/P1/P2 迭代规划，且每个 P0 均有反馈证据和风险说明；否则请求补充反馈样本。",
+    "passed": true
+  },
+  "compressed_room_result": {
+    "summary": "小红书发布反馈显示：用户对“记住 AI 工作方式”和“memory preview”有明确兴趣，但当前表达过于抽象，且隐私机制是试用前阻碍。",
+    "recommended_iteration_plan": [
+      "P0：做一个真实 playbook 写回可视化样例。",
+      "P0：补隐私、可删除、raw trace 不写回说明。",
+      "P1：对外弱化技术术语，换成工作流记忆和临时任务空间。"
+    ],
+    "next_launch_test": "用真实 Codex 协作案例发布第二条内容，并比较收藏率、评论质量、试用请求数。"
+  },
+  "playbook_writeback_proposal": {
+    "memory_type": "product_launch_feedback_room_playbook",
+    "requires_user_approval": true,
+    "candidate_playbook": "产品发布反馈 Room：读取产品 memory -> 生成小红书文案 -> 用户确认后上传 -> 收集 24h/48h 反馈 -> Feedback Triage Agent 聚类 -> Product Iteration Agent 生成迭代规划 -> 输出 playbook 写回预览。",
+    "do_not_save": ["raw room trace", "raw private messages", "failed copy drafts", "unconfirmed platform credentials"]
+  },
+  "room_state_contract": {
+    "capsule_id": "room_state_capsule_product_launch_feedback_v1",
+    "task_goal": "从产品 memory 生成小红书发布文案，用户确认后上传，24h / 48h 后收集反馈，并生成产品迭代规划。",
+    "current_phase": "ready_for_human_review",
+    "can_reopen_window": true,
+    "resume_mode": "contract_state_only",
+    "confirmed_decisions": [
+      "本次只使用已注册 Feedback Triage Agent 和 Product Iteration Agent 进入可信执行。",
+      "候选 Agent 需要通过评测后才能注册，不在本次直接执行。",
+      "外部发布、私信回复和长期记忆写回都需要用户确认。",
+      "Room 结束后只回传压缩结果、playbook 写回建议和可恢复状态，不回传原始过程。"
+    ],
+    "open_questions": [
+      "是否接受本次最小完成路径。",
+      "是否把 Trust & Activation Agent / Evaluation Agent 放入后续评测。",
+      "是否确认保存本次 playbook 写回建议。"
+    ],
+    "active_constraints": [
+      "未经确认发布",
+      "自动私信用户",
+      "自动回复评论",
+      "保存 raw 私信全文",
+      "写入未经确认的长期记忆",
+      "不保存 raw room trace",
+      "不把未确认 candidate agent 当作可信执行单元"
+    ],
+    "artifact_inventory": [
+      {
+        "artifact_id": "publish_preview",
+        "owner": "xiaohongshu_copy_skill",
+        "status": "available",
+        "summary": "小红书发布标题、正文、标签、CTA 和承诺风险说明。"
+      },
+      {
+        "artifact_id": "feedback_signal_artifact",
+        "owner": "Feedback Triage Agent",
+        "status": "available",
+        "summary": "反馈聚类与信号强度。"
+      },
+      {
+        "artifact_id": "product_iteration_artifact",
+        "owner": "Product Iteration Agent",
+        "status": "available",
+        "summary": "产品迭代候选、优先级与停止条件。"
+      }
+    ],
+    "evidence_ledger": [
+      {
+        "claim": "上下文断裂痛点",
+        "evidence": ["每次上下文断了都很痛苦", "不想要知识库，但想要能记住工作方式的助手"],
+        "confidence": "high"
+      },
+      {
+        "claim": "memory preview 价值信号",
+        "evidence": ["区分临时上下文和长期记忆很打动我", "希望看到 memory preview 的具体样例"],
+        "confidence": "high"
+      }
+    ],
+    "agent_outputs_summary": [
+      {
+        "agent": "Feedback Triage Agent",
+        "judgment": "反馈显示 AI 工作流记忆和 playbook 写回存在明确价值信号，但术语门槛与隐私信任是主要阻碍。",
+        "confidence": "medium"
+      },
+      {
+        "agent": "Product Iteration Agent",
+        "judgment": "下一轮应优先降低理解门槛和信任门槛，再扩展自动化能力。",
+        "confidence": "medium"
+      }
+    ],
+    "blocked_actions": ["未经确认发布", "自动私信用户", "自动回复评论", "保存 raw 私信全文", "写入未经确认的长期记忆"],
+    "next_minimal_step": "请用户确认是否采用下一轮最小迭代，并决定是否写回 playbook。",
+    "resume_instructions": [
+      "新窗口只读取本 capsule、collaboration_contract、capability_gap_report 和必要 artifacts。",
+      "继续时先复述 confirmed_decisions，再处理 open_questions。",
+      "不得根据丢弃的 raw trace 补充未确认事实。",
+      "如需要更多上下文，必须向用户请求，而不是猜测。"
+    ],
+    "discarded_context": ["raw room trace", "失败文案草稿", "raw private messages", "与当前阶段无关的中间推理", "未确认的平台账号或凭据"],
+    "compression_confidence": "high",
+    "requires_human_review": true,
+    "playbook_writeback_reference": "product_launch_feedback_room_playbook",
+    "capability_gap_summary": {
+      "gap_severity": "recoverable",
+      "missing_capabilities": ["trust_activation", "evaluation_design"],
+      "candidate_agent_count": 2
+    }
+  },
+  "policy": {
+    "allowed": ["读取 scoped product memory", "生成小红书文案草稿", "用户确认后上传", "收集公开反馈", "生成迭代规划", "生成 playbook 写回预览"],
+    "needs_approval": ["发布到小红书", "保存 launch feedback playbook", "保存 agent performance memory"],
+    "blocked": ["未经确认发布", "自动私信用户", "自动回复评论", "保存 raw 私信全文", "写入未经确认的长期记忆"]
+  },
+  "benchmark_preview": {
+    "candidate_agent_registration_rubric": [
+      "是否输出结构化 artifact",
+      "是否减少噪音或冲突",
+      "是否遵守 blocked actions",
+      "是否提升 result surface 质量",
+      "是否能跨 3 个以上类似 room 复用"
+    ],
+    "current_decision": "只注册 Feedback Triage Agent 和 Product Iteration Agent；其他 agent 保持 candidate_only。"
+  },
+  "capability_gap_report": {
+    "required_capabilities": ["feedback_triage", "product_iteration", "trust_activation", "evaluation_design", "memory_writeback"],
+    "covered_by_registered_agents": [
+      {
+        "capability": "feedback_triage",
+        "agent": "Feedback Triage Agent",
+        "source": "agents/feedback_triage_agent.json",
+        "status": "registered"
+      },
+      {
+        "capability": "product_iteration",
+        "agent": "Product Iteration Agent",
+        "source": "agents/product_iteration_agent.json",
+        "status": "registered"
+      }
+    ],
+    "covered_by_skills": [
+      {
+        "skill_id": "memory_retrieval_skill",
+        "capability": "memory_retrieval",
+        "covers": ["scoped_product_memory"],
+        "status": "room_local_skill"
+      },
+      {
+        "skill_id": "xiaohongshu_copy_skill",
+        "capability": "launch_copy",
+        "covers": ["publish_preview", "claim_risk_notes"],
+        "status": "room_local_skill"
+      },
+      {
+        "skill_id": "collaboration_memory_writer_skill",
+        "capability": "memory_writeback",
+        "covers": ["playbook_writeback_proposal"],
+        "status": "harness_service"
+      }
+    ],
+    "missing_capabilities": ["trust_activation", "evaluation_design"],
+    "gap_severity": "recoverable",
+    "minimal_path": [
+      "本次只使用已注册 Feedback Triage Agent 和 Product Iteration Agent 完成可交付结果。",
+      "信任激活风险先由 claim risk notes、人审发布和 blocked actions 覆盖。",
+      "评测设计先保留 benchmark preview，不让 Evaluation Agent 进入可信执行。",
+      "成功后只写回 playbook proposal；多次复用稳定后再考虑注册/升级 agent 或 skill。"
+    ],
+    "candidate_agent_specs": [
+      {
+        "agent": "Trust & Activation Agent",
+        "capability": "trust_activation",
+        "status": "candidate_only",
+        "generated_by": "external_agent_builder_tool_protocol",
+        "why_needed": "发布内容存在承诺边界、信任激活和隐私表达风险；当前先由 claim risk notes 与人审覆盖。",
+        "input_contract": ["task_goal", "scoped_memory", "registered_agent_artifacts", "blocked_actions"],
+        "output_contract": ["structured_artifact", "evidence", "risk_notes", "stop_condition"],
+        "blocked_actions": ["enter_trusted_execution_without_eval", "perform_external_actions", "write_long_term_memory_without_approval"],
+        "eval_required": true
+      },
+      {
+        "agent": "Evaluation Agent",
+        "capability": "evaluation_design",
+        "status": "candidate_only",
+        "generated_by": "external_agent_builder_tool_protocol",
+        "why_needed": "后续需要系统评估不同 Room 的成功率、噪音和复用质量；当前 demo 只展示 benchmark preview。",
+        "input_contract": ["task_goal", "scoped_memory", "registered_agent_artifacts", "blocked_actions"],
+        "output_contract": ["structured_artifact", "evidence", "risk_notes", "stop_condition"],
+        "blocked_actions": ["enter_trusted_execution_without_eval", "perform_external_actions", "write_long_term_memory_without_approval"],
+        "eval_required": true
+      }
+    ],
+    "agent_builder_call": {
+      "tool": "external_agent_builder",
+      "status": "proposed_not_executed",
+      "why": "Room Controller 只提出 candidate agent spec；通过 Agent Eval 前不进入可信执行。",
+      "inputs": ["missing_capabilities", "task_goal", "artifact_contract", "blocked_actions"],
+      "outputs": ["candidate_agent_spec", "eval_plan", "registration_recommendation"]
+    },
+    "eval_gate": [
+      "必须在 3 个以上同类任务中输出结构化 artifact",
+      "必须遵守 blocked actions，不能自动执行外部动作",
+      "必须证明相比现有 registered agents 能降低噪音或提高结果质量",
+      "通过后只注册为 registered agent；多次稳定复用后才可能升级为 skill"
+    ],
+    "human_checkpoint": "确认本次是否接受最小路径；确认 candidate agents 是否进入 Agent Eval；确认 playbook 是否写回。"
+  }
+}

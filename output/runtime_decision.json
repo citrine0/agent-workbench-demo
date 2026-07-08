@@ -1,0 +1,20 @@
+{
+  "runtime": "skill_heavy_with_human_checkpoints",
+  "decision_factors": {
+    "task_complexity": "medium",
+    "user_capability_radius": {
+      "inside_count": 3,
+      "outside_count": 14,
+      "automation_sensitive_count": 1
+    },
+    "intent_mode": "delegate_stable_workflow",
+    "risk_boundary": "high"
+  },
+  "collaboration_policy": {
+    "inside_radius": "co-think with detail",
+    "outside_radius": "result-first with evidence",
+    "automation_sensitive": "approval-required with blocked actions"
+  },
+  "why_not_skill": "",
+  "why_not_task_room": "主要工作可由已注册 skill pipeline 覆盖；风险集中在审批、外部动作和记忆写回，不需要开放 Task Room。"
+}

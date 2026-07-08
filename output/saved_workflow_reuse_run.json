@@ -1,0 +1,1275 @@
+{
+  "goal_check": {
+    "input_type": "execution_request",
+    "interpreted_goal": "我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+    "executable_goal": true,
+    "needs_task_room": true,
+    "single_agent_sufficient": false,
+    "recommendation": "task_room",
+    "why": "目标跨反馈归因、产品收敛、执行交接与授权治理，建议创建 Task Room。",
+    "why_single_agent_not_enough": "需要显式输出 primary blocker、execution handoff、blocked actions 和 policy 更新条件。",
+    "current_autonomy_level": "Level 1: Draft with approval",
+    "recommended_autonomy_level": "Level 2: Execute after one-click approval（仅限低风险 patch）",
+    "automation_risk": "medium-high",
+    "authorization_scope": {
+      "allowed": [
+        "生成 Execution Agent patch brief",
+        "生成低风险草稿"
+      ],
+      "needs_approval": [
+        "关键流程改动",
+        "默认授权策略改动"
+      ],
+      "blocked": [
+        "自动触达所有用户",
+        "自动上线高风险功能",
+        "自动改动计费/权限策略"
+      ],
+      "review_required": true
+    },
+    "success_criteria": [
+      "用户能快速判断 primary blocker",
+      "用户能看到下一轮最小迭代而非功能堆叠",
+      "用户能明确哪些动作可授权、哪些必须人工确认",
+      "用户能看到本次任务如何更新 autonomy policy"
+    ],
+    "minimum_completion_path": [
+      "判断反馈中的最大阻塞点",
+      "区分价值问题、体验问题、信任问题和增长问题",
+      "定义下一轮最小产品迭代",
+      "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+      "定义观察指标与 autonomy policy 更新条件"
+    ],
+    "required_capabilities": [
+      "feedback_triage",
+      "product_iteration",
+      "trust_activation",
+      "execution_handoff",
+      "evaluation_design",
+      "automation_risk_governance"
+    ],
+    "minimum_viable_team": [
+      {
+        "agent": "Feedback Triage Agent",
+        "capability": "feedback_triage",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "用户不擅长反馈归因，需要结果优先",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Product Iteration Agent",
+        "capability": "product_iteration",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "用户希望减少产品决策噪音，先看结论与证据",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Trust & Activation Agent",
+        "capability": "trust_activation",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "该能力影响主阻塞判断，需给结论和风险",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Execution Handoff Agent",
+        "capability": "execution_handoff",
+        "covers_gap": "automation_sensitive",
+        "radius_type": "automation_sensitive",
+        "collaboration_mode": "delegate_with_review",
+        "why_selected": "涉及执行边界与回滚条件，需要审批",
+        "output_policy": "boundary-first with approval and rollback"
+      },
+      {
+        "agent": "Evaluation Agent",
+        "capability": "evaluation_design",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "用户更需要可观测指标与验证路径",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "自动化风险治理 Agent",
+        "capability": "automation_risk_governance",
+        "covers_gap": "automation_sensitive",
+        "radius_type": "automation_sensitive",
+        "collaboration_mode": "delegate_with_review",
+        "why_selected": "自动化敏感区必须边界优先",
+        "output_policy": "boundary-first with approval and rollback"
+      }
+    ],
+    "excluded_agents": [
+      {
+        "agent": "Growth Experiment Agent",
+        "why_excluded": "当前阻塞在激活与信任，先修复产品闭环再放大获客。"
+      },
+      {
+        "agent": "Full Automation Agent",
+        "why_excluded": "证据不足，不应直接提升到高自治自动执行。"
+      }
+    ],
+    "suggested_experts": [
+      "Feedback Triage Agent",
+      "Product Iteration Agent",
+      "Trust & Activation Agent",
+      "Execution Handoff Agent",
+      "Evaluation Agent"
+    ],
+    "clarification_questions": [],
+    "capability_blindspots": [
+      "反馈归因",
+      "授权边界",
+      "执行交接",
+      "评测设计"
+    ],
+    "capability_boundary": "擅长：AI Coding、快速原型；希望委托：反馈归因、授权策略、自动化风险、评测设计。"
+  },
+  "minimum_completion_path": {
+    "success_criteria": [
+      "用户能快速判断 primary blocker",
+      "用户能看到下一轮最小迭代而非功能堆叠",
+      "用户能明确哪些动作可授权、哪些必须人工确认",
+      "用户能看到本次任务如何更新 autonomy policy"
+    ],
+    "minimum_completion_path": [
+      "判断反馈中的最大阻塞点",
+      "区分价值问题、体验问题、信任问题和增长问题",
+      "定义下一轮最小产品迭代",
+      "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+      "定义观察指标与 autonomy policy 更新条件"
+    ],
+    "required_capabilities": [
+      "feedback_triage",
+      "product_iteration",
+      "trust_activation",
+      "execution_handoff",
+      "evaluation_design",
+      "automation_risk_governance"
+    ]
+  },
+  "task_state": {
+    "task_room": "ai-product-iteration-loop",
+    "status": "waiting_for_user_review",
+    "goal": "我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+    "current_autonomy_level": "Level 1: Draft with approval",
+    "recommended_autonomy_level": "Level 2: Execute after one-click approval（仅限低风险 patch）",
+    "automation_risk": "medium-high",
+    "success_criteria": [
+      "用户能快速判断 primary blocker",
+      "用户能看到下一轮最小迭代",
+      "用户能明确授权范围和 blocked actions"
+    ],
+    "authorization_level": "Level 1: 生成建议，等待确认"
+  },
+  "collaboration_contract": {
+    "why_task_room": "任务同时涉及反馈分层、产品收敛、风险授权和执行交接；这些能力共同影响最终授权决策。",
+    "selected_agents": [
+      {
+        "agent": "Feedback Triage Agent",
+        "capability": "feedback_triage",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "用户不擅长反馈归因，需要结果优先",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Product Iteration Agent",
+        "capability": "product_iteration",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "用户希望减少产品决策噪音，先看结论与证据",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Trust & Activation Agent",
+        "capability": "trust_activation",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "该能力影响主阻塞判断，需给结论和风险",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Execution Handoff Agent",
+        "capability": "execution_handoff",
+        "covers_gap": "automation_sensitive",
+        "radius_type": "automation_sensitive",
+        "collaboration_mode": "delegate_with_review",
+        "why_selected": "涉及执行边界与回滚条件，需要审批",
+        "output_policy": "boundary-first with approval and rollback"
+      },
+      {
+        "agent": "Evaluation Agent",
+        "capability": "evaluation_design",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "用户更需要可观测指标与验证路径",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "自动化风险治理 Agent",
+        "capability": "automation_risk_governance",
+        "covers_gap": "automation_sensitive",
+        "radius_type": "automation_sensitive",
+        "collaboration_mode": "delegate_with_review",
+        "why_selected": "自动化敏感区必须边界优先",
+        "output_policy": "boundary-first with approval and rollback"
+      }
+    ],
+    "excluded_agents": [
+      {
+        "agent": "Growth Experiment Agent",
+        "why_excluded": "当前阻塞在激活与信任，先修复产品闭环再放大获客。"
+      },
+      {
+        "agent": "Full Automation Agent",
+        "why_excluded": "证据不足，不应直接提升到高自治自动执行。"
+      }
+    ],
+    "authorization_scope": {
+      "allowed": [
+        "生成 Execution Agent patch brief",
+        "生成低风险草稿"
+      ],
+      "needs_approval": [
+        "关键流程改动",
+        "默认授权策略改动"
+      ],
+      "blocked": [
+        "自动触达所有用户",
+        "自动上线高风险功能",
+        "自动改动计费/权限策略"
+      ],
+      "review_required": true
+    },
+    "merge_rule": "先确定 primary blocker，再定义最小迭代与执行交接，最后给出授权范围和 policy 更新建议。",
+    "success_criteria": "用户能在一个界面中判断该改什么、能授权什么、不能自动化什么。"
+  },
+  "context_packets": [
+    {
+      "agent": "Feedback Triage Agent",
+      "capability": "feedback_triage",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "task": "围绕 minimum completion path 完成 Feedback Triage Agent 的子任务",
+      "minimum_completion_path": [
+        "判断反馈中的最大阻塞点",
+        "区分价值问题、体验问题、信任问题和增长问题",
+        "定义下一轮最小产品迭代",
+        "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+        "定义观察指标与 autonomy policy 更新条件"
+      ],
+      "necessary_context": [
+        "用户目标：我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+        "当前自治等级：Level 1: Draft with approval",
+        "能力边界：擅长：AI Coding、快速原型；希望委托：反馈归因、授权策略、自动化风险、评测设计。",
+        "仅输出统一 schema"
+      ],
+      "excluded_context": [
+        "无关历史聊天",
+        "未确认外部事实",
+        "和当前子任务无关的长讨论"
+      ],
+      "expected_output": {
+        "agent": "Feedback Triage Agent",
+        "capability": "feedback_triage",
+        "covers_gap": "outside_radius",
+        "collaboration_mode": "result_first",
+        "judgment": "",
+        "key_findings": [],
+        "evidence": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high",
+        "should_be_saved_to_workflow": true
+      },
+      "success_criteria": "输出能改变最终决策或降低自动化风险"
+    },
+    {
+      "agent": "Product Iteration Agent",
+      "capability": "product_iteration",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "task": "围绕 minimum completion path 完成 Product Iteration Agent 的子任务",
+      "minimum_completion_path": [
+        "判断反馈中的最大阻塞点",
+        "区分价值问题、体验问题、信任问题和增长问题",
+        "定义下一轮最小产品迭代",
+        "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+        "定义观察指标与 autonomy policy 更新条件"
+      ],
+      "necessary_context": [
+        "用户目标：我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+        "当前自治等级：Level 1: Draft with approval",
+        "能力边界：擅长：AI Coding、快速原型；希望委托：反馈归因、授权策略、自动化风险、评测设计。",
+        "仅输出统一 schema"
+      ],
+      "excluded_context": [
+        "无关历史聊天",
+        "未确认外部事实",
+        "和当前子任务无关的长讨论"
+      ],
+      "expected_output": {
+        "agent": "Product Iteration Agent",
+        "capability": "product_iteration",
+        "covers_gap": "outside_radius",
+        "collaboration_mode": "result_first",
+        "judgment": "",
+        "key_findings": [],
+        "evidence": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high",
+        "should_be_saved_to_workflow": true
+      },
+      "success_criteria": "输出能改变最终决策或降低自动化风险"
+    },
+    {
+      "agent": "Trust & Activation Agent",
+      "capability": "trust_activation",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "task": "围绕 minimum completion path 完成 Trust & Activation Agent 的子任务",
+      "minimum_completion_path": [
+        "判断反馈中的最大阻塞点",
+        "区分价值问题、体验问题、信任问题和增长问题",
+        "定义下一轮最小产品迭代",
+        "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+        "定义观察指标与 autonomy policy 更新条件"
+      ],
+      "necessary_context": [
+        "用户目标：我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+        "当前自治等级：Level 1: Draft with approval",
+        "能力边界：擅长：AI Coding、快速原型；希望委托：反馈归因、授权策略、自动化风险、评测设计。",
+        "仅输出统一 schema"
+      ],
+      "excluded_context": [
+        "无关历史聊天",
+        "未确认外部事实",
+        "和当前子任务无关的长讨论"
+      ],
+      "expected_output": {
+        "agent": "Trust & Activation Agent",
+        "capability": "trust_activation",
+        "covers_gap": "outside_radius",
+        "collaboration_mode": "result_first",
+        "judgment": "",
+        "key_findings": [],
+        "evidence": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high",
+        "should_be_saved_to_workflow": true
+      },
+      "success_criteria": "输出能改变最终决策或降低自动化风险"
+    },
+    {
+      "agent": "Execution Handoff Agent",
+      "capability": "execution_handoff",
+      "covers_gap": "automation_sensitive",
+      "collaboration_mode": "delegate_with_review",
+      "task": "围绕 minimum completion path 完成 Execution Handoff Agent 的子任务",
+      "minimum_completion_path": [
+        "判断反馈中的最大阻塞点",
+        "区分价值问题、体验问题、信任问题和增长问题",
+        "定义下一轮最小产品迭代",
+        "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+        "定义观察指标与 autonomy policy 更新条件"
+      ],
+      "necessary_context": [
+        "用户目标：我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+        "当前自治等级：Level 1: Draft with approval",
+        "能力边界：擅长：AI Coding、快速原型；希望委托：反馈归因、授权策略、自动化风险、评测设计。",
+        "仅输出统一 schema"
+      ],
+      "excluded_context": [
+        "无关历史聊天",
+        "未确认外部事实",
+        "和当前子任务无关的长讨论"
+      ],
+      "expected_output": {
+        "agent": "Execution Handoff Agent",
+        "capability": "execution_handoff",
+        "covers_gap": "automation_sensitive",
+        "collaboration_mode": "delegate_with_review",
+        "judgment": "",
+        "key_findings": [],
+        "evidence": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high",
+        "should_be_saved_to_workflow": true
+      },
+      "success_criteria": "输出能改变最终决策或降低自动化风险"
+    },
+    {
+      "agent": "Evaluation Agent",
+      "capability": "evaluation_design",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "task": "围绕 minimum completion path 完成 Evaluation Agent 的子任务",
+      "minimum_completion_path": [
+        "判断反馈中的最大阻塞点",
+        "区分价值问题、体验问题、信任问题和增长问题",
+        "定义下一轮最小产品迭代",
+        "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+        "定义观察指标与 autonomy policy 更新条件"
+      ],
+      "necessary_context": [
+        "用户目标：我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+        "当前自治等级：Level 1: Draft with approval",
+        "能力边界：擅长：AI Coding、快速原型；希望委托：反馈归因、授权策略、自动化风险、评测设计。",
+        "仅输出统一 schema"
+      ],
+      "excluded_context": [
+        "无关历史聊天",
+        "未确认外部事实",
+        "和当前子任务无关的长讨论"
+      ],
+      "expected_output": {
+        "agent": "Evaluation Agent",
+        "capability": "evaluation_design",
+        "covers_gap": "outside_radius",
+        "collaboration_mode": "result_first",
+        "judgment": "",
+        "key_findings": [],
+        "evidence": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high",
+        "should_be_saved_to_workflow": true
+      },
+      "success_criteria": "输出能改变最终决策或降低自动化风险"
+    },
+    {
+      "agent": "自动化风险治理 Agent",
+      "capability": "automation_risk_governance",
+      "covers_gap": "automation_sensitive",
+      "collaboration_mode": "delegate_with_review",
+      "task": "围绕 minimum completion path 完成 自动化风险治理 Agent 的子任务",
+      "minimum_completion_path": [
+        "判断反馈中的最大阻塞点",
+        "区分价值问题、体验问题、信任问题和增长问题",
+        "定义下一轮最小产品迭代",
+        "判断哪些改动可交给 Execution Agent，哪些不能自动执行",
+        "定义观察指标与 autonomy policy 更新条件"
+      ],
+      "necessary_context": [
+        "用户目标：我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+        "当前自治等级：Level 1: Draft with approval",
+        "能力边界：擅长：AI Coding、快速原型；希望委托：反馈归因、授权策略、自动化风险、评测设计。",
+        "仅输出统一 schema"
+      ],
+      "excluded_context": [
+        "无关历史聊天",
+        "未确认外部事实",
+        "和当前子任务无关的长讨论"
+      ],
+      "expected_output": {
+        "agent": "自动化风险治理 Agent",
+        "capability": "automation_risk_governance",
+        "covers_gap": "automation_sensitive",
+        "collaboration_mode": "delegate_with_review",
+        "judgment": "",
+        "key_findings": [],
+        "evidence": [],
+        "risks": [],
+        "missing_information": [],
+        "next_validation_step": "",
+        "authorization_impact": "",
+        "confidence": "low | medium | high",
+        "should_be_saved_to_workflow": true
+      },
+      "success_criteria": "输出能改变最终决策或降低自动化风险"
+    }
+  ],
+  "expert_outputs": [
+    {
+      "agent": "Feedback Triage Agent",
+      "capability": "feedback_triage",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "judgment": "Feedback Triage Agent 建议先收敛低风险改动，并保留人工复核。",
+      "key_findings": [
+        "当前应先解决结果到行动的激活断层",
+        "需要显式给出 blocked actions 与回滚条件"
+      ],
+      "evidence": [
+        "用户反馈中多次出现‘不知道下一步怎么做’",
+        "自动化请求集中在高风险动作前"
+      ],
+      "risks": [
+        "过早提升自治等级会放大错误自动化风险",
+        "范围过宽会导致迭代不可归因"
+      ],
+      "missing_information": [
+        "关键指标分层数据仍需补充"
+      ],
+      "next_validation_step": "先在测试环境验证低风险 patch，再小流量上线。",
+      "authorization_impact": "建议限定一键确认授权，不开放全自动执行。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    {
+      "agent": "Product Iteration Agent",
+      "capability": "product_iteration",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "judgment": "Product Iteration Agent 建议先收敛低风险改动，并保留人工复核。",
+      "key_findings": [
+        "当前应先解决结果到行动的激活断层",
+        "需要显式给出 blocked actions 与回滚条件"
+      ],
+      "evidence": [
+        "用户反馈中多次出现‘不知道下一步怎么做’",
+        "自动化请求集中在高风险动作前"
+      ],
+      "risks": [
+        "过早提升自治等级会放大错误自动化风险",
+        "范围过宽会导致迭代不可归因"
+      ],
+      "missing_information": [
+        "关键指标分层数据仍需补充"
+      ],
+      "next_validation_step": "先在测试环境验证低风险 patch，再小流量上线。",
+      "authorization_impact": "建议限定一键确认授权，不开放全自动执行。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    {
+      "agent": "Trust & Activation Agent",
+      "capability": "trust_activation",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "judgment": "Trust & Activation Agent 建议先收敛低风险改动，并保留人工复核。",
+      "key_findings": [
+        "当前应先解决结果到行动的激活断层",
+        "需要显式给出 blocked actions 与回滚条件"
+      ],
+      "evidence": [
+        "用户反馈中多次出现‘不知道下一步怎么做’",
+        "自动化请求集中在高风险动作前"
+      ],
+      "risks": [
+        "过早提升自治等级会放大错误自动化风险",
+        "范围过宽会导致迭代不可归因"
+      ],
+      "missing_information": [
+        "关键指标分层数据仍需补充"
+      ],
+      "next_validation_step": "先在测试环境验证低风险 patch，再小流量上线。",
+      "authorization_impact": "建议限定一键确认授权，不开放全自动执行。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    {
+      "agent": "Execution Handoff Agent",
+      "capability": "execution_handoff",
+      "covers_gap": "automation_sensitive",
+      "collaboration_mode": "delegate_with_review",
+      "judgment": "Execution Handoff Agent 建议先收敛低风险改动，并保留人工复核。",
+      "key_findings": [
+        "当前应先解决结果到行动的激活断层",
+        "需要显式给出 blocked actions 与回滚条件"
+      ],
+      "evidence": [
+        "用户反馈中多次出现‘不知道下一步怎么做’",
+        "自动化请求集中在高风险动作前"
+      ],
+      "risks": [
+        "过早提升自治等级会放大错误自动化风险",
+        "范围过宽会导致迭代不可归因"
+      ],
+      "missing_information": [
+        "关键指标分层数据仍需补充"
+      ],
+      "next_validation_step": "先在测试环境验证低风险 patch，再小流量上线。",
+      "authorization_impact": "建议限定一键确认授权，不开放全自动执行。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    {
+      "agent": "Evaluation Agent",
+      "capability": "evaluation_design",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "judgment": "Evaluation Agent 建议先收敛低风险改动，并保留人工复核。",
+      "key_findings": [
+        "当前应先解决结果到行动的激活断层",
+        "需要显式给出 blocked actions 与回滚条件"
+      ],
+      "evidence": [
+        "用户反馈中多次出现‘不知道下一步怎么做’",
+        "自动化请求集中在高风险动作前"
+      ],
+      "risks": [
+        "过早提升自治等级会放大错误自动化风险",
+        "范围过宽会导致迭代不可归因"
+      ],
+      "missing_information": [
+        "关键指标分层数据仍需补充"
+      ],
+      "next_validation_step": "先在测试环境验证低风险 patch，再小流量上线。",
+      "authorization_impact": "建议限定一键确认授权，不开放全自动执行。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    {
+      "agent": "自动化风险治理 Agent",
+      "capability": "automation_risk_governance",
+      "covers_gap": "automation_sensitive",
+      "collaboration_mode": "delegate_with_review",
+      "judgment": "自动化风险治理 Agent 建议先收敛低风险改动，并保留人工复核。",
+      "key_findings": [
+        "当前应先解决结果到行动的激活断层",
+        "需要显式给出 blocked actions 与回滚条件"
+      ],
+      "evidence": [
+        "用户反馈中多次出现‘不知道下一步怎么做’",
+        "自动化请求集中在高风险动作前"
+      ],
+      "risks": [
+        "过早提升自治等级会放大错误自动化风险",
+        "范围过宽会导致迭代不可归因"
+      ],
+      "missing_information": [
+        "关键指标分层数据仍需补充"
+      ],
+      "next_validation_step": "先在测试环境验证低风险 patch，再小流量上线。",
+      "authorization_impact": "建议限定一键确认授权，不开放全自动执行。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": false
+    }
+  ],
+  "single_agent_baseline": {
+    "summary": "single agent 可以给出综合建议，但通常难以显式区分可授权动作、blocked actions 与执行交接边界。",
+    "gaps": [
+      "authorization scope 不够结构化",
+      "execution handoff 粒度不足",
+      "policy 更新条件不稳定"
+    ]
+  },
+  "multi_agent_chat_baseline": {
+    "summary": "多角色群聊信息量大，但若缺少 contract 和 merge rule，用户很难快速做授权决策。",
+    "gaps": [
+      "噪音高",
+      "冲突难合并",
+      "无法稳定生成可执行 handoff"
+    ]
+  },
+  "execution_handoff_brief": {
+    "patch_goal": "实现下一步引导卡与草稿执行卡",
+    "files_or_modules_to_touch": [
+      "result_surface_view",
+      "next_action_card",
+      "execution_draft_panel"
+    ],
+    "acceptance_criteria": [
+      "30 秒内可定位下一步",
+      "草稿可生成且可编辑",
+      "blocked actions 显示清晰"
+    ],
+    "blocked_actions": [
+      "自动触达用户",
+      "自动上线高风险功能",
+      "自动改计费/权限"
+    ],
+    "rollback_condition": "关键指标恶化或出现高风险误触发即回滚",
+    "review_required": true
+  },
+  "final_result": {
+    "goal_summary": {
+      "user_goal": "我们按上一轮方案上线了结果页下一步引导卡，但用户执行下一步时仍有犹豫。请复用之前 workflow，判断要不要继续授权自动执行。",
+      "header_understanding": "系统先按能力半径分配协作模式，再组织最小专家团队。",
+      "success_criteria": [
+        "用户能快速判断 primary blocker",
+        "用户能看到下一轮最小迭代而非功能堆叠",
+        "用户能明确哪些动作可授权、哪些必须人工确认",
+        "用户能看到本次任务如何更新 autonomy policy"
+      ],
+      "current_autonomy_level": "Level 1: Draft with approval",
+      "recommended_autonomy_level": "Level 2: Execute after one-click approval（仅限低风险 patch）",
+      "authorization_scope": {
+        "allowed": [
+          "生成 Execution Agent patch brief",
+          "生成低风险草稿"
+        ],
+        "needs_approval": [
+          "关键流程改动",
+          "默认授权策略改动"
+        ],
+        "blocked": [
+          "自动触达所有用户",
+          "自动上线高风险功能",
+          "自动改动计费/权限策略"
+        ],
+        "review_required": true
+      }
+    },
+    "final_recommendation": {
+      "decision": "建议继续（Go）",
+      "reason": "先做低风险 patch 验证，再决定是否提升自治等级。",
+      "suggested_action": "授权 Execution Agent 执行受限 patch。"
+    },
+    "primary_blocker": "用户完成首次结果后缺少下一步行动引导，导致激活链路断层。",
+    "next_minimal_iteration": [
+      "结果页增加下一步引导卡",
+      "提供一键确认草稿执行卡",
+      "降低首屏信息密度并突出主行动按钮"
+    ],
+    "execution_agent_handoff_brief": {
+      "patch_goal": "实现下一步引导卡与草稿执行卡",
+      "files_or_modules_to_touch": [
+        "result_surface_view",
+        "next_action_card",
+        "execution_draft_panel"
+      ],
+      "acceptance_criteria": [
+        "30 秒内可定位下一步",
+        "草稿可生成且可编辑",
+        "blocked actions 显示清晰"
+      ],
+      "blocked_actions": [
+        "自动触达用户",
+        "自动上线高风险功能",
+        "自动改计费/权限"
+      ],
+      "rollback_condition": "关键指标恶化或出现高风险误触发即回滚",
+      "review_required": true
+    },
+    "automation_boundary": {
+      "allowed": [
+        "生成 Execution Agent patch brief",
+        "生成低风险草稿"
+      ],
+      "needs_approval": [
+        "关键流程改动",
+        "默认授权策略改动"
+      ],
+      "blocked": [
+        "自动触达所有用户",
+        "自动上线高风险功能",
+        "自动改动计费/权限策略"
+      ],
+      "review_required": true
+    },
+    "blocked_automation": [
+      "自动触达所有用户",
+      "自动上线高风险功能",
+      "自动改动计费或权限策略"
+    ],
+    "metrics_to_watch": [
+      "结果后 24h 二次行动率",
+      "授权通过率",
+      "回滚触发率"
+    ],
+    "autonomy_update": "保持全局 Level 1；对“低风险引导类 patch”试点 Level 2（一键确认）。",
+    "evidence_confidence": {
+      "overall_confidence": "medium",
+      "evidence": [
+        "多能力模块对 primary blocker 判断一致"
+      ],
+      "uncertainties": [
+        "用户对一键确认路径的接受度仍需验证"
+      ]
+    },
+    "risks_unknowns": [
+      "若过早全自动执行，错误成本会快速放大"
+    ],
+    "suggested_next_actions": {
+      "low_risk": [
+        "先执行低风险 UI/文案 patch"
+      ],
+      "needs_authorization": [
+        "授权 Execution Agent 执行受限 patch"
+      ],
+      "human_confirm_required": [
+        "关键流程改动"
+      ],
+      "blocked": [
+        "自动触达所有用户",
+        "自动上线高风险功能",
+        "自动改动计费/权限策略"
+      ],
+      "not_recommended": [
+        "当前阶段提升到 Level 3/4"
+      ]
+    },
+    "capability_radius_review": {
+      "inside_review": [
+        "AI Coding",
+        "快速原型"
+      ],
+      "delegate_with_evidence": [
+        "产品迭代收敛",
+        "反馈归因",
+        "信任与激活",
+        "评测设计",
+        "执行交接（需审批）",
+        "自动化风险治理（需审批）"
+      ]
+    },
+    "collaboration_mode": {
+      "by_capability": {
+        "ai_coding": {
+          "mode": "co_think",
+          "detail_level": "high",
+          "user_action": "review_and_challenge"
+        },
+        "rapid_prototyping": {
+          "mode": "co_think",
+          "detail_level": "high",
+          "user_action": "review_and_challenge"
+        },
+        "product_iteration": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "feedback_triage": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "trust_activation": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "evaluation_design": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "execution_handoff": {
+          "mode": "delegate_with_review",
+          "detail_level": "boundary_first",
+          "user_action": "approve_or_block"
+        },
+        "automation_risk_governance": {
+          "mode": "delegate_with_review",
+          "detail_level": "boundary_first",
+          "user_action": "approve_or_block"
+        }
+      }
+    },
+    "authorization_panel": [
+      "Authorize low-risk patch",
+      "Ask deeper in my strong area",
+      "Challenge expert conclusion",
+      "Replace expert",
+      "Save as workflow asset",
+      "Close Task Room"
+    ]
+  },
+  "memory_patch": {
+    "stable_user_profile": {
+      "strengths": [
+        "AI Coding",
+        "快速原型"
+      ],
+      "blind_spots": [
+        "自动化风险边界",
+        "授权策略设计",
+        "评测体系"
+      ]
+    },
+    "confirmed_preferences": [
+      "先看可授权动作，再看协作细节",
+      "希望显式看到 blocked actions",
+      "偏好低风险一键确认而非全自动"
+    ],
+    "writeback_reason": "这些偏好跨任务稳定，可用于后续自治策略。"
+  },
+  "playbook_update": {
+    "title": "MVP 反馈迭代与执行交接",
+    "steps": [
+      "先定位 primary blocker",
+      "收敛 next minimal iteration",
+      "生成 execution handoff brief",
+      "定义 blocked actions 与回滚条件",
+      "按指标复盘并更新自治策略"
+    ],
+    "when_to_use": [
+      "已有真实用户反馈",
+      "需要把分析推进到执行"
+    ]
+  },
+  "autonomy_policy_update": {
+    "current_level": "Level 1: Draft with approval",
+    "recommended_level": "Level 2: Execute after one-click approval（仅限低风险 patch）",
+    "allowed_action_classes": [
+      "生成 Execution Agent patch brief",
+      "生成低风险草稿"
+    ],
+    "blocked_action_classes": [
+      "自动触达所有用户",
+      "自动上线高风险功能",
+      "自动改动计费/权限策略"
+    ],
+    "upgrade_condition": [
+      "连续两轮核心指标达标",
+      "无高风险事故",
+      "回滚触发率低于阈值"
+    ],
+    "downgrade_condition": [
+      "出现高风险误执行",
+      "核心指标连续恶化",
+      "回滚频繁触发"
+    ],
+    "review_required": true,
+    "notes": "保持全局 Level 1；对“低风险引导类 patch”试点 Level 2（一键确认）。"
+  },
+  "evaluation": {
+    "dimensions": [
+      "Goal clarity",
+      "能力半径识别准确度",
+      "专家选择必要性",
+      "是否避免过度协作",
+      "用户判断负担",
+      "过程噪音",
+      "结果可判断性",
+      "授权边界清晰度",
+      "handoff 可执行性",
+      "workflow asset 可复用性",
+      "第二次任务复用效果",
+      "token/latency/noise 成本"
+    ],
+    "scores": {
+      "single_agent": [
+        4,
+        2,
+        4,
+        3,
+        5,
+        4,
+        3,
+        2,
+        3,
+        2,
+        1,
+        5
+      ],
+      "multi_agent_chat": [
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "task_room_protocol": [
+        4,
+        4,
+        4,
+        4,
+        3,
+        3,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "capability_radius_harness": [
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        4
+      ]
+    },
+    "badcases": [
+      "伪协作：single agent 足够却硬拉多专家",
+      "按岗位堆专家，没有能力缺口映射",
+      "输出不能转成 execution handoff",
+      "自动化边界不清导致误授权",
+      "workflow 没有沉淀，任务不可复用"
+    ],
+    "judge_summary": "Capability-radius harness 在边界清晰度、复用性和可授权性上显著优于普通多 Agent 协作。",
+    "comparison": {
+      "single_agent": {
+        "average_score": 3.17
+      },
+      "multi_agent_chat": {
+        "average_score": 1.25
+      },
+      "task_room_protocol": {
+        "average_score": 3.58
+      },
+      "capability_radius_harness": {
+        "average_score": 4.75
+      }
+    }
+  },
+  "capability_radius": {
+    "inside_radius": [
+      {
+        "capability": "ai_coding",
+        "label": "AI Coding",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户能判断实现细节与工程取舍"
+      },
+      {
+        "capability": "rapid_prototyping",
+        "label": "快速原型",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户擅长快速验证并收敛方案"
+      }
+    ],
+    "outside_radius": [
+      {
+        "capability": "product_iteration",
+        "label": "产品迭代收敛",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "用户希望减少产品决策噪音，先看结论与证据"
+      },
+      {
+        "capability": "feedback_triage",
+        "label": "反馈归因",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "用户不擅长反馈归因，需要结果优先"
+      },
+      {
+        "capability": "trust_activation",
+        "label": "信任与激活",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "该能力影响主阻塞判断，需给结论和风险"
+      },
+      {
+        "capability": "evaluation_design",
+        "label": "评测设计",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "用户更需要可观测指标与验证路径"
+      }
+    ],
+    "automation_sensitive": [
+      {
+        "capability": "execution_handoff",
+        "label": "执行交接",
+        "preferred_mode": "delegate_with_review",
+        "required_controls": [
+          "blocked_actions",
+          "rollback_condition",
+          "review_required"
+        ],
+        "why": "涉及执行边界与回滚条件，需要审批"
+      },
+      {
+        "capability": "automation_risk_governance",
+        "label": "自动化风险治理",
+        "preferred_mode": "delegate_with_review",
+        "required_controls": [
+          "blocked_actions",
+          "rollback_condition",
+          "review_required"
+        ],
+        "why": "自动化敏感区必须边界优先"
+      }
+    ]
+  },
+  "collaboration_mode": {
+    "by_capability": {
+      "ai_coding": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "rapid_prototyping": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "product_iteration": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "feedback_triage": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "trust_activation": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "evaluation_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "execution_handoff": {
+        "mode": "delegate_with_review",
+        "detail_level": "boundary_first",
+        "user_action": "approve_or_block"
+      },
+      "automation_risk_governance": {
+        "mode": "delegate_with_review",
+        "detail_level": "boundary_first",
+        "user_action": "approve_or_block"
+      }
+    }
+  },
+  "meta": {
+    "mode": "v0-fallback",
+    "generated_at": "2026-06-01T15:18:12",
+    "warning": "当前 Task Room 使用 fallback 样例输出。"
+  },
+  "workflow_asset": {
+    "workflow_asset": {
+      "name": "MVP Feedback Iteration Loop",
+      "trigger": "已有早期用户反馈，需要决定下一轮迭代与授权边界",
+      "user_strengths": [
+        "ai_coding",
+        "rapid_prototyping"
+      ],
+      "delegated_capabilities": [
+        "product_iteration",
+        "feedback_triage",
+        "trust_activation",
+        "evaluation_design",
+        "execution_handoff",
+        "automation_risk_governance"
+      ],
+      "preferred_expert_team": [
+        "Feedback Triage Agent",
+        "Product Iteration Agent",
+        "Trust & Activation Agent",
+        "Execution Handoff Agent",
+        "Evaluation Agent"
+      ],
+      "automation_boundary": {
+        "allowed": [
+          "生成 Execution Agent patch brief",
+          "生成低风险草稿"
+        ],
+        "needs_approval": [
+          "关键流程改动",
+          "默认授权策略改动"
+        ],
+        "blocked": [
+          "自动触达所有用户",
+          "自动上线高风险功能",
+          "自动改动计费/权限策略"
+        ],
+        "review_required": true
+      },
+      "review_policy": {
+        "inside_radius_detail_level": "high",
+        "outside_radius_detail_level": "summary_with_evidence",
+        "approval_required": true
+      },
+      "reuse_condition": [
+        "has_real_user_feedback",
+        "needs_product_iteration",
+        "involves_execution_agent_or_automation"
+      ],
+      "source_primary_blocker": "用户完成首次结果后缺少下一步行动引导，导致激活链路断层。",
+      "updated_at": "2026-06-01T15:18:12"
+    }
+  },
+  "personalized_expert_team_update": {
+    "accepted_experts": [
+      "Feedback Triage Agent",
+      "Product Iteration Agent",
+      "Trust & Activation Agent",
+      "Execution Handoff Agent",
+      "Evaluation Agent"
+    ],
+    "replaced_experts": [],
+    "experts_to_try_next": [],
+    "saved_preferences": [
+      "能力范围外默认结果优先",
+      "自动化相关任务必须显示 blocked actions",
+      "工程实现细节需要展开讨论"
+    ]
+  },
+  "workflow_reuse": {
+    "using_saved_workflow": "MVP Feedback Iteration Loop",
+    "inherited": {
+      "preferred_expert_team": [
+        "Feedback Triage Agent",
+        "Product Iteration Agent",
+        "Trust & Activation Agent",
+        "Execution Handoff Agent",
+        "Evaluation Agent"
+      ],
+      "delegated_capabilities": [
+        "product_iteration",
+        "feedback_triage",
+        "trust_activation",
+        "evaluation_design",
+        "execution_handoff",
+        "automation_risk_governance"
+      ],
+      "automation_boundary": {
+        "allowed": [
+          "生成 Execution Agent patch brief",
+          "生成低风险草稿"
+        ],
+        "needs_approval": [
+          "关键流程改动",
+          "默认授权策略改动"
+        ],
+        "blocked": [
+          "自动触达所有用户",
+          "自动上线高风险功能",
+          "自动改动计费/权限策略"
+        ],
+        "review_required": true
+      },
+      "review_policy": {
+        "inside_radius_detail_level": "high",
+        "outside_radius_detail_level": "summary_with_evidence",
+        "approval_required": true
+      }
+    },
+    "recheck_required": [
+      "当前任务是否仍属于同类反馈迭代",
+      "是否出现新的 automation risk",
+      "是否需要替换专家"
+    ],
+    "generated_at": "2026-06-01T15:18:12"
+  }
+}

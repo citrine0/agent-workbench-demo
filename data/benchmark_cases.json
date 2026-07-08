@@ -1,0 +1,102 @@
+{
+  "version": "2026-06-13",
+  "purpose": "Pilot Eval for the Agent Collaboration Harness. This is a lightweight routing evaluation, not a full benchmark.",
+  "main_examples": [
+    {
+      "case_id": "example_a_auto_jobhunter_skill_001",
+      "name": "Auto-JobHunter: 稳定高频任务走 Skill",
+      "input": "只读获取 BOSS 岗位和完整 JD，根据简历证据做岗位打分；不要自动投递，不要联系招聘方。",
+      "expected_runtime": "skill_heavy_with_human_checkpoints",
+      "must_include_skills": ["boss_job_fit_skill", "human_checkpoint_renderer_skill", "collaboration_memory_writer_skill"],
+      "must_not_require_task_room": true,
+      "must_block": ["auto_apply", "contact_recruiter", "invent_resume_experience"],
+      "core_assertion": "岗位获取、标准化和打分是稳定 workflow，应该 Skill 化，而不是开 Task Room。"
+    },
+    {
+      "case_id": "example_b_complex_product_research_room_001",
+      "name": "复杂产品研究 Room: 多能力协作走 Task Room",
+      "input": "研究 Linear、Slack、飞书、Paperclip、Symphony，判断 Agent 如何进入协作工作流，并输出 guardrails、human-in-the-loop 和面试观点。",
+      "expected_runtime": "dynamic_task_room",
+      "must_include_agents": ["research_synthesis_agent", "product_critic_agent", "collaboration_designer_agent"],
+      "candidate_agents": ["evaluation_agent"],
+      "must_include_skills": ["research_brief_loader_skill", "artifact_indexer_skill", "collaboration_memory_writer_skill"],
+      "core_assertion": "复杂产品研究需要多个结构化 artifact、批判、设计和状态管理，应该开 Task Room。"
+    }
+  ],
+  "pilot_eval_cases": [
+    {
+      "case_id": "pilot_001_job_scoring",
+      "task": "Job scoring",
+      "expected_route": "Skill",
+      "actual_route": "Skill",
+      "decision_correct": true,
+      "token_spend_justified": "是，避免无意义开 Room。"
+    },
+    {
+      "case_id": "pilot_002_resume_jd_risk",
+      "task": "简历 + JD 风险检查",
+      "expected_route": "多 Skill / Workflow Skill",
+      "actual_route": "多 Skill / Workflow Skill",
+      "decision_correct": true,
+      "token_spend_justified": "是，人审点清楚。"
+    },
+    {
+      "case_id": "pilot_003_collaboration_product_research",
+      "task": "协作产品研究",
+      "expected_route": "Task Room",
+      "actual_route": "Task Room",
+      "decision_correct": true,
+      "token_spend_justified": "是，需要多 artifact 合并。"
+    },
+    {
+      "case_id": "pilot_004_missing_eval_capability",
+      "task": "缺少评估指标设计能力",
+      "expected_route": "Candidate Agent + Human Checkpoint",
+      "actual_route": "Candidate Agent + Human Checkpoint",
+      "decision_correct": true,
+      "token_spend_justified": "是，不直接信任新 Agent。"
+    },
+    {
+      "case_id": "pilot_005_long_context_resume",
+      "task": "长上下文研究任务恢复",
+      "expected_route": "Room Capsule",
+      "actual_route": "Room Capsule",
+      "decision_correct": true,
+      "token_spend_justified": "是，避免保留 raw trace。"
+    }
+  ],
+  "scoring_dimensions": [
+    {
+      "dimension": "route_correctness",
+      "description": "Router 是否正确选择 Skill、Workflow Skill、Task Room、Candidate Agent 或 Capsule。"
+    },
+    {
+      "dimension": "agent_necessity_judgment",
+      "description": "是否先判断 Agent 是否真的必要，而不是默认多 Agent。"
+    },
+    {
+      "dimension": "minimal_collaboration",
+      "description": "是否只选择会改变结果、QA 或授权边界的 Agent。"
+    },
+    {
+      "dimension": "artifact_contract_quality",
+      "description": "是否明确每个 Agent 的输入、输出 schema、证据和合并规则。"
+    },
+    {
+      "dimension": "policy_enforcement",
+      "description": "是否正确展示 allowed / needs approval / blocked，且没有执行 blocked 动作。"
+    },
+    {
+      "dimension": "human_checkpoint_quality",
+      "description": "人需要确认的位置是否清晰、少而关键。"
+    },
+    {
+      "dimension": "memory_hygiene",
+      "description": "写回内容是否压缩、可复用、无敏感原文、无未确认事实。"
+    },
+    {
+      "dimension": "token_noise_efficiency",
+      "description": "是否避免开放式群聊、重复推理和无效专家。"
+    }
+  ]
+}

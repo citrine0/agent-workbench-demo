@@ -1,0 +1,21 @@
+# Execution Agent Handoff Brief
+
+- patch_goal: 实现复杂产品研究 Room 的结果面板、注册 Agent 展示、候选 Evaluation Agent 和 Pilot Eval 表。
+- files_or_modules_to_touch:
+  - room_lifecycle_panel
+  - registered_agents_panel
+  - candidate_agent_specs_panel
+  - pilot_eval_panel
+- acceptance_criteria:
+  - 用户能看到 Header / Room Controller 职责分离
+  - 用户能看到 room-local skills 和 registered agents 的区别
+  - Product Critic Agent 和 Collaboration Designer Agent 的输入来自上游 artifact
+  - candidate Evaluation Agent 不进入可信执行
+  - room 结束后只回传 compressed result、capsule 和 playbook proposal
+- blocked_actions:
+  - 伪造外部事实
+  - 把待确认资料写成确定事实
+  - 自动注册新 Agent
+  - 写入未经确认的长期记忆
+- rollback_condition: 如果页面重新表现成开放式多 Agent 群聊，则回滚。
+- review_required: True

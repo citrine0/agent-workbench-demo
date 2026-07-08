@@ -1,0 +1,200 @@
+[
+  {
+    "agent": "Task Decomposition Agent",
+    "capability": "task_decomposition",
+    "skills": ["任务拆解", "能力缺口识别", "最小完成路径"],
+    "inputs": ["最终任务", "约束", "成功标准"],
+    "output_focus": ["subtasks", "capability gaps", "minimum completion path"],
+    "failure_modes": ["过度拆解简单任务", "漏掉关键依赖"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Role Assignment Agent",
+    "capability": "role_assignment",
+    "skills": ["Agent 选择", "角色分工", "排除无效 Agent"],
+    "inputs": ["能力缺口", "可选 Agent", "策略边界"],
+    "output_focus": ["minimum agent team", "excluded agents", "why selected"],
+    "failure_modes": ["默认选择所有 Agent", "无法解释排除原因"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Artifact Contract Agent",
+    "capability": "artifact_contract",
+    "skills": ["context packet", "输出 schema", "merge rule"],
+    "inputs": ["Agent team", "子任务", "成功标准"],
+    "output_focus": ["artifact schema", "context packet", "merge rule"],
+    "failure_modes": ["允许自由群聊", "schema 不可执行"],
+    "cost_hint": "中",
+    "latency_hint": "低",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "QA & Conflict Resolution Agent",
+    "capability": "qa_conflict_resolution",
+    "skills": ["质检", "冲突处理", "返工循环", "停止条件"],
+    "inputs": ["Agent artifacts", "质量标准", "策略边界"],
+    "output_focus": ["QA rubric", "conflict rule", "revision loop", "stop condition"],
+    "failure_modes": ["质检标准模糊", "返工无法停止"],
+    "cost_hint": "中",
+    "latency_hint": "中",
+    "risk_hint": "高"
+  },
+  {
+    "agent": "Memory Writeback Agent",
+    "capability": "memory_writeback",
+    "skills": ["workflow memory", "policy memory", "context hygiene"],
+    "inputs": ["result surface", "policy decisions", "user confirmations"],
+    "output_focus": ["workflow asset", "policy memory update", "writeback preview"],
+    "failure_modes": ["保存 raw trace", "未经确认写长期记忆"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "高"
+  },
+  {
+    "agent": "Research Synthesis Agent",
+    "capability": "research_synthesis",
+    "skills": ["产品资料归纳", "协作机制抽取", "证据强弱标注"],
+    "inputs": ["研究目标", "目标产品列表", "已有资料", "证据策略"],
+    "output_focus": ["product cards", "comparison table", "evidence map", "unknowns"],
+    "failure_modes": ["把推测写成事实", "遗漏目标产品", "只总结功能不总结协作机制"],
+    "cost_hint": "中",
+    "latency_hint": "中",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Product Critic Agent",
+    "capability": "product_critique",
+    "skills": ["产品批判", "反例识别", "风险与局限判断"],
+    "inputs": ["研究归纳 artifact", "用户目标", "产品原则", "风险策略"],
+    "output_focus": ["strengths", "limitations", "counterexamples", "risk notes"],
+    "failure_modes": ["为了显得高级而强行引入 Agent", "只讲风险不给取舍", "缺少反例"],
+    "cost_hint": "中",
+    "latency_hint": "中",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Collaboration Designer Agent",
+    "capability": "collaboration_design",
+    "skills": ["Agent 介入点设计", "交互协议", "human-in-the-loop", "guardrails"],
+    "inputs": ["研究归纳 artifact", "产品批判 artifact", "Task Room contract", "人审策略"],
+    "output_focus": ["agent entry points", "interaction protocol", "guardrails", "interview narrative", "playbook draft"],
+    "failure_modes": ["输出空泛原则", "没有体现人审位置", "把 Task Room 说成群聊"],
+    "cost_hint": "中",
+    "latency_hint": "中",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Feedback Triage Agent",
+    "capability": "feedback_triage",
+    "skills": ["反馈聚类", "信号强度判断", "用户问题归因"],
+    "inputs": ["平台评论", "私信摘要", "转化反馈", "产品定位"],
+    "output_focus": ["feedback clusters", "signal strength", "user problem map"],
+    "failure_modes": ["把噪音当趋势", "忽略平台语境", "保存 raw 私信"],
+    "cost_hint": "中",
+    "latency_hint": "中",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Product Iteration Agent",
+    "capability": "product_iteration",
+    "skills": ["迭代优先级", "产品假设", "roadmap 收敛"],
+    "inputs": ["反馈聚类", "目标用户", "产品约束", "当前 roadmap"],
+    "output_focus": ["iteration candidates", "priority rationale", "tradeoffs"],
+    "failure_modes": ["被少量反馈带偏", "只给功能清单", "缺少停止条件"],
+    "cost_hint": "中",
+    "latency_hint": "中",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Trust & Activation Agent",
+    "capability": "trust_activation",
+    "skills": ["平台文案", "信任门槛", "激活路径"],
+    "inputs": ["产品定位", "平台受众", "文案草稿", "用户行动目标"],
+    "output_focus": ["copy risks", "activation path", "trust claims"],
+    "failure_modes": ["过度承诺", "平台语气不匹配", "CTA 不清"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Execution Handoff Agent",
+    "capability": "execution_handoff",
+    "skills": ["执行交接", "审批边界", "发布计划"],
+    "inputs": ["文案草稿", "发布节奏", "授权策略"],
+    "output_focus": ["handoff checklist", "approval points", "blocked external actions"],
+    "failure_modes": ["绕过用户发布", "审批点不清", "回滚条件缺失"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "高"
+  },
+  {
+    "agent": "Evaluation Agent",
+    "capability": "evaluation_design",
+    "skills": ["指标设计", "反馈质量评估", "停止条件"],
+    "inputs": ["目标指标", "反馈聚类", "迭代候选"],
+    "output_focus": ["metrics", "evidence threshold", "stop condition"],
+    "failure_modes": ["指标虚高", "没有样本阈值", "无法判断是否继续"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Job Scoring Agent",
+    "capability": "job_scoring",
+    "skills": ["岗位排序", "约束打分", "tradeoff 解释"],
+    "inputs": ["岗位列表", "目标角色", "用户约束"],
+    "output_focus": ["top jobs", "score breakdown", "tradeoffs"],
+    "failure_modes": ["只按标题打分", "忽略用户约束"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "中"
+  },
+  {
+    "agent": "Resume Evidence Agent",
+    "capability": "resume_evidence",
+    "skills": ["简历证据映射", "缺口识别", "真实性校验"],
+    "inputs": ["简历文本", "岗位要求", "排名结果"],
+    "output_focus": ["evidence map", "missing evidence", "no fabrication notes"],
+    "failure_modes": ["编造经历", "过度包装"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "高"
+  },
+  {
+    "agent": "Application Risk Policy Agent",
+    "capability": "application_risk_policy",
+    "skills": ["外部动作边界", "投递风险", "human-in-the-loop"],
+    "inputs": ["申请动作", "简历证据", "用户授权"],
+    "output_focus": ["allowed", "needs approval", "blocked"],
+    "failure_modes": ["建议自动投递", "允许未经确认联系招聘方"],
+    "cost_hint": "低",
+    "latency_hint": "低",
+    "risk_hint": "高"
+  },
+  {
+    "agent": "Open-Ended Swarm Agent",
+    "capability": "open_ended_swarm",
+    "skills": ["开放式讨论"],
+    "inputs": ["任意任务"],
+    "output_focus": ["free-form discussion"],
+    "failure_modes": ["噪音高", "责任不清", "token 成本高"],
+    "cost_hint": "高",
+    "latency_hint": "高",
+    "risk_hint": "高"
+  },
+  {
+    "agent": "Full Automation Agent",
+    "capability": "full_automation",
+    "skills": ["自动执行策略", "零人工链路"],
+    "inputs": ["授权策略", "高置信 playbook"],
+    "output_focus": ["auto execution plan"],
+    "failure_modes": ["证据不足时错误自动化", "越权执行"],
+    "cost_hint": "高",
+    "latency_hint": "中",
+    "risk_hint": "高"
+  }
+]

@@ -1,0 +1,2050 @@
+{
+  "route_id": "example_b_complex_product_research_room",
+  "runtime": "dynamic_task_room",
+  "room_lifecycle": [
+    {
+      "step": "forked",
+      "owner": "Header Agent",
+      "output": "复杂产品研究 Room created with scoped boundary"
+    },
+    {
+      "step": "contract_created",
+      "owner": "Room Controller",
+      "output": "目标、证据策略、Agent 角色和交付物 contract 已生成"
+    },
+    {
+      "step": "running_room_skills",
+      "owner": "Room Controller",
+      "output": "资料读取、目标产品列表整理、artifact index 初始化"
+    },
+    {
+      "step": "running_registered_agents",
+      "owner": "Room Controller",
+      "output": "三个已注册 Agent 分别产出研究、批判和协作设计 artifact"
+    },
+    {
+      "step": "candidate_agent_check",
+      "owner": "Room Controller",
+      "output": "Evaluation Agent 仅作为 candidate spec，等待后续评测"
+    },
+    {
+      "step": "closed",
+      "owner": "Header Agent",
+      "output": "compressed result、capsule 和 playbook draft returned；raw room trace discarded"
+    }
+  ],
+  "room_local_skills": [
+    {
+      "skill_id": "research_brief_loader_skill",
+      "status": "completed",
+      "input": "target_products=Linear, Slack, 飞书, Paperclip, Symphony",
+      "output": "研究对象、证据策略、待确认产品资料清单"
+    },
+    {
+      "skill_id": "artifact_indexer_skill",
+      "status": "completed",
+      "input": "registered agent outputs",
+      "output": "research_synthesis_artifact, product_critique_artifact, collaboration_design_artifact"
+    },
+    {
+      "skill_id": "collaboration_memory_writer_skill",
+      "status": "preview_only",
+      "input": "compressed result + human checkpoint",
+      "output": "complex product research playbook writeback proposal"
+    }
+  ],
+  "merge_rule": "先把研究事实与推断分开，再由 Product Critic 找局限和反例，最后只允许 Collaboration Designer 基于上游 artifact 生成 Agent 介入点、guardrails 和面试叙事。",
+  "qa_gate": {
+    "rubric": [
+      "事实/推断是否分离",
+      "是否覆盖目标产品",
+      "是否避免无脑多 Agent",
+      "是否保留人审与授权边界",
+      "是否能形成可复用 playbook"
+    ],
+    "stop_condition": "输出产品对比、局限反例、Agent 介入点、guardrails、3 分钟观点和 playbook draft；未确认资料必须标注 unknown。",
+    "passed": true
+  },
+  "policy": {
+    "allowed": [
+      "生成产品研究卡",
+      "生成协作机制对比表",
+      "生成 Agent 介入点和 guardrails",
+      "生成 playbook 写回预览"
+    ],
+    "needs_approval": [
+      "把研究结论用于投递材料",
+      "保存产品研究 playbook",
+      "让候选 Evaluation Agent 进入后续评测"
+    ],
+    "blocked": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆"
+    ],
+    "review_required": true
+  },
+  "goal_check": {
+    "input_type": "decision",
+    "interpreted_goal": "复杂产品研究 Room 示例：我需要研究 Linear、Slack、飞书、Paperclip、Symphony 这类协作产品，判断 Agent 应该如何进入真实协作工作流。\n\n请不要直接给一篇长答案。先判断是否需要 Task Room，再用已注册 Agent 分别完成资料归纳、产品批判和 Agent 协作设计，最后输出协作产品对比表、Agent 介入点、guardrails / human-in-the-loop 设计、可用于面试的 3 分钟观点，以及 Room Capsule / Playbook Draft。\n\n我擅长产品构建和快速原型，但希望系统帮我补足跨产品研究、反例批判、协作协议设计和评估指标这几类能力。不要伪造外部事实；如果资料不足，请标记为待确认。长期 playbook 写回和 candidate agent 注册都需要我确认。",
+    "executable_goal": true,
+    "needs_task_room": true,
+    "single_agent_sufficient": false,
+    "recommendation": "task_room",
+    "why": "这是复杂产品研究 Room 示例：跨产品研究、批判、协作设计和评估指标不适合由单个 Skill 或一篇长答案覆盖；需要 Room Controller 组织已注册 Agent 产出可合并 artifact，并把 candidate Agent、人审和写回边界显性化。",
+    "why_single_agent_not_enough": "需要显式输出最小 Agent team、artifact contract、QA / conflict resolution、stop condition 和 memory writeback preview。",
+    "current_autonomy_level": "Level 1: Draft with approval",
+    "recommended_autonomy_level": "Level 2: Build agent team spec after approval",
+    "automation_risk": "medium",
+    "authorization_scope": {
+      "allowed": [
+        "生成产品研究卡",
+        "生成协作机制对比表",
+        "生成 Agent 介入点和 guardrails",
+        "生成 playbook 写回预览"
+      ],
+      "needs_approval": [
+        "把研究结论用于投递材料",
+        "保存产品研究 playbook",
+        "让候选 Evaluation Agent 进入后续评测"
+      ],
+      "blocked": [
+        "伪造外部事实",
+        "把待确认资料写成确定事实",
+        "自动注册新 Agent",
+        "写入未经确认的长期记忆"
+      ],
+      "review_required": true
+    },
+    "success_criteria": [
+      "用户能看到为什么这不是单个长答案或单个 Skill 能覆盖的任务",
+      "每个研究结论都区分已知事实、推断和待确认信息",
+      "产品优点、局限、Agent 介入点和 guardrails 能形成可判断交付物",
+      "candidate Evaluation Agent 只展示规格和评测门槛，不直接注册",
+      "长期 playbook 只展示预览，等待用户确认后写回"
+    ],
+    "minimum_completion_path": [
+      "把研究目标、目标产品和证据策略转成 Room Contract",
+      "由 Research Synthesis Agent 输出产品研究卡和协作机制对比表",
+      "由 Product Critic Agent 挑战结论、识别局限、反例和风险",
+      "由 Collaboration Designer Agent 生成 Agent 介入点、guardrails、人审节点和面试叙事",
+      "展示 candidate Evaluation Agent、Room Capsule 和 playbook 写回预览"
+    ],
+    "required_capabilities": [
+      "research_synthesis",
+      "product_critique",
+      "collaboration_design",
+      "memory_writeback"
+    ],
+    "minimum_viable_team": [
+      {
+        "agent": "Research Synthesis Agent",
+        "capability": "research_synthesis",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "跨产品研究需要把事实、推断、证据强弱和待确认信息结构化",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Product Critic Agent",
+        "capability": "product_critique",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "需要主动寻找反例、局限和不可迁移条件，避免只输出正向总结",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Collaboration Designer Agent",
+        "capability": "collaboration_design",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "需要把研究结论转成可执行的 Agent 介入点、授权边界和人审节点",
+        "output_policy": "conclusion-first with evidence"
+      },
+      {
+        "agent": "Memory Writeback Agent",
+        "capability": "memory_writeback",
+        "covers_gap": "outside_radius",
+        "radius_type": "outside_radius",
+        "collaboration_mode": "result_first",
+        "why_selected": "用户更偏好结果优先与证据优先",
+        "output_policy": "conclusion-first with evidence"
+      }
+    ],
+    "excluded_agents": [
+      {
+        "agent": "Open-Ended Swarm Agent",
+        "why_excluded": "开放式群聊无法保证研究证据、批判结论和设计方案按 contract 合并。"
+      },
+      {
+        "agent": "Full Automation Agent",
+        "why_excluded": "研究结论、playbook 写回和 candidate agent 注册都必须人工审批。"
+      },
+      {
+        "agent": "Growth Agent",
+        "why_excluded": "当前示例不是发布增长任务，增长策略不进入本次最小路径。"
+      }
+    ],
+    "suggested_experts": [
+      "Research Synthesis Agent",
+      "Product Critic Agent",
+      "Collaboration Designer Agent",
+      "Memory Writeback Agent"
+    ],
+    "clarification_questions": [],
+    "capability_blindspots": [
+      "跨产品研究归纳",
+      "产品批判与反例",
+      "协作协议设计",
+      "评测指标",
+      "外部事实确认"
+    ],
+    "capability_boundary": "擅长：AI Coding、快速原型、产品构建；希望委托：跨产品研究、产品批判、协作设计、评测指标。"
+  },
+  "capability_radius": {
+    "inside_radius": [
+      {
+        "capability": "ai_coding",
+        "label": "AI Coding",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户能判断实现细节与工程取舍"
+      },
+      {
+        "capability": "rapid_prototyping",
+        "label": "快速原型",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户擅长快速验证并收敛方案"
+      },
+      {
+        "capability": "resume_evidence",
+        "label": "简历证据映射",
+        "confidence": "high",
+        "preferred_mode": "discuss_details",
+        "why": "用户能判断自身经历真实性，适合深挖和确认"
+      }
+    ],
+    "outside_radius": [
+      {
+        "capability": "task_decomposition",
+        "label": "任务拆解",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "复杂任务需要先拆成可交付单元，避免 Agent 直接长回答"
+      },
+      {
+        "capability": "role_assignment",
+        "label": "角色分配",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要判断哪些 Agent 会改变结果，哪些只是增加噪音"
+      },
+      {
+        "capability": "artifact_contract",
+        "label": "产物合约",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "Agent 协作需要结构化输入输出，否则难以合并和复核"
+      },
+      {
+        "capability": "qa_conflict_resolution",
+        "label": "QA 与冲突处理",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "多 Agent 输出必须有质检、冲突合并和停止条件"
+      },
+      {
+        "capability": "memory_writeback",
+        "label": "协作记忆写回",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "用户更偏好结果优先与证据优先"
+      },
+      {
+        "capability": "feedback_triage",
+        "label": "反馈分诊",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "跨平台反馈需要去重、聚类和信号强度判断，不能只凭单条评论下结论"
+      },
+      {
+        "capability": "research_synthesis",
+        "label": "研究归纳",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "跨产品研究需要把事实、推断、证据强弱和待确认信息结构化"
+      },
+      {
+        "capability": "product_critique",
+        "label": "产品批判",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要主动寻找反例、局限和不可迁移条件，避免只输出正向总结"
+      },
+      {
+        "capability": "collaboration_design",
+        "label": "协作设计",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要把研究结论转成可执行的 Agent 介入点、授权边界和人审节点"
+      },
+      {
+        "capability": "product_iteration",
+        "label": "产品迭代收敛",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要把用户信号、目标用户和产品策略合并成下一轮迭代判断"
+      },
+      {
+        "capability": "trust_activation",
+        "label": "信任与激活",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "平台文案和激活路径涉及承诺边界、信任门槛与用户行动设计"
+      },
+      {
+        "capability": "evaluation_design",
+        "label": "评测设计",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "需要定义反馈是否足够支撑产品迭代的证据标准和停止条件"
+      },
+      {
+        "capability": "job_scoring",
+        "label": "岗位打分",
+        "confidence": "low",
+        "preferred_mode": "result_first",
+        "why": "岗位排序需要证据映射和约束判断"
+      }
+    ],
+    "automation_sensitive": [
+      {
+        "capability": "execution_handoff",
+        "label": "执行交接",
+        "preferred_mode": "delegate_with_review",
+        "required_controls": [
+          "blocked_actions",
+          "rollback_condition",
+          "review_required"
+        ],
+        "why": "发布、私信和跨平台外部动作必须先生成草稿并等待审批"
+      },
+      {
+        "capability": "application_risk_policy",
+        "label": "申请风险策略",
+        "preferred_mode": "delegate_with_review",
+        "required_controls": [
+          "blocked_actions",
+          "rollback_condition",
+          "review_required"
+        ],
+        "why": "外部联系、自动投递和简历改写必须 human-in-the-loop"
+      }
+    ]
+  },
+  "collaboration_mode": {
+    "by_capability": {
+      "ai_coding": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "rapid_prototyping": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "resume_evidence": {
+        "mode": "co_think",
+        "detail_level": "high",
+        "user_action": "review_and_challenge"
+      },
+      "task_decomposition": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "role_assignment": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "artifact_contract": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "qa_conflict_resolution": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "memory_writeback": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "feedback_triage": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "research_synthesis": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "product_critique": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "collaboration_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "product_iteration": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "trust_activation": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "evaluation_design": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "job_scoring": {
+        "mode": "result_first",
+        "detail_level": "summary_with_evidence",
+        "user_action": "accept_or_ask_for_evidence"
+      },
+      "execution_handoff": {
+        "mode": "delegate_with_review",
+        "detail_level": "boundary_first",
+        "user_action": "approve_or_block"
+      },
+      "application_risk_policy": {
+        "mode": "delegate_with_review",
+        "detail_level": "boundary_first",
+        "user_action": "approve_or_block"
+      }
+    }
+  },
+  "runtime_decision": {
+    "runtime": "dynamic_task_room",
+    "decision_factors": {
+      "task_complexity": "high",
+      "user_capability_radius": {
+        "inside_count": 3,
+        "outside_count": 13,
+        "automation_sensitive_count": 2
+      },
+      "intent_mode": "design_collaboration",
+      "risk_boundary": "medium"
+    },
+    "collaboration_policy": {
+      "inside_radius": "co-think with detail",
+      "outside_radius": "result-first with evidence",
+      "automation_sensitive": "approval-required with blocked actions"
+    },
+    "why_not_skill": "当前任务跨多个能力缺口，且需要动态定义 agent team、artifact contract、QA / merge rule 和 stop condition。",
+    "why_not_task_room": ""
+  },
+  "minimum_completion_path": {
+    "success_criteria": [
+      "用户能看到为什么这不是单个长答案或单个 Skill 能覆盖的任务",
+      "每个研究结论都区分已知事实、推断和待确认信息",
+      "产品优点、局限、Agent 介入点和 guardrails 能形成可判断交付物",
+      "candidate Evaluation Agent 只展示规格和评测门槛，不直接注册",
+      "长期 playbook 只展示预览，等待用户确认后写回"
+    ],
+    "minimum_completion_path": [
+      "把研究目标、目标产品和证据策略转成 Room Contract",
+      "由 Research Synthesis Agent 输出产品研究卡和协作机制对比表",
+      "由 Product Critic Agent 挑战结论、识别局限、反例和风险",
+      "由 Collaboration Designer Agent 生成 Agent 介入点、guardrails、人审节点和面试叙事",
+      "展示 candidate Evaluation Agent、Room Capsule 和 playbook 写回预览"
+    ],
+    "required_capabilities": [
+      "research_synthesis",
+      "product_critique",
+      "collaboration_design",
+      "memory_writeback"
+    ]
+  },
+  "task_state": {
+    "room_name": "Complex Product Research Room",
+    "status": "completed_with_compressed_result",
+    "goal": "复杂产品研究 Room 示例：我需要研究 Linear、Slack、飞书、Paperclip、Symphony 这类协作产品，判断 Agent 应该如何进入真实协作工作流。\n\n请不要直接给一篇长答案。先判断是否需要 Task Room，再用已注册 Agent 分别完成资料归纳、产品批判和 Agent 协作设计，最后输出协作产品对比表、Agent 介入点、guardrails / human-in-the-loop 设计、可用于面试的 3 分钟观点，以及 Room Capsule / Playbook Draft。\n\n我擅长产品构建和快速原型，但希望系统帮我补足跨产品研究、反例批判、协作协议设计和评估指标这几类能力。不要伪造外部事实；如果资料不足，请标记为待确认。长期 playbook 写回和 candidate agent 注册都需要我确认。",
+    "why_task_room": "这是复杂产品研究 Room 示例：跨产品研究、批判、协作设计和评估指标不适合由单个 Skill 或一篇长答案覆盖；需要 Room Controller 组织已注册 Agent 产出可合并 artifact，并把 candidate Agent、人审和写回边界显性化。",
+    "context_scope": "temporary_room_context",
+    "current_autonomy_level": "Level 1: Draft with approval",
+    "recommended_autonomy_level": "Level 2: Build agent team spec after approval",
+    "automation_risk": "medium"
+  },
+  "collaboration_contract": {
+    "why_task_room": "这是复杂产品研究 Room 示例：跨产品研究、批判、协作设计和评估指标不适合由单个 Skill 或一篇长答案覆盖；需要 Room Controller 组织已注册 Agent 产出可合并 artifact，并把 candidate Agent、人审和写回边界显性化。",
+    "selected_agents": [
+      {
+        "agent": "Research Synthesis Agent",
+        "capability": "research_synthesis",
+        "why_selected": "复杂产品研究需要先把多款产品的协作机制结构化，否则后续批判和设计会变成泛泛观点。",
+        "source": "agents/research_synthesis_agent.json",
+        "status": "registered"
+      },
+      {
+        "agent": "Product Critic Agent",
+        "capability": "product_critique",
+        "why_selected": "研究 Room 需要有人专门挑战结论，避免只输出产品优点清单或把 Agent 介入点想得过于乐观。",
+        "source": "agents/product_critic_agent.json",
+        "status": "registered"
+      },
+      {
+        "agent": "Collaboration Designer Agent",
+        "capability": "collaboration_design",
+        "why_selected": "最终交付不是竞品报告，而是面向 Agent 协作产品的设计判断和可执行叙事。",
+        "source": "agents/collaboration_designer_agent.json",
+        "status": "registered"
+      }
+    ],
+    "excluded_agents": [
+      {
+        "agent": "Evaluation Agent",
+        "capability": "evaluation_design",
+        "why_excluded": "当前先展示 Pilot Eval 表，不把 Evaluation Agent 作为可信执行单元。",
+        "status": "candidate_only"
+      }
+    ],
+    "authorization_scope": {
+      "allowed": [
+        "生成产品研究卡",
+        "生成协作机制对比表",
+        "生成 Agent 介入点和 guardrails",
+        "生成 playbook 写回预览"
+      ],
+      "needs_approval": [
+        "把研究结论用于投递材料",
+        "保存产品研究 playbook",
+        "让候选 Evaluation Agent 进入后续评测"
+      ],
+      "blocked": [
+        "伪造外部事实",
+        "把待确认资料写成确定事实",
+        "自动注册新 Agent",
+        "写入未经确认的长期记忆"
+      ],
+      "review_required": true
+    },
+    "merge_rule": "先把研究事实与推断分开，再由 Product Critic 找局限和反例，最后只允许 Collaboration Designer 基于上游 artifact 生成 Agent 介入点、guardrails 和面试叙事。",
+    "success_criteria": "Room 只组合 registered agents；candidate agents 只提出规格，不进入可信执行。",
+    "room_context_policy": {
+      "context_scope": "temporary_room_context",
+      "return_to_main_context": [
+        "compressed_room_result",
+        "playbook_writeback_proposal",
+        "candidate_agent_specs"
+      ],
+      "discard": [
+        "raw room trace",
+        "failed drafts",
+        "unconfirmed external facts"
+      ]
+    }
+  },
+  "context_packets": [
+    {
+      "agent": "Research Synthesis Agent",
+      "capability": "research_synthesis",
+      "source": "agents/research_synthesis_agent.json",
+      "task": "在 Complex Product Research Room 内按 artifact contract 产出结构化 artifact。",
+      "expected_output": [
+        "product_cards",
+        "comparison_table",
+        "evidence_map",
+        "unknowns",
+        "source_quality_notes"
+      ]
+    },
+    {
+      "agent": "Product Critic Agent",
+      "capability": "product_critique",
+      "source": "agents/product_critic_agent.json",
+      "task": "在 Complex Product Research Room 内按 artifact contract 产出结构化 artifact。",
+      "expected_output": [
+        "strengths",
+        "limitations",
+        "counterexamples",
+        "risk_notes",
+        "questions_for_human_review"
+      ]
+    },
+    {
+      "agent": "Collaboration Designer Agent",
+      "capability": "collaboration_design",
+      "source": "agents/collaboration_designer_agent.json",
+      "task": "在 Complex Product Research Room 内按 artifact contract 产出结构化 artifact。",
+      "expected_output": [
+        "agent_entry_points",
+        "interaction_protocol",
+        "guardrails",
+        "human_checkpoints",
+        "interview_narrative",
+        "playbook_draft"
+      ]
+    }
+  ],
+  "registered_agents": [
+    {
+      "agent_id": "research_synthesis_agent",
+      "agent": "Research Synthesis Agent",
+      "capability": "research_synthesis",
+      "source": "agents/research_synthesis_agent.json",
+      "status": "registered",
+      "description": "整理协作产品资料，抽取产品定位、协作对象、核心机制、信息流和可验证证据。",
+      "why_selected": "复杂产品研究需要先把多款产品的协作机制结构化，否则后续批判和设计会变成泛泛观点。",
+      "input_contract": [
+        "research_goal",
+        "target_products",
+        "available_notes",
+        "evidence_policy"
+      ],
+      "output_contract": [
+        "product_cards",
+        "comparison_table",
+        "evidence_map",
+        "unknowns",
+        "source_quality_notes"
+      ],
+      "allowed_actions": [
+        "summarize_known_material",
+        "extract_collaboration_mechanisms",
+        "mark_unknowns",
+        "build_comparison_table"
+      ],
+      "blocked_actions": [
+        "invent_external_facts",
+        "quote_unverified_claims_as_fact",
+        "crawl_private_sources",
+        "hide_uncertainty"
+      ],
+      "eval_criteria": [
+        "keeps_claims_traceable",
+        "separates_fact_from_inference",
+        "covers_all_target_products",
+        "surfaces_unknowns"
+      ],
+      "failure_modes": [
+        "把推测写成事实",
+        "遗漏目标产品",
+        "只总结功能不总结协作机制",
+        "不给证据强弱"
+      ]
+    },
+    {
+      "agent_id": "product_critic_agent",
+      "agent": "Product Critic Agent",
+      "capability": "product_critique",
+      "source": "agents/product_critic_agent.json",
+      "status": "registered",
+      "description": "基于研究归纳产物判断协作产品的优点、局限、反例、风险和不可迁移条件。",
+      "why_selected": "研究 Room 需要有人专门挑战结论，避免只输出产品优点清单或把 Agent 介入点想得过于乐观。",
+      "input_contract": [
+        "research_synthesis_artifact",
+        "user_goal",
+        "product_principles",
+        "risk_policy"
+      ],
+      "output_contract": [
+        "strengths",
+        "limitations",
+        "counterexamples",
+        "risk_notes",
+        "questions_for_human_review"
+      ],
+      "allowed_actions": [
+        "critique_assumptions",
+        "surface_tradeoffs",
+        "identify_guardrail_needs",
+        "ask_review_questions"
+      ],
+      "blocked_actions": [
+        "overstate_agent_value",
+        "ignore_user_workflow_cost",
+        "recommend_unbounded_bot_behavior",
+        "erase_human_accountability"
+      ],
+      "eval_criteria": [
+        "names_real_tradeoffs",
+        "keeps_human_judgment_visible",
+        "identifies_failure_modes",
+        "does_not_default_to_more_agents"
+      ],
+      "failure_modes": [
+        "为了显得高级而强行引入 Agent",
+        "只讲风险不给取舍",
+        "忽略普通用户协作成本",
+        "缺少反例"
+      ]
+    },
+    {
+      "agent_id": "collaboration_designer_agent",
+      "agent": "Collaboration Designer Agent",
+      "capability": "collaboration_design",
+      "source": "agents/collaboration_designer_agent.json",
+      "status": "registered",
+      "description": "把产品研究和批判结果转成 Agent 进入协作工作流的设计原则、交互协议、guardrails 和可复用 playbook。",
+      "why_selected": "最终交付不是竞品报告，而是面向 Agent 协作产品的设计判断和可执行叙事。",
+      "input_contract": [
+        "research_synthesis_artifact",
+        "product_critique_artifact",
+        "task_room_contract",
+        "human_checkpoint_policy"
+      ],
+      "output_contract": [
+        "agent_entry_points",
+        "interaction_protocol",
+        "guardrails",
+        "human_checkpoints",
+        "interview_narrative",
+        "playbook_draft"
+      ],
+      "allowed_actions": [
+        "design_agent_entry_points",
+        "define_human_in_loop",
+        "draft_interview_narrative",
+        "propose_playbook"
+      ],
+      "blocked_actions": [
+        "auto_register_candidate_agent",
+        "remove_human_checkpoint",
+        "turn_design_into_unbounded_swarm",
+        "write_long_term_memory_without_approval"
+      ],
+      "eval_criteria": [
+        "uses_upstream_artifacts",
+        "keeps_protocol_minimal",
+        "defines_guardrails",
+        "produces_actionable_narrative"
+      ],
+      "failure_modes": [
+        "输出空泛原则",
+        "没有体现人审位置",
+        "把 Task Room 说成群聊",
+        "无法沉淀为 playbook"
+      ]
+    }
+  ],
+  "candidate_agents": [
+    {
+      "agent": "Evaluation Agent",
+      "capability": "evaluation_design",
+      "why_excluded": "当前先展示 Pilot Eval 表，不把 Evaluation Agent 作为可信执行单元。",
+      "status": "candidate_only"
+    }
+  ],
+  "agent_artifacts": {
+    "research_synthesis_artifact": {
+      "agent": "Research Synthesis Agent",
+      "capability": "research_synthesis",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "artifact_type": "research_synthesis_artifact",
+      "judgment": "协作产品的核心差异不是有没有聊天入口，而是如何把任务状态、责任边界、证据和下一步动作结构化。",
+      "product_cards": [
+        {
+          "product": "Linear",
+          "positioning": "面向产品与工程团队的高速度 issue / project / roadmap 协作系统。",
+          "collaboration_mechanism": "用强结构、快捷键、轻量状态流和清晰 ownership 降低团队协调成本。",
+          "agent_opportunity": "Agent 可以在 issue triage、状态摘要、跨项目依赖提醒和 release note 草稿中介入。",
+          "risk": "如果 Agent 自动改优先级或改 owner，会破坏团队对系统状态的信任。",
+          "evidence_status": "基于公开产品形态与常见使用经验，需补官方/用户材料复核。"
+        },
+        {
+          "product": "Slack",
+          "positioning": "团队实时沟通与通知中心。",
+          "collaboration_mechanism": "频道、线程、bot、工作流和搜索把异步沟通集中到一个事件流。",
+          "agent_opportunity": "Agent 可以做频道摘要、任务提取、决策追踪和噪音过滤。",
+          "risk": "bot 容易打扰频道、重复发言，且难以承担明确责任。",
+          "evidence_status": "基于产品常识归纳，需补 workspace 实际样本验证。"
+        },
+        {
+          "product": "飞书",
+          "positioning": "集即时沟通、文档、审批、日历和低代码为一体的组织协作平台。",
+          "collaboration_mechanism": "通过 IM + Docs + Base + 审批把信息流、文档流和业务流连接起来。",
+          "agent_opportunity": "Agent 可以在流程审批、知识库问答、会议纪要、跨表更新和执行提醒中介入。",
+          "risk": "组织级平台里 Agent 权限边界更复杂，错误写入或越权执行影响更大。",
+          "evidence_status": "基于公开产品形态归纳，需结合具体组织场景验证。"
+        },
+        {
+          "product": "Paperclip",
+          "positioning": "面向 Agent 协作或 AI-native 工作流的早期产品/社区信号。",
+          "collaboration_mechanism": "强调把 AI 参与工作流的过程、状态和交接显性化。",
+          "agent_opportunity": "可作为 Task Room、artifact contract、memory writeback 等概念的参照样本。",
+          "risk": "公开资料可能有限，不能把推测当成事实。",
+          "evidence_status": "信息不足；需要用户或后续 researcher 补资料。"
+        },
+        {
+          "product": "Symphony",
+          "positioning": "面向多 Agent 或组织协作编排的新兴产品/概念参照。",
+          "collaboration_mechanism": "关注 Agent 之间如何分工、交接、审计和被人类监督。",
+          "agent_opportunity": "可用于讨论 agent-to-agent protocol、角色边界和评测机制。",
+          "risk": "名称与产品形态可能存在歧义，必须标注待确认事实。",
+          "evidence_status": "信息不足；需要二次检索确认。"
+        }
+      ],
+      "comparison_table": [
+        {
+          "dimension": "状态结构",
+          "strong_examples": [
+            "Linear",
+            "飞书"
+          ],
+          "agent_design_implication": "Agent 输出必须落到状态字段或 artifact，而不是只发消息。"
+        },
+        {
+          "dimension": "沟通噪音",
+          "strong_examples": [
+            "Slack"
+          ],
+          "agent_design_implication": "Agent 需要发言预算、触发条件和静默摘要。"
+        },
+        {
+          "dimension": "权限边界",
+          "strong_examples": [
+            "飞书",
+            "Slack"
+          ],
+          "agent_design_implication": "外部动作和组织级写入必须 human-in-the-loop。"
+        },
+        {
+          "dimension": "Agent 协作显性化",
+          "strong_examples": [
+            "Paperclip",
+            "Symphony"
+          ],
+          "agent_design_implication": "需要 contract、handoff、eval 和 memory hygiene。"
+        }
+      ],
+      "key_findings": [
+        "协作产品最重要的不是内容生成，而是责任、状态和上下文连续性。",
+        "Agent 介入应优先选择低风险高重复的整理、摘要、路由和检查点。",
+        "早期 Agent 协作产品需要证明 bot 不吵、不越权、能被追责。"
+      ],
+      "evidence": [
+        "Linear 通过强结构和 ownership 降低协调成本。",
+        "Slack 的 bot 生态说明 Agent 可以进入协作流，但噪音和可信度是主要风险。",
+        "飞书的组织级套件说明权限、审批和跨应用写入必须显性化。"
+      ],
+      "missing_information": [
+        "Paperclip / Symphony 需要补充最新公开资料和具体产品形态。",
+        "需要真实团队场景验证 Agent 介入是否降低任务完成时间。"
+      ],
+      "source_quality_notes": "Linear / Slack / 飞书可基于公开产品形态做稳定归纳；Paperclip / Symphony 只能作为待确认研究对象。",
+      "risks": [
+        "把新兴产品推测当事实",
+        "只比较功能，不比较协作机制",
+        "忽略用户授权和组织权限"
+      ],
+      "next_validation_step": "补充每个产品 1 页研究卡：优点、局限、如果加 Agent 会怎么设计。",
+      "authorization_impact": "只输出研究归纳；不访问私有 workspace，不伪造未确认资料。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    "product_critique_artifact": {
+      "agent": "Product Critic Agent",
+      "capability": "product_critique",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "artifact_type": "product_critique_artifact",
+      "judgment": "Agent 协作产品不能把“更多 Agent”当卖点，真正要解决的是什么时候该安静、什么时候该请求授权、什么时候该把过程压缩成可复用状态。",
+      "strengths": [
+        "Linear 证明强结构能减少协作摩擦。",
+        "Slack 证明 bot 可以进入团队流，但也暴露噪音和可信度问题。",
+        "飞书证明组织协作需要权限、审批和跨工具状态一致性。"
+      ],
+      "limitations": [
+        "协作产品研究如果只停留在功能对比，无法回答 Agent 如何成为可信团队成员。",
+        "Agent 介入点如果没有触发条件和停止条件，会退化成群聊噪音。",
+        "Paperclip / Symphony 的资料不足，不能承担强事实论证。"
+      ],
+      "counterexamples": [
+        "一个普通总结 bot 可能提高短期效率，却降低频道信任，因为它频繁打扰且无法负责。",
+        "一个自动改 roadmap 的 Agent 即使建议正确，也可能破坏团队决策边界。",
+        "没有 artifact contract 的多 Agent 输出难以合并，不能形成可审计交付物。"
+      ],
+      "key_findings": [
+        "Agent 产品设计要优先定义发言权、写入权和升级到人审的条件。",
+        "Task Room 的价值是状态管理和责任边界，不是角色数量。",
+        "评估指标应覆盖任务完成率、噪音、授权负担和复用质量。"
+      ],
+      "evidence": [
+        "协作产品最重要的不是内容生成，而是责任、状态和上下文连续性。",
+        "Agent 介入应优先选择低风险高重复的整理、摘要、路由和检查点。",
+        "早期 Agent 协作产品需要证明 bot 不吵、不越权、能被追责。"
+      ],
+      "risks": [
+        "过度迎合 Agent-native 叙事，忽略普通协作用户的学习成本。",
+        "把协议设计讲得过重，掩盖真实产品体验。"
+      ],
+      "questions_for_human_review": [
+        "面试时是否把重点放在协作产品判断，而不是协议术语。",
+        "是否需要补 Paperclip / Symphony 的最新资料截图或引用。"
+      ],
+      "missing_information": [
+        "Paperclip / Symphony 需要补充最新公开资料和具体产品形态。",
+        "需要真实团队场景验证 Agent 介入是否降低任务完成时间。"
+      ],
+      "next_validation_step": "用 5 个 pilot case 验证 Router 是否会避免无脑开 Task Room。",
+      "authorization_impact": "只挑战结论和提出人审问题，不替用户做最终产品判断。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    "collaboration_design_artifact": {
+      "agent": "Collaboration Designer Agent",
+      "capability": "collaboration_design",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "artifact_type": "collaboration_design_artifact",
+      "judgment": "Agent 应该作为协作 harness 的可控参与者进入工作流：先路由，再拿到局部 contract，输出 artifact，关键点交给人审，结束后只写回压缩 playbook。",
+      "agent_entry_points": [
+        {
+          "entry_point": "频道 / room 摘要",
+          "use_agent_when": "信息量大、需要压缩成状态，而不是参与开放讨论。",
+          "human_checkpoint": "摘要影响决策或要写入长期记忆前需要确认。"
+        },
+        {
+          "entry_point": "任务路由",
+          "use_agent_when": "任务需要判断 Skill、单 Agent、Task Room 或人审路径。",
+          "human_checkpoint": "进入外部动作、长期 memory 或 candidate agent 注册前确认。"
+        },
+        {
+          "entry_point": "Artifact contract",
+          "use_agent_when": "多个 Agent 产物需要合并、质检和追责。",
+          "human_checkpoint": "合约改变任务目标或授权边界时确认。"
+        }
+      ],
+      "interaction_protocol": [
+        "Header 判断：稳定任务走 Skill，开放判断走 Agent，复杂协作走 Task Room。",
+        "Room Controller 生成 contract：目标、边界、角色、artifact、done criteria。",
+        "Registered Agent 只拿局部 context packet，输出结构化 artifact。",
+        "Candidate Agent 只生成 spec，经过 eval gate 和人审后才能注册。",
+        "Room 结束只回传 compressed result、capsule 和 playbook draft。"
+      ],
+      "guardrails": [
+        "发言预算：Agent 默认不在协作流中主动刷屏。",
+        "写入预算：状态、memory、外部系统写入必须显式授权。",
+        "证据预算：未确认资料必须标注 unknown，不能伪造成事实。",
+        "降级策略：Skill 足够时不开 Room；缺能力但风险高时只生成 candidate spec。"
+      ],
+      "human_checkpoints": [
+        "确认 Router 是否该开 Task Room。",
+        "确认 candidate Evaluation Agent 是否进入后续评测。",
+        "确认 playbook draft 是否写入长期记忆。"
+      ],
+      "interview_narrative": [
+        "我不是想证明多 Agent 永远更强，而是设计一个知道何时不用 Agent 的协作 harness。",
+        "稳定动作 Skill 化，开放判断 Agent 化，复杂协作 Room 化，能力缺口 candidate 化。",
+        "真正的产品价值是降低人的协作负担，同时保留授权、证据和责任边界。"
+      ],
+      "playbook_draft": "复杂产品研究 Room：输入研究目标 -> Research Synthesis 结构化资料 -> Product Critic 找局限和反例 -> Collaboration Designer 产出 Agent 介入点、guardrails、面试叙事和 playbook -> 人审后写回。",
+      "key_findings": [
+        "Task Room 应被解释为复杂协作 harness，而不是多 Agent 群聊。",
+        "Skill vs Agent 的分界是稳定性和判断强度，不是用户会不会。",
+        "Agent Builder 现在只保留 candidate spec 入口，后续再接 eval 和 registry lifecycle。"
+      ],
+      "evidence": [
+        "Agent 产品设计要优先定义发言权、写入权和升级到人审的条件。",
+        "Task Room 的价值是状态管理和责任边界，不是角色数量。",
+        "评估指标应覆盖任务完成率、噪音、授权负担和复用质量。",
+        "协作产品最重要的不是内容生成，而是责任、状态和上下文连续性。"
+      ],
+      "risks": [
+        "如果 UI 展示太多内部机制，会稀释主线。",
+        "如果没有 pilot eval，会像精心编排的单一路径。"
+      ],
+      "missing_information": [
+        "需要 5 行 pilot eval 记录支撑 Router/Room Controller 判断力。",
+        "需要补一份 MCP/A2A 概念映射文档作为后续材料。"
+      ],
+      "next_validation_step": "用协作决策评测表验证 5 类任务是否正确路由。",
+      "authorization_impact": "只生成设计方案和 playbook draft；不自动注册新 Agent，不写长期 memory。",
+      "confidence": "medium-high",
+      "should_be_saved_to_workflow": true
+    }
+  },
+  "expert_outputs": [
+    {
+      "agent": "Research Synthesis Agent",
+      "capability": "research_synthesis",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "artifact_type": "research_synthesis_artifact",
+      "judgment": "协作产品的核心差异不是有没有聊天入口，而是如何把任务状态、责任边界、证据和下一步动作结构化。",
+      "product_cards": [
+        {
+          "product": "Linear",
+          "positioning": "面向产品与工程团队的高速度 issue / project / roadmap 协作系统。",
+          "collaboration_mechanism": "用强结构、快捷键、轻量状态流和清晰 ownership 降低团队协调成本。",
+          "agent_opportunity": "Agent 可以在 issue triage、状态摘要、跨项目依赖提醒和 release note 草稿中介入。",
+          "risk": "如果 Agent 自动改优先级或改 owner，会破坏团队对系统状态的信任。",
+          "evidence_status": "基于公开产品形态与常见使用经验，需补官方/用户材料复核。"
+        },
+        {
+          "product": "Slack",
+          "positioning": "团队实时沟通与通知中心。",
+          "collaboration_mechanism": "频道、线程、bot、工作流和搜索把异步沟通集中到一个事件流。",
+          "agent_opportunity": "Agent 可以做频道摘要、任务提取、决策追踪和噪音过滤。",
+          "risk": "bot 容易打扰频道、重复发言，且难以承担明确责任。",
+          "evidence_status": "基于产品常识归纳，需补 workspace 实际样本验证。"
+        },
+        {
+          "product": "飞书",
+          "positioning": "集即时沟通、文档、审批、日历和低代码为一体的组织协作平台。",
+          "collaboration_mechanism": "通过 IM + Docs + Base + 审批把信息流、文档流和业务流连接起来。",
+          "agent_opportunity": "Agent 可以在流程审批、知识库问答、会议纪要、跨表更新和执行提醒中介入。",
+          "risk": "组织级平台里 Agent 权限边界更复杂，错误写入或越权执行影响更大。",
+          "evidence_status": "基于公开产品形态归纳，需结合具体组织场景验证。"
+        },
+        {
+          "product": "Paperclip",
+          "positioning": "面向 Agent 协作或 AI-native 工作流的早期产品/社区信号。",
+          "collaboration_mechanism": "强调把 AI 参与工作流的过程、状态和交接显性化。",
+          "agent_opportunity": "可作为 Task Room、artifact contract、memory writeback 等概念的参照样本。",
+          "risk": "公开资料可能有限，不能把推测当成事实。",
+          "evidence_status": "信息不足；需要用户或后续 researcher 补资料。"
+        },
+        {
+          "product": "Symphony",
+          "positioning": "面向多 Agent 或组织协作编排的新兴产品/概念参照。",
+          "collaboration_mechanism": "关注 Agent 之间如何分工、交接、审计和被人类监督。",
+          "agent_opportunity": "可用于讨论 agent-to-agent protocol、角色边界和评测机制。",
+          "risk": "名称与产品形态可能存在歧义，必须标注待确认事实。",
+          "evidence_status": "信息不足；需要二次检索确认。"
+        }
+      ],
+      "comparison_table": [
+        {
+          "dimension": "状态结构",
+          "strong_examples": [
+            "Linear",
+            "飞书"
+          ],
+          "agent_design_implication": "Agent 输出必须落到状态字段或 artifact，而不是只发消息。"
+        },
+        {
+          "dimension": "沟通噪音",
+          "strong_examples": [
+            "Slack"
+          ],
+          "agent_design_implication": "Agent 需要发言预算、触发条件和静默摘要。"
+        },
+        {
+          "dimension": "权限边界",
+          "strong_examples": [
+            "飞书",
+            "Slack"
+          ],
+          "agent_design_implication": "外部动作和组织级写入必须 human-in-the-loop。"
+        },
+        {
+          "dimension": "Agent 协作显性化",
+          "strong_examples": [
+            "Paperclip",
+            "Symphony"
+          ],
+          "agent_design_implication": "需要 contract、handoff、eval 和 memory hygiene。"
+        }
+      ],
+      "key_findings": [
+        "协作产品最重要的不是内容生成，而是责任、状态和上下文连续性。",
+        "Agent 介入应优先选择低风险高重复的整理、摘要、路由和检查点。",
+        "早期 Agent 协作产品需要证明 bot 不吵、不越权、能被追责。"
+      ],
+      "evidence": [
+        "Linear 通过强结构和 ownership 降低协调成本。",
+        "Slack 的 bot 生态说明 Agent 可以进入协作流，但噪音和可信度是主要风险。",
+        "飞书的组织级套件说明权限、审批和跨应用写入必须显性化。"
+      ],
+      "missing_information": [
+        "Paperclip / Symphony 需要补充最新公开资料和具体产品形态。",
+        "需要真实团队场景验证 Agent 介入是否降低任务完成时间。"
+      ],
+      "source_quality_notes": "Linear / Slack / 飞书可基于公开产品形态做稳定归纳；Paperclip / Symphony 只能作为待确认研究对象。",
+      "risks": [
+        "把新兴产品推测当事实",
+        "只比较功能，不比较协作机制",
+        "忽略用户授权和组织权限"
+      ],
+      "next_validation_step": "补充每个产品 1 页研究卡：优点、局限、如果加 Agent 会怎么设计。",
+      "authorization_impact": "只输出研究归纳；不访问私有 workspace，不伪造未确认资料。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    {
+      "agent": "Product Critic Agent",
+      "capability": "product_critique",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "artifact_type": "product_critique_artifact",
+      "judgment": "Agent 协作产品不能把“更多 Agent”当卖点，真正要解决的是什么时候该安静、什么时候该请求授权、什么时候该把过程压缩成可复用状态。",
+      "strengths": [
+        "Linear 证明强结构能减少协作摩擦。",
+        "Slack 证明 bot 可以进入团队流，但也暴露噪音和可信度问题。",
+        "飞书证明组织协作需要权限、审批和跨工具状态一致性。"
+      ],
+      "limitations": [
+        "协作产品研究如果只停留在功能对比，无法回答 Agent 如何成为可信团队成员。",
+        "Agent 介入点如果没有触发条件和停止条件，会退化成群聊噪音。",
+        "Paperclip / Symphony 的资料不足，不能承担强事实论证。"
+      ],
+      "counterexamples": [
+        "一个普通总结 bot 可能提高短期效率，却降低频道信任，因为它频繁打扰且无法负责。",
+        "一个自动改 roadmap 的 Agent 即使建议正确，也可能破坏团队决策边界。",
+        "没有 artifact contract 的多 Agent 输出难以合并，不能形成可审计交付物。"
+      ],
+      "key_findings": [
+        "Agent 产品设计要优先定义发言权、写入权和升级到人审的条件。",
+        "Task Room 的价值是状态管理和责任边界，不是角色数量。",
+        "评估指标应覆盖任务完成率、噪音、授权负担和复用质量。"
+      ],
+      "evidence": [
+        "协作产品最重要的不是内容生成，而是责任、状态和上下文连续性。",
+        "Agent 介入应优先选择低风险高重复的整理、摘要、路由和检查点。",
+        "早期 Agent 协作产品需要证明 bot 不吵、不越权、能被追责。"
+      ],
+      "risks": [
+        "过度迎合 Agent-native 叙事，忽略普通协作用户的学习成本。",
+        "把协议设计讲得过重，掩盖真实产品体验。"
+      ],
+      "questions_for_human_review": [
+        "面试时是否把重点放在协作产品判断，而不是协议术语。",
+        "是否需要补 Paperclip / Symphony 的最新资料截图或引用。"
+      ],
+      "missing_information": [
+        "Paperclip / Symphony 需要补充最新公开资料和具体产品形态。",
+        "需要真实团队场景验证 Agent 介入是否降低任务完成时间。"
+      ],
+      "next_validation_step": "用 5 个 pilot case 验证 Router 是否会避免无脑开 Task Room。",
+      "authorization_impact": "只挑战结论和提出人审问题，不替用户做最终产品判断。",
+      "confidence": "medium",
+      "should_be_saved_to_workflow": true
+    },
+    {
+      "agent": "Collaboration Designer Agent",
+      "capability": "collaboration_design",
+      "covers_gap": "outside_radius",
+      "collaboration_mode": "result_first",
+      "artifact_type": "collaboration_design_artifact",
+      "judgment": "Agent 应该作为协作 harness 的可控参与者进入工作流：先路由，再拿到局部 contract，输出 artifact，关键点交给人审，结束后只写回压缩 playbook。",
+      "agent_entry_points": [
+        {
+          "entry_point": "频道 / room 摘要",
+          "use_agent_when": "信息量大、需要压缩成状态，而不是参与开放讨论。",
+          "human_checkpoint": "摘要影响决策或要写入长期记忆前需要确认。"
+        },
+        {
+          "entry_point": "任务路由",
+          "use_agent_when": "任务需要判断 Skill、单 Agent、Task Room 或人审路径。",
+          "human_checkpoint": "进入外部动作、长期 memory 或 candidate agent 注册前确认。"
+        },
+        {
+          "entry_point": "Artifact contract",
+          "use_agent_when": "多个 Agent 产物需要合并、质检和追责。",
+          "human_checkpoint": "合约改变任务目标或授权边界时确认。"
+        }
+      ],
+      "interaction_protocol": [
+        "Header 判断：稳定任务走 Skill，开放判断走 Agent，复杂协作走 Task Room。",
+        "Room Controller 生成 contract：目标、边界、角色、artifact、done criteria。",
+        "Registered Agent 只拿局部 context packet，输出结构化 artifact。",
+        "Candidate Agent 只生成 spec，经过 eval gate 和人审后才能注册。",
+        "Room 结束只回传 compressed result、capsule 和 playbook draft。"
+      ],
+      "guardrails": [
+        "发言预算：Agent 默认不在协作流中主动刷屏。",
+        "写入预算：状态、memory、外部系统写入必须显式授权。",
+        "证据预算：未确认资料必须标注 unknown，不能伪造成事实。",
+        "降级策略：Skill 足够时不开 Room；缺能力但风险高时只生成 candidate spec。"
+      ],
+      "human_checkpoints": [
+        "确认 Router 是否该开 Task Room。",
+        "确认 candidate Evaluation Agent 是否进入后续评测。",
+        "确认 playbook draft 是否写入长期记忆。"
+      ],
+      "interview_narrative": [
+        "我不是想证明多 Agent 永远更强，而是设计一个知道何时不用 Agent 的协作 harness。",
+        "稳定动作 Skill 化，开放判断 Agent 化，复杂协作 Room 化，能力缺口 candidate 化。",
+        "真正的产品价值是降低人的协作负担，同时保留授权、证据和责任边界。"
+      ],
+      "playbook_draft": "复杂产品研究 Room：输入研究目标 -> Research Synthesis 结构化资料 -> Product Critic 找局限和反例 -> Collaboration Designer 产出 Agent 介入点、guardrails、面试叙事和 playbook -> 人审后写回。",
+      "key_findings": [
+        "Task Room 应被解释为复杂协作 harness，而不是多 Agent 群聊。",
+        "Skill vs Agent 的分界是稳定性和判断强度，不是用户会不会。",
+        "Agent Builder 现在只保留 candidate spec 入口，后续再接 eval 和 registry lifecycle。"
+      ],
+      "evidence": [
+        "Agent 产品设计要优先定义发言权、写入权和升级到人审的条件。",
+        "Task Room 的价值是状态管理和责任边界，不是角色数量。",
+        "评估指标应覆盖任务完成率、噪音、授权负担和复用质量。",
+        "协作产品最重要的不是内容生成，而是责任、状态和上下文连续性。"
+      ],
+      "risks": [
+        "如果 UI 展示太多内部机制，会稀释主线。",
+        "如果没有 pilot eval，会像精心编排的单一路径。"
+      ],
+      "missing_information": [
+        "需要 5 行 pilot eval 记录支撑 Router/Room Controller 判断力。",
+        "需要补一份 MCP/A2A 概念映射文档作为后续材料。"
+      ],
+      "next_validation_step": "用协作决策评测表验证 5 类任务是否正确路由。",
+      "authorization_impact": "只生成设计方案和 playbook draft；不自动注册新 Agent，不写长期 memory。",
+      "confidence": "medium-high",
+      "should_be_saved_to_workflow": true
+    }
+  ],
+  "capability_gap_report": {
+    "required_capabilities": [
+      "research_synthesis",
+      "product_critique",
+      "collaboration_design",
+      "memory_writeback",
+      "evaluation_design"
+    ],
+    "covered_by_registered_agents": [
+      {
+        "capability": "research_synthesis",
+        "agent": "Research Synthesis Agent",
+        "source": "agents/research_synthesis_agent.json",
+        "status": "registered"
+      },
+      {
+        "capability": "product_critique",
+        "agent": "Product Critic Agent",
+        "source": "agents/product_critic_agent.json",
+        "status": "registered"
+      },
+      {
+        "capability": "collaboration_design",
+        "agent": "Collaboration Designer Agent",
+        "source": "agents/collaboration_designer_agent.json",
+        "status": "registered"
+      }
+    ],
+    "covered_by_skills": [
+      {
+        "skill_id": "research_brief_loader_skill",
+        "capability": "research_brief_loading",
+        "covers": [
+          "target_products",
+          "evidence_policy",
+          "known_unknowns"
+        ],
+        "status": "room_local_skill"
+      },
+      {
+        "skill_id": "artifact_indexer_skill",
+        "capability": "artifact_indexing",
+        "covers": [
+          "research_synthesis_artifact",
+          "product_critique_artifact",
+          "collaboration_design_artifact"
+        ],
+        "status": "room_local_skill"
+      },
+      {
+        "skill_id": "collaboration_memory_writer_skill",
+        "capability": "memory_writeback",
+        "covers": [
+          "playbook_writeback_proposal"
+        ],
+        "status": "harness_service"
+      }
+    ],
+    "missing_capabilities": [
+      "evaluation_design"
+    ],
+    "gap_severity": "recoverable",
+    "minimal_path": [
+      "本次只使用已注册 Research Synthesis、Product Critic、Collaboration Designer 三个 Agent 完成可交付结果。",
+      "Evaluation Agent 先保留为 candidate spec，不进入可信执行。",
+      "未确认资料全部标记为待确认，不作为强事实。",
+      "成功后只写回 playbook proposal；多次复用稳定后再考虑注册/升级 agent 或 skill。"
+    ],
+    "candidate_agent_specs": [
+      {
+        "agent": "Evaluation Agent",
+        "capability": "evaluation_design",
+        "status": "candidate_only",
+        "generated_by": "external_agent_builder_tool_protocol",
+        "why_needed": "后续需要系统评估 Router / Room Controller 的路由准确率、噪音和复用质量；当前 demo 只展示 5 行 Pilot Eval。",
+        "input_contract": [
+          "task_goal",
+          "scoped_memory",
+          "registered_agent_artifacts",
+          "blocked_actions"
+        ],
+        "output_contract": [
+          "structured_artifact",
+          "evidence",
+          "risk_notes",
+          "stop_condition"
+        ],
+        "blocked_actions": [
+          "enter_trusted_execution_without_eval",
+          "perform_external_actions",
+          "write_long_term_memory_without_approval"
+        ],
+        "eval_required": true
+      }
+    ],
+    "agent_builder_call": {
+      "tool": "external_agent_builder",
+      "status": "proposed_not_executed",
+      "why": "Room Controller 只提出 candidate agent spec；通过 Agent Eval 前不进入可信执行。",
+      "inputs": [
+        "missing_capabilities",
+        "task_goal",
+        "artifact_contract",
+        "blocked_actions"
+      ],
+      "outputs": [
+        "candidate_agent_spec",
+        "eval_plan",
+        "registration_recommendation"
+      ]
+    },
+    "eval_gate": [
+      "必须在 3 个以上同类任务中输出结构化 artifact",
+      "必须遵守 blocked actions，不能自动执行外部动作",
+      "必须证明相比现有 registered agents 能降低噪音或提高结果质量",
+      "通过后只注册为 registered agent；多次稳定复用后才可能升级为 skill"
+    ],
+    "human_checkpoint": "确认本次是否接受最小路径；确认 Evaluation Agent 是否进入后续评测；确认 playbook 是否写回。"
+  },
+  "compressed_room_result": {
+    "decision": "Go",
+    "reason": "复杂产品研究需要跨产品资料归纳、反例批判和 Agent 协作设计，Task Room 比单个长答案更容易保留证据、边界和可复用状态。",
+    "recommended_iteration_plan": [
+      "产出 Linear / Slack / 飞书 / Paperclip / Symphony 的 1 页研究卡。",
+      "把 Agent 介入点收敛为路由、摘要、artifact contract 和人审写回四类。",
+      "用 5 行 Pilot Eval 验证 Router 是否避免无脑开 Room。"
+    ],
+    "qa_notes": [
+      "Research Synthesis Agent 负责事实/推测分离。",
+      "Product Critic Agent 挑战“更多 Agent 更好”的假设。",
+      "Collaboration Designer Agent 只基于上游 artifact 生成协议和面试叙事。",
+      "Evaluation Agent 保持 candidate only，不进入可信执行。"
+    ]
+  },
+  "playbook_writeback_proposal": {
+    "memory_type": "complex_product_research_room_playbook",
+    "requires_user_approval": true,
+    "candidate_playbook": "复杂产品研究 Room：输入研究目标 -> Research Synthesis 结构化资料 -> Product Critic 找局限和反例 -> Collaboration Designer 产出 Agent 介入点、guardrails、面试叙事和 playbook -> 人审后写回。",
+    "do_not_save": [
+      "raw room trace",
+      "failed drafts",
+      "unconfirmed external facts",
+      "private workspace content"
+    ]
+  },
+  "room_state_contract": {
+    "capsule_id": "room_state_capsule_complex_product_research_v1",
+    "task_goal": "复杂产品研究 Room 示例：我需要研究 Linear、Slack、飞书、Paperclip、Symphony 这类协作产品，判断 Agent 应该如何进入真实协作工作流。\n\n请不要直接给一篇长答案。先判断是否需要 Task Room，再用已注册 Agent 分别完成资料归纳、产品批判和 Agent 协作设计，最后输出协作产品对比表、Agent 介入点、guardrails / human-in-the-loop 设计、可用于面试的 3 分钟观点，以及 Room Capsule / Playbook Draft。\n\n我擅长产品构建和快速原型，但希望系统帮我补足跨产品研究、反例批判、协作协议设计和评估指标这几类能力。不要伪造外部事实；如果资料不足，请标记为待确认。长期 playbook 写回和 candidate agent 注册都需要我确认。",
+    "current_phase": "ready_for_human_review",
+    "can_reopen_window": true,
+    "resume_mode": "contract_state_only",
+    "confirmed_decisions": [
+      "本次只使用已注册 Research Synthesis Agent、Product Critic Agent 和 Collaboration Designer Agent 进入可信执行。",
+      "候选 Agent 需要通过评测后才能注册，不在本次直接执行。",
+      "未确认外部事实、长期记忆写回和 candidate agent 注册都需要用户确认。",
+      "Room 结束后只回传压缩结果、playbook 写回建议和可恢复状态，不回传原始过程。"
+    ],
+    "open_questions": [
+      "是否接受本次最小完成路径。",
+      "是否把 Evaluation Agent 放入后续评测。",
+      "是否确认保存本次 playbook 写回建议。"
+    ],
+    "active_constraints": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆",
+      "不保存 raw room trace",
+      "不把待确认研究资料写成确定事实",
+      "不把未确认 candidate agent 当作可信执行单元"
+    ],
+    "artifact_inventory": [
+      {
+        "artifact_id": "research_synthesis_artifact",
+        "owner": "Research Synthesis Agent",
+        "status": "available",
+        "summary": "协作产品的核心差异不是有没有聊天入口，而是如何把任务状态、责任边界、证据和下一步动作结构化。"
+      },
+      {
+        "artifact_id": "product_critique_artifact",
+        "owner": "Product Critic Agent",
+        "status": "available",
+        "summary": "Agent 协作产品不能把“更多 Agent”当卖点，真正要解决的是什么时候该安静、什么时候该请求授权、什么时候该把过程压缩成可复用状态。"
+      },
+      {
+        "artifact_id": "collaboration_design_artifact",
+        "owner": "Collaboration Designer Agent",
+        "status": "available",
+        "summary": "Agent 应该作为协作 harness 的可控参与者进入工作流：先路由，再拿到局部 contract，输出 artifact，关键点交给人审，结束后只写回压缩 playbook。"
+      }
+    ],
+    "evidence_ledger": [
+      {
+        "claim": "Linear",
+        "evidence": [
+          "用强结构、快捷键、轻量状态流和清晰 ownership 降低团队协调成本。",
+          "Agent 可以在 issue triage、状态摘要、跨项目依赖提醒和 release note 草稿中介入。"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "claim": "Slack",
+        "evidence": [
+          "频道、线程、bot、工作流和搜索把异步沟通集中到一个事件流。",
+          "Agent 可以做频道摘要、任务提取、决策追踪和噪音过滤。"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "claim": "飞书",
+        "evidence": [
+          "通过 IM + Docs + Base + 审批把信息流、文档流和业务流连接起来。",
+          "Agent 可以在流程审批、知识库问答、会议纪要、跨表更新和执行提醒中介入。"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "claim": "Paperclip",
+        "evidence": [
+          "强调把 AI 参与工作流的过程、状态和交接显性化。",
+          "可作为 Task Room、artifact contract、memory writeback 等概念的参照样本。"
+        ],
+        "confidence": "medium"
+      }
+    ],
+    "agent_outputs_summary": [
+      {
+        "agent": "Research Synthesis Agent",
+        "judgment": "协作产品的核心差异不是有没有聊天入口，而是如何把任务状态、责任边界、证据和下一步动作结构化。",
+        "confidence": "medium"
+      },
+      {
+        "agent": "Product Critic Agent",
+        "judgment": "Agent 协作产品不能把“更多 Agent”当卖点，真正要解决的是什么时候该安静、什么时候该请求授权、什么时候该把过程压缩成可复用状态。",
+        "confidence": "medium"
+      },
+      {
+        "agent": "Collaboration Designer Agent",
+        "judgment": "Agent 应该作为协作 harness 的可控参与者进入工作流：先路由，再拿到局部 contract，输出 artifact，关键点交给人审，结束后只写回压缩 playbook。",
+        "confidence": "medium-high"
+      }
+    ],
+    "blocked_actions": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆"
+    ],
+    "next_minimal_step": "请用户确认是否采用下一轮最小迭代，并决定是否写回 playbook。",
+    "resume_instructions": [
+      "新窗口只读取本 capsule、collaboration_contract、capability_gap_report 和必要 artifacts。",
+      "继续时先复述 confirmed_decisions，再处理 open_questions。",
+      "不得根据丢弃的 raw trace 补充未确认事实。",
+      "如需要更多上下文，必须向用户请求，而不是猜测。"
+    ],
+    "discarded_context": [
+      "raw room trace",
+      "失败研究草稿",
+      "未确认外部事实",
+      "与当前阶段无关的中间推理"
+    ],
+    "compression_confidence": "high",
+    "requires_human_review": true,
+    "playbook_writeback_reference": "complex_product_research_room_playbook",
+    "capability_gap_summary": {
+      "gap_severity": "recoverable",
+      "missing_capabilities": [
+        "evaluation_design"
+      ],
+      "candidate_agent_count": 1
+    }
+  },
+  "final_result": {
+    "goal_summary": {
+      "user_goal": "复杂产品研究 Room 示例：我需要研究 Linear、Slack、飞书、Paperclip、Symphony 这类协作产品，判断 Agent 应该如何进入真实协作工作流。\n\n请不要直接给一篇长答案。先判断是否需要 Task Room，再用已注册 Agent 分别完成资料归纳、产品批判和 Agent 协作设计，最后输出协作产品对比表、Agent 介入点、guardrails / human-in-the-loop 设计、可用于面试的 3 分钟观点，以及 Room Capsule / Playbook Draft。\n\n我擅长产品构建和快速原型，但希望系统帮我补足跨产品研究、反例批判、协作协议设计和评估指标这几类能力。不要伪造外部事实；如果资料不足，请标记为待确认。长期 playbook 写回和 candidate agent 注册都需要我确认。",
+      "header_understanding": "Header Agent fork 临时 Complex Product Research Room；Room Controller 调用 room-local skills 和 registered agents，结束后只回传压缩结果。",
+      "success_criteria": [
+        "用户能看到为什么这不是单个长答案或单个 Skill 能覆盖的任务",
+        "每个研究结论都区分已知事实、推断和待确认信息",
+        "产品优点、局限、Agent 介入点和 guardrails 能形成可判断交付物",
+        "candidate Evaluation Agent 只展示规格和评测门槛，不直接注册",
+        "长期 playbook 只展示预览，等待用户确认后写回"
+      ],
+      "authorization_scope": {
+        "allowed": [
+          "生成产品研究卡",
+          "生成协作机制对比表",
+          "生成 Agent 介入点和 guardrails",
+          "生成 playbook 写回预览"
+        ],
+        "needs_approval": [
+          "把研究结论用于投递材料",
+          "保存产品研究 playbook",
+          "让候选 Evaluation Agent 进入后续评测"
+        ],
+        "blocked": [
+          "伪造外部事实",
+          "把待确认资料写成确定事实",
+          "自动注册新 Agent",
+          "写入未经确认的长期记忆"
+        ],
+        "review_required": true
+      }
+    },
+    "final_recommendation": {
+      "decision": "Go",
+      "reason": "复杂产品研究需要跨产品资料归纳、反例批判和 Agent 协作设计，Task Room 比单个长答案更容易保留证据、边界和可复用状态。",
+      "suggested_action": "补齐每个产品 1 页研究卡，并用 5 行 Pilot Eval 验证 Router/Room Controller 判断力。"
+    },
+    "primary_blocker": "Paperclip / Symphony 等新兴产品资料不足，必须把待确认事实和推断分开。",
+    "next_minimal_iteration": [
+      "产出 Linear / Slack / 飞书 / Paperclip / Symphony 的 1 页研究卡。",
+      "把 Agent 介入点收敛为路由、摘要、artifact contract 和人审写回四类。",
+      "用 5 行 Pilot Eval 验证 Router 是否避免无脑开 Room。"
+    ],
+    "metrics_to_watch": [
+      "路由判断准确率",
+      "无效 Agent 排除率",
+      "证据可追溯性",
+      "人审负担",
+      "playbook 复用质量"
+    ],
+    "automation_boundary": {
+      "allowed": [
+        "生成产品研究卡",
+        "生成协作机制对比表",
+        "生成 Agent 介入点和 guardrails",
+        "生成 playbook 写回预览"
+      ],
+      "needs_approval": [
+        "把研究结论用于投递材料",
+        "保存产品研究 playbook",
+        "让候选 Evaluation Agent 进入后续评测"
+      ],
+      "blocked": [
+        "伪造外部事实",
+        "把待确认资料写成确定事实",
+        "自动注册新 Agent",
+        "写入未经确认的长期记忆"
+      ],
+      "review_required": true
+    },
+    "blocked_automation": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆"
+    ],
+    "execution_agent_handoff_brief": {
+      "patch_goal": "实现复杂产品研究 Room 的结果面板、注册 Agent 展示、候选 Evaluation Agent 和 Pilot Eval 表。",
+      "files_or_modules_to_touch": [
+        "room_lifecycle_panel",
+        "registered_agents_panel",
+        "candidate_agent_specs_panel",
+        "pilot_eval_panel"
+      ],
+      "acceptance_criteria": [
+        "用户能看到 Header / Room Controller 职责分离",
+        "用户能看到 room-local skills 和 registered agents 的区别",
+        "Product Critic Agent 和 Collaboration Designer Agent 的输入来自上游 artifact",
+        "candidate Evaluation Agent 不进入可信执行",
+        "room 结束后只回传 compressed result、capsule 和 playbook proposal"
+      ],
+      "blocked_actions": [
+        "伪造外部事实",
+        "把待确认资料写成确定事实",
+        "自动注册新 Agent",
+        "写入未经确认的长期记忆"
+      ],
+      "rollback_condition": "如果页面重新表现成开放式多 Agent 群聊，则回滚。",
+      "review_required": true
+    },
+    "capability_radius_review": {
+      "inside_review": [
+        "AI Coding",
+        "快速原型",
+        "简历证据映射"
+      ],
+      "delegate_with_evidence": [
+        "任务拆解",
+        "角色分配",
+        "产物合约",
+        "QA 与冲突处理",
+        "协作记忆写回",
+        "反馈分诊",
+        "研究归纳",
+        "产品批判",
+        "协作设计",
+        "产品迭代收敛",
+        "信任与激活",
+        "评测设计",
+        "岗位打分",
+        "执行交接（需审批）",
+        "申请风险策略（需审批）"
+      ]
+    },
+    "collaboration_mode": {
+      "by_capability": {
+        "ai_coding": {
+          "mode": "co_think",
+          "detail_level": "high",
+          "user_action": "review_and_challenge"
+        },
+        "rapid_prototyping": {
+          "mode": "co_think",
+          "detail_level": "high",
+          "user_action": "review_and_challenge"
+        },
+        "resume_evidence": {
+          "mode": "co_think",
+          "detail_level": "high",
+          "user_action": "review_and_challenge"
+        },
+        "task_decomposition": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "role_assignment": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "artifact_contract": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "qa_conflict_resolution": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "memory_writeback": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "feedback_triage": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "research_synthesis": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "product_critique": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "collaboration_design": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "product_iteration": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "trust_activation": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "evaluation_design": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "job_scoring": {
+          "mode": "result_first",
+          "detail_level": "summary_with_evidence",
+          "user_action": "accept_or_ask_for_evidence"
+        },
+        "execution_handoff": {
+          "mode": "delegate_with_review",
+          "detail_level": "boundary_first",
+          "user_action": "approve_or_block"
+        },
+        "application_risk_policy": {
+          "mode": "delegate_with_review",
+          "detail_level": "boundary_first",
+          "user_action": "approve_or_block"
+        }
+      }
+    },
+    "authorization_panel": [
+      "Approve playbook writeback",
+      "Challenge research claim",
+      "Reject candidate agent",
+      "Close Room"
+    ]
+  },
+  "execution_handoff_brief": {
+    "patch_goal": "实现复杂产品研究 Room 的结果面板、注册 Agent 展示、候选 Evaluation Agent 和 Pilot Eval 表。",
+    "files_or_modules_to_touch": [
+      "room_lifecycle_panel",
+      "registered_agents_panel",
+      "candidate_agent_specs_panel",
+      "pilot_eval_panel"
+    ],
+    "acceptance_criteria": [
+      "用户能看到 Header / Room Controller 职责分离",
+      "用户能看到 room-local skills 和 registered agents 的区别",
+      "Product Critic Agent 和 Collaboration Designer Agent 的输入来自上游 artifact",
+      "candidate Evaluation Agent 不进入可信执行",
+      "room 结束后只回传 compressed result、capsule 和 playbook proposal"
+    ],
+    "blocked_actions": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆"
+    ],
+    "rollback_condition": "如果页面重新表现成开放式多 Agent 群聊，则回滚。",
+    "review_required": true
+  },
+  "autonomy_policy_update": {
+    "current_level": "Level 1: Draft with approval",
+    "recommended_level": "Level 2: Build agent team spec after approval",
+    "allowed_action_classes": [
+      "生成产品研究卡",
+      "生成协作机制对比表",
+      "生成 Agent 介入点和 guardrails",
+      "生成 playbook 写回预览"
+    ],
+    "blocked_action_classes": [
+      "伪造外部事实",
+      "把待确认资料写成确定事实",
+      "自动注册新 Agent",
+      "写入未经确认的长期记忆"
+    ],
+    "upgrade_condition": [
+      "连续两轮核心指标达标",
+      "无高风险事故",
+      "回滚触发率低于阈值"
+    ],
+    "downgrade_condition": [
+      "出现高风险误执行",
+      "核心指标连续恶化",
+      "回滚频繁触发"
+    ],
+    "review_required": true,
+    "notes": "按任务类型分层升级自治，不做一次性全局升权。"
+  },
+  "memory_patch": {
+    "stable_user_profile": {
+      "strengths": [
+        "AI Coding",
+        "快速原型",
+        "简历证据映射"
+      ],
+      "blind_spots": [
+        "任务拆解",
+        "角色分配",
+        "产物合约",
+        "QA 与冲突处理",
+        "协作记忆写回",
+        "反馈分诊",
+        "研究归纳",
+        "产品批判",
+        "协作设计",
+        "产品迭代收敛",
+        "信任与激活",
+        "评测设计",
+        "岗位打分"
+      ]
+    },
+    "confirmed_preferences": [
+      "Room 内 raw trace 不写回主 context",
+      "candidate agents 需要 Pilot Eval 后才能注册",
+      "待确认研究资料必须标记 unknown，不能写成事实"
+    ],
+    "writeback_reason": "这些偏好能稳定提升后续 Room fork、授权边界和 context hygiene。"
+  },
+  "playbook_update": {
+    "title": "Complex Product Research Room Playbook",
+    "steps": [
+      "Header Agent fork 临时 Room",
+      "Room Controller 生成研究 contract 和证据策略",
+      "Research Synthesis Agent 输出产品研究卡与对比表",
+      "Product Critic Agent 输出局限、反例和风险",
+      "Collaboration Designer Agent 输出 Agent 介入点、guardrails 和面试叙事",
+      "输出 compressed result、Room Capsule 和 playbook writeback proposal"
+    ],
+    "when_to_use": [
+      "需要完成复杂产品研究、竞品判断、协作机制设计或面试观点沉淀"
+    ]
+  },
+  "evaluation": {
+    "dimensions": [
+      "Goal clarity",
+      "能力半径识别准确度",
+      "专家选择必要性",
+      "是否避免过度协作",
+      "用户判断负担",
+      "过程噪音",
+      "结果可判断性",
+      "授权边界清晰度",
+      "handoff 可执行性",
+      "workflow asset 可复用性",
+      "第二次任务复用效果",
+      "token/latency/noise 成本"
+    ],
+    "scores": {
+      "single_agent": [
+        4,
+        2,
+        4,
+        3,
+        5,
+        4,
+        3,
+        2,
+        3,
+        2,
+        1,
+        5
+      ],
+      "multi_agent_chat": [
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "task_room_protocol": [
+        4,
+        4,
+        4,
+        4,
+        3,
+        3,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "capability_radius_harness": [
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        4
+      ]
+    },
+    "badcases": [
+      "伪协作：single agent 足够却硬拉多专家",
+      "按岗位堆专家，没有能力缺口映射",
+      "输出不能转成 execution handoff",
+      "自动化边界不清导致误授权",
+      "workflow 没有沉淀，任务不可复用"
+    ],
+    "judge_summary": "Capability-radius harness 在边界清晰度、复用性和可授权性上显著优于普通多 Agent 协作。",
+    "comparison": {
+      "single_agent": {
+        "average_score": 3.17
+      },
+      "multi_agent_chat": {
+        "average_score": 1.25
+      },
+      "task_room_protocol": {
+        "average_score": 3.58
+      },
+      "capability_radius_harness": {
+        "average_score": 4.75
+      }
+    }
+  },
+  "meta": {
+    "mode": "v0.8-complex-product-research-room-fallback",
+    "generated_at": "2026-06-13T15:19:07",
+    "warning": "当前 Complex Product Research Room 使用 fallback/stub 数据，Paperclip / Symphony 资料标记为待确认。"
+  },
+  "workflow_asset": {
+    "workflow_asset": {
+      "name": "Agent Collaboration Harness Pattern",
+      "trigger": "用户需要判断是否让 Agent 介入，或需要 builder 一个最小 Agent team 完成复杂任务",
+      "user_strengths": [
+        "ai_coding",
+        "rapid_prototyping",
+        "resume_evidence"
+      ],
+      "delegated_capabilities": [
+        "task_decomposition",
+        "role_assignment",
+        "artifact_contract",
+        "qa_conflict_resolution",
+        "memory_writeback",
+        "feedback_triage",
+        "research_synthesis",
+        "product_critique",
+        "collaboration_design",
+        "product_iteration",
+        "trust_activation",
+        "evaluation_design",
+        "job_scoring",
+        "execution_handoff",
+        "application_risk_policy"
+      ],
+      "preferred_expert_team": [
+        "Research Synthesis Agent",
+        "Product Critic Agent",
+        "Collaboration Designer Agent"
+      ],
+      "automation_boundary": {
+        "allowed": [
+          "生成产品研究卡",
+          "生成协作机制对比表",
+          "生成 Agent 介入点和 guardrails",
+          "生成 playbook 写回预览"
+        ],
+        "needs_approval": [
+          "把研究结论用于投递材料",
+          "保存产品研究 playbook",
+          "让候选 Evaluation Agent 进入后续评测"
+        ],
+        "blocked": [
+          "伪造外部事实",
+          "把待确认资料写成确定事实",
+          "自动注册新 Agent",
+          "写入未经确认的长期记忆"
+        ],
+        "review_required": true
+      },
+      "review_policy": {
+        "inside_radius_detail_level": "high",
+        "outside_radius_detail_level": "summary_with_evidence",
+        "automation_sensitive_detail_level": "boundary_first",
+        "approval_required": true
+      },
+      "reuse_condition": [
+        "task_requires_agent_necessity_check",
+        "task_requires_agent_team_builder",
+        "task_has_human_checkpoint_or_memory_writeback"
+      ],
+      "source_primary_blocker": "Paperclip / Symphony 等新兴产品资料不足，必须把待确认事实和推断分开。",
+      "memory_writeback_preview": {
+        "memory_type": "collaboration_harness_memory",
+        "requires_user_approval": true,
+        "user_capability_profile": {
+          "inside_radius": [
+            "ai_coding",
+            "rapid_prototyping",
+            "resume_evidence"
+          ],
+          "outside_radius": [
+            "task_decomposition",
+            "role_assignment",
+            "artifact_contract",
+            "qa_conflict_resolution",
+            "memory_writeback",
+            "feedback_triage",
+            "research_synthesis",
+            "product_critique",
+            "collaboration_design",
+            "product_iteration",
+            "trust_activation",
+            "evaluation_design",
+            "job_scoring"
+          ],
+          "automation_sensitive": [
+            "execution_handoff",
+            "application_risk_policy"
+          ]
+        },
+        "delegation_policy_memory": {
+          "allowed": [
+            "生成产品研究卡",
+            "生成协作机制对比表",
+            "生成 Agent 介入点和 guardrails",
+            "生成 playbook 写回预览"
+          ],
+          "needs_approval": [
+            "把研究结论用于投递材料",
+            "保存产品研究 playbook",
+            "让候选 Evaluation Agent 进入后续评测"
+          ],
+          "blocked": [
+            "伪造外部事实",
+            "把待确认资料写成确定事实",
+            "自动注册新 Agent",
+            "写入未经确认的长期记忆"
+          ],
+          "review_required": true
+        },
+        "agent_team_template": {
+          "preferred_team": [
+            "Research Synthesis Agent",
+            "Product Critic Agent",
+            "Collaboration Designer Agent"
+          ],
+          "merge_rule": "先把研究事实与推断分开，再由 Product Critic 找局限和反例，最后只允许 Collaboration Designer 基于上游 artifact 生成 Agent 介入点、guardrails 和面试叙事。",
+          "stop_condition": "Only save when the result surface has clear blocked actions, QA outcome, and human checkpoint."
+        },
+        "context_hygiene_rule": "Only compressed workflow, policy, and capability preferences are written back; raw traces and unconfirmed evidence are discarded."
+      },
+      "updated_at": "2026-06-13T15:19:07"
+    }
+  },
+  "personalized_expert_team_update": {
+    "accepted_experts": [
+      "Research Synthesis Agent",
+      "Product Critic Agent",
+      "Collaboration Designer Agent"
+    ],
+    "replaced_experts": [],
+    "experts_to_try_next": [],
+    "saved_preferences": [
+      "开放判断默认结果优先并附证据",
+      "自动化相关任务必须显示 blocked actions",
+      "长期 memory 写回必须先展示 preview"
+    ]
+  }
+}
