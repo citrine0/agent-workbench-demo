@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Agent Workbench Demo",
   description:
-    "Agent-native workbench demo for Header Agent, Task Room, runtime policy, and Header-to-Header collaboration.",
+    "Agent Workbench demo：先判断该不该开 room，再做最小可信团队交接、A/B token 对比和 trust gate。",
 };
 
 export default function RootLayout({

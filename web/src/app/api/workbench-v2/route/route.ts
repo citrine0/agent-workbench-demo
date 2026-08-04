@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   callOpenAiCompatibleJson,
+  buildRouteExplanation,
   inferFallbackDecision,
   normalizeHeaderDecision,
   readWorkbenchRegistry,
@@ -77,8 +78,10 @@ export async function POST(request: Request) {
 
     const decision = normalizeHeaderDecision(rawDecision);
     const controller = resolveControllerPlan(decision, registry);
+    const route_explanation = buildRouteExplanation(decision, registry);
 
     return NextResponse.json({
+      task,
       header: {
         source: "live_llm",
         provider: "deepseek",
@@ -86,6 +89,7 @@ export async function POST(request: Request) {
         decision,
       },
       controller,
+      route_explanation,
       registry_principle: registry.trust_model.principle,
     });
   } catch (error) {
